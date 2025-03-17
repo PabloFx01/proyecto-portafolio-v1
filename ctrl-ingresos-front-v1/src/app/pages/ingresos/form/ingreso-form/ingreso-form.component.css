@@ -1,0 +1,96 @@
+  .example-radio-button {
+      margin: 5px;
+  }
+
+  .miContainer {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+  }
+
+  
+
+  mat-dialog-actions {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+  }
+
+
+  .header-app-main{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+  }
+
+
+  .tools_uno{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 30px;
+    margin-top: 15px;
+  }
+
+
+  mat-form-field {
+      width: 120%;
+      /* max-width: 500px; Opcional: para evitar que los inputs sean demasiado anchos en pantallas grandes */
+  }
+
+
+  span {
+      margin-bottom: 5px;
+  }
+
+  .demo-app {
+      display: flex;
+      min-height: 100%;
+      /* font-family: Arial, Helvetica Neue, Helvetica, sans-serif;
+      font-size: 14px; */
+  }
+
+  .demo-app-sidebar {
+      width: 100px;
+      line-height: 1.5;
+      background: #eaf9ff;
+      border-right: 1px solid #d3e2e8;
+  }
+
+  .demo-app-sidebar-section {
+      padding: 0.5em;
+  }
+
+  .demo-app-main {
+      flex-grow: 1;
+      padding: 1em;
+  }
+  .edit{    
+    
+    margin-top: 25px;
+    margin-bottom: 25px; 
+    margin-left: 12px;
+  }
+
+  .details{    
+    
+    margin-top: 25px;
+    margin-bottom: 25px; 
+    margin-left: 12px;
+  }
+
+  .delete{    
+    
+    margin-top: 25px;
+    margin-bottom: 25px; 
+    margin-left: 12px;
+  }
+
+  .slide{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 10px;
+}

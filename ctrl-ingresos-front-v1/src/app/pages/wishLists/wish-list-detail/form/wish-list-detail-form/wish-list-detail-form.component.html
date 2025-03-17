@@ -1,0 +1,43 @@
+<h2 mat-dialog-title>{{title}}</h2>
+
+<mat-dialog-content class="miContainer">
+
+    <form [formGroup]="detalleWishListForm">
+        <div class="myForm">
+            <mat-form-field >
+                <mat-label>Fecha de creación</mat-label>
+                <input matInput [matDatepicker]="picker" formControlName="fechaCreacion">
+                <mat-hint>MM/DD/YYYY</mat-hint>
+                <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
+                <mat-datepicker #picker></mat-datepicker>
+            </mat-form-field>
+
+            <mat-form-field >
+                <mat-label>item</mat-label>
+                <input matInput formControlName="itemName" name="itemName" type="text">
+            </mat-form-field>
+
+            <mat-form-field >
+                <mat-label>Precio</mat-label>
+                <input matInput formControlName="precio" name="precio" type="number">
+            </mat-form-field>
+
+            <mat-form-field >
+                <mat-label>Comentario</mat-label>
+                <input matInput formControlName="comentario" name="comentario" type="text">
+            </mat-form-field>
+
+            <mat-form-field >
+                <mat-label>Link</mat-label>
+                <input matInput formControlName="link" name="link" type="text">
+            </mat-form-field>
+        </div>
+    </form>
+
+</mat-dialog-content>
+
+<mat-dialog-actions>
+    <button mat-raised-button (click)="cancel()">Cancelar</button>
+    <button mat-raised-button color="primary" (click)="onSave()"
+        [disabled]="detalleWishListForm.invalid">Guardar</button>
+</mat-dialog-actions>

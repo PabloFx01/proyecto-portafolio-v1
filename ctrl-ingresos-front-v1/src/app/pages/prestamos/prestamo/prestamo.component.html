@@ -1,0 +1,122 @@
+<app-nav-prestamo />
+<router-outlet />
+<br>
+<mat-toolbar>
+    <button (click)="addRegister()" mat-raised-button color="primary" class="my-2">
+        <mat-icon>add_circle_outline</mat-icon>
+        Nuevo prestamo
+    </button>
+</mat-toolbar>
+
+
+<div class="filtros">
+    <mat-button-toggle-group name="filtros" aria-label="filtros">
+        <mat-button-toggle value="NOT-PAID" (click)="seleccionarFiltro('NOT-PAID')" checked>No
+            pagados</mat-button-toggle>
+        <mat-button-toggle value="PAID" (click)="seleccionarFiltro('PAID')">Pagados</mat-button-toggle>
+        <mat-button-toggle value="ALL" (click)="seleccionarFiltro('ALL')">Todos</mat-button-toggle>
+    </mat-button-toggle-group>
+</div>
+
+<br />
+
+<div class="container my-3">
+
+    <mat-form-field class="myFilter">
+        <mat-label>Buscar</mat-label>
+        <input matInput (keyup)="applyFilter($event)" placeholder="Titulo: xxx" #input>
+    </mat-form-field>
+
+    <div class="row">
+        <div class="col">
+            <table mat-table [dataSource]="dataSource" class="table-responsive">
+
+                <ng-container matColumnDef="titulo">
+                    <th mat-header-cell *matHeaderCellDef >Titulo</th>
+                    <td class="td-center" mat-cell *matCellDef="let row"> {{row.titulo}} </td>
+                </ng-container>
+
+                <ng-container matColumnDef="monto">
+                    <th mat-header-cell *matHeaderCellDef >Monto</th>
+                    <td class="td-center" mat-cell *matCellDef="let row"> {{row.monto | currency }} </td>
+
+                </ng-container>
+                <ng-container matColumnDef="interes">
+                    <th mat-header-cell *matHeaderCellDef >Interés</th>
+                    <td class="td-center" mat-cell *matCellDef="let row"> {{row.interes}}% </td>
+                </ng-container>
+
+                <ng-container matColumnDef="cuotas">
+                    <th mat-header-cell *matHeaderCellDef >Cuotas</th>
+                    <td class="td-center" mat-cell *matCellDef="let row"> {{row.cuotas}} </td>
+                </ng-container>
+
+                <ng-container matColumnDef="totAPagar">
+                    <th mat-header-cell *matHeaderCellDef >Total a pagar</th>
+                    <td class="td-center" mat-cell *matCellDef="let row"> {{row.totAPagar | currency}} </td>
+                </ng-container>
+
+                <ng-container matColumnDef="cuentas">
+                    <th mat-header-cell *matHeaderCellDef >Cuentas afectadas.</th>
+                    <td class="td-center" mat-cell *matCellDef="let row"> {{row.cuentaOrigen.sobre.descripcion}} ->
+                        {{row.cuentaBeneficiario.sobre.descripcion}}</td>
+                </ng-container>
+
+                <ng-container matColumnDef="totPag">
+                    <th mat-header-cell *matHeaderCellDef >Total pagado</th>
+                    <td class="td-center" mat-cell *matCellDef="let row"> {{row.totPag | currency}} </td>
+                </ng-container>
+
+                <ng-container matColumnDef="saldoRest">
+                    <th mat-header-cell *matHeaderCellDef >Saldo restante</th>
+                    <td class="td-center" mat-cell *matCellDef="let row"> {{row.saldoRest | currency}} </td>
+                </ng-container>
+
+                <ng-container matColumnDef="estado">
+                    <th mat-header-cell *matHeaderCellDef >Estado</th>
+                    <td mat-cell *matCellDef="let row"> {{row.estado?'Pagado':'Sin pagar'}} </td>
+                </ng-container>
+
+
+                <ng-container matColumnDef="acciones">
+                    <th mat-header-cell *matHeaderCellDef></th>
+                    <td mat-cell *matCellDef="let row">
+                        <div class="acciones-button-container">
+                            @if (!row.procesarPrestamo) {
+                            <button title="Procesar pago" mat-fab class="custom-green-button"
+                                (click)="procesarPago(row.id, row.monto)">
+                                <mat-icon>payments</mat-icon>
+                            </button>
+
+                            <button title="Editar" mat-fab color="primary" (click)="editar(row.id)">
+                                <mat-icon>edit</mat-icon>
+                            </button>
+
+                            <button title="Eliminar" mat-fab color="warn" (click)="eliminar(row.id)">
+                                <mat-icon>delete</mat-icon>
+                            </button>
+                            }@else {
+                            <button title="Ir a pagos" mat-fab color="primary" (click)="irDetalles(row.id)">
+                                <span class="material-symbols-outlined">
+                                    forward
+                                </span>
+                            </button>
+                            }
+                        </div>
+                    </td>
+                </ng-container>
+
+
+                <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+                <tr class="mat-row" *matNoDataRow>
+                    <td class="mat-cell" colspan="4">No data matching the filter "{{input.value}}"</td>
+                </tr>
+            </table>
+            <mat-paginator #paginator (page)="cambiarPagina($event)" [length]="cantidadTotal"
+                [pageSize]="cantidadPorPagina" [showFirstLastButtons]="true" [pageSizeOptions]="opcionesDePaginado"
+                [pageIndex]="numeroDePagina">
+            </mat-paginator>
+        </div>
+    </div>
+</div>

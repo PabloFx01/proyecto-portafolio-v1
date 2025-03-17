@@ -1,0 +1,75 @@
+<app-nav-ctrl-efectivo />
+<router-outlet />
+<br>
+<mat-toolbar>
+    <button (click)="addRegister()" mat-raised-button color="primary" class="my-2">
+        <mat-icon>add_circle_outline</mat-icon>
+        Nueva cuenta
+    </button>
+</mat-toolbar>
+
+
+<div class="filtros">
+    <mat-button-toggle-group name="filtros" aria-label="filtros">
+        <mat-button-toggle value="ACT" (click)="seleccionarFiltro('ACT')" checked>Activos</mat-button-toggle>
+        <mat-button-toggle value="INACT" (click)="seleccionarFiltro('INACT')">Inactivos</mat-button-toggle>
+        <mat-button-toggle value="ALL" (click)="seleccionarFiltro('ALL')">Todos</mat-button-toggle>
+    </mat-button-toggle-group>
+</div>
+
+<br />
+
+<div class="container my-3">
+
+    <mat-form-field class="myFilter">
+        <mat-label>Buscar</mat-label>
+        <input matInput (keyup)="applyFilter($event)" placeholder="Ej. gastos variables" #input>
+    </mat-form-field>
+
+    <div class="row">
+        <div class="col">
+            <table mat-table [dataSource]="dataSource">
+
+                <ng-container matColumnDef="descripcion">
+                    <th mat-header-cell *matHeaderCellDef> Descripcion </th>
+                    <td mat-cell *matCellDef="let row"> {{row.descripcion}} </td>
+                </ng-container>
+
+
+                <ng-container matColumnDef="acciones">
+                    <th mat-header-cell *matHeaderCellDef></th>
+                    <td mat-cell *matCellDef="let row">
+                        <div class="acciones-button-container">
+                            <button title="Editar" mat-fab color="primary" (click)="editar(row.id)">
+                                <mat-icon>edit</mat-icon>
+                            </button>
+                            @if (!row.activo) {
+                            <button title="Desactivar" mat-fab color="warn" (click)="eliminar(row.id)">
+                                <mat-icon>delete</mat-icon>
+                            </button>
+                            }@else {
+                            <button title="Restaurar elemento" mat-fab class="custom-green-button"
+                                (click)="restaurar(row.id)">
+                                <span class="material-symbols-outlined">
+                                    restart_alt
+                                </span>
+                            </button>
+                            }
+                        </div>
+                    </td>
+                </ng-container>
+
+
+                <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+                <tr class="mat-row" *matNoDataRow>
+                    <td class="mat-cell" colspan="4">No data matching the filter "{{input.value}}"</td>
+                </tr>
+            </table>
+            <mat-paginator #paginator (page)="cambiarPagina($event)" [length]="cantidadTotal"
+                [pageSize]="cantidadPorPagina" [showFirstLastButtons]="true" [pageSizeOptions]="opcionesDePaginado"
+                [pageIndex]="numeroDePagina">
+            </mat-paginator>
+        </div>
+    </div>
+</div>

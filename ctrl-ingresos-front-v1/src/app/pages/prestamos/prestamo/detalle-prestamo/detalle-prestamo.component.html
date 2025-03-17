@@ -1,0 +1,100 @@
+<app-nav-prestamo />
+<router-outlet />
+<div class='demo-app'>
+    <div class='demo-app-sidebar'>
+        <div class='demo-app-sidebar-section'>
+            <header>{{title}}</header>
+        </div>
+        <div class="container">
+
+            <div class="facturaDetails">
+                <p class="facturaTitle">Titulo:</p>
+                <p class="facturaData">{{prestamoData.titulo}}</p>
+                <p class="facturaTitle">Fecha de creación:</p>
+                <p class="facturaData">{{prestamoData.fechaCreacion | date:'dd-MM-yyyy' }}</p>
+                <p class="facturaTitle">Monto prestado:</p>
+                <p class="facturaData">{{prestamoData.monto | currency}}</p>
+                <p class="facturaTitle">Interés:</p>
+                <p class="facturaData">{{prestamoData.interes}}%</p>
+                <p class="facturaTitle">Coutas:</p>
+                <p class="facturaData">{{prestamoData.cuotas}}</p>
+                <p class="facturaTitle">Total a pagar:</p>
+                <p class="facturaData">{{prestamoData.totAPagar | currency}}</p>
+                <p class="facturaTitle">Cuenta origen:</p>
+                <p class="facturaData">{{prestamoData.cuentaOrigen?.sobre?.descripcion}}</p>
+                <p class="facturaTitle">Cuenta beneficiario:</p>
+                <p class="facturaData">{{prestamoData.cuentaBeneficiario?.sobre?.descripcion}}</p>
+                <p class="facturaTitle">Monto pagado:</p>
+                <p class="facturaData">{{prestamoData.totPag | currency}}</p>
+                <p class="facturaTitle">Saldo restante:</p>
+                <p class="facturaData">{{prestamoData.saldoRest | currency}}</p>
+
+            </div>
+        </div>
+    </div>
+
+    <div class='demo-app-main'>
+        <div class="container">
+            @if (!prestamoData.estado) {
+            <div>
+                <button (click)="nuevoPago()" mat-raised-button color="primary" class="my-2">
+                    <mat-icon>add_circle_outline</mat-icon>
+                    Nuevo pago
+                </button>
+            </div>
+            }
+            <br />
+
+            <div class="miTabla">
+                <table mat-table [dataSource]="dataSource" >
+
+                    <ng-container matColumnDef="fechaPago">
+                        <th mat-header-cell *matHeaderCellDef >Fecha de pago</th>
+                        <td mat-cell *matCellDef="let row"> {{row.fechaPago | date:'dd-MM-yyyy'}} </td>
+                    </ng-container>
+
+
+                    <ng-container matColumnDef="pago">
+                        <th mat-header-cell *matHeaderCellDef >Pago</th>
+                        <td mat-cell *matCellDef="let row">{{row.montoPago | currency}}</td>
+                    </ng-container>
+
+                    <ng-container matColumnDef="pagoProcesado">
+                        <th mat-header-cell *matHeaderCellDef >Pago procesado?</th>
+                        <td mat-cell *matCellDef="let row">{{row.pagoEfectuado?'si':'no'}}</td>
+                    </ng-container>
+
+                    <ng-container matColumnDef="acciones">
+                        <th mat-header-cell *matHeaderCellDef></th>
+                        <td mat-cell *matCellDef="let row">
+                            <div class="acciones-button-container">
+                                @if (!row.pagoEfectuado) {
+
+                                <button title="Procesar pago" mat-fab class="custom-green-button"
+                                    (click)="procesarPago(row.detallePrestamoId.id, row.detallePrestamoId.idPrestamo, row.montoPago)">
+                                    <mat-icon>payments</mat-icon>
+                                </button>
+
+                                <button title="Editar pago" mat-fab color="primary"
+                                    (click)="editar(row.detallePrestamoId.id, row.detallePrestamoId.idPrestamo)">
+                                    <mat-icon>edit</mat-icon>
+                                </button>
+
+                                <button title="Eliminar pago" mat-fab color="warn"
+                                    (click)="eliminarDetallePrestamo(row.detallePrestamoId.id, row.detallePrestamoId.idPrestamo)">
+                                    <mat-icon>delete</mat-icon>
+                                </button>
+                                }
+                            </div>
+                        </td>
+                    </ng-container>
+
+                    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                    <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+
+                </table>
+            </div>
+
+        </div>
+    </div>
+</div>

@@ -1,0 +1,36 @@
+<h2 mat-dialog-title>{{title}} tipo de metal</h2>
+<mat-dialog-content>
+  <form [formGroup]="metalCompraForm" class="miContainer">
+    <div>
+      <mat-form-field appearance="fill">
+        <mat-label>Id</mat-label>
+        <input matInput formControlName="id" name="id" type="text">
+      </mat-form-field>
+    </div>
+
+    <div>
+      <mat-form-field appearance="fill">
+        <mat-label>Nombre</mat-label>
+        <input matInput formControlName="nombre" name="nombre" type="text">
+        @if(hasError('nombre','minlength')){
+          <span class="text-danger">El campo nombre debe tener minimo 3 caracteres.</span>
+          }@else if(messageError!=null){
+          <span class="text-danger">{{messageError}}</span>
+          }
+      </mat-form-field>
+    </div>
+
+    <div>
+      <mat-form-field appearance="fill">
+        <mat-label>Precio</mat-label>
+        <input matInput formControlName="precio" name="precio" type="number">
+      </mat-form-field>
+    </div>
+  </form>
+</mat-dialog-content>
+
+
+<mat-dialog-actions>
+  <button mat-raised-button (click)="cancel()">Cancelar</button>
+  <button mat-raised-button color="primary" (click)="onSave()" [disabled]="metalCompraForm.invalid">Guardar</button>
+</mat-dialog-actions>

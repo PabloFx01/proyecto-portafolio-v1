@@ -1,0 +1,50 @@
+.app-panel-container {
+    /* height: 91.9%;     */
+    height: 91.9%;    
+    padding-top: 50px;
+    display: flex;
+}
+
+.app-panel-container .mat-mdc-card {    
+    box-shadow: 0 1px 3px 0 #0fdddd, 0 4px 6px 0 #0fdddd !important;
+    background-color: #2986c4;
+    color: rgba(255, 255, 255, .8);
+    text-align: center;
+    cursor: pointer;
+    transition: all .25s ease, transform.25s ease;
+    font-weight: bold;
+    min-width: 80px;
+}
+.cardDanger{    
+    border: 3px solid red;    
+}
+.cardOk{    
+    border: 3px solid rgb(96, 238, 14);    
+}
+
+.app-panel-container .mat-mdc-card:hover {
+    background-color: #2986c4;
+    transform: translateY(-3px);
+    box-shadow: 0 1px 3px 0 #0fdddd, 0 4px 6px 0 #0fdddd !important;
+}
+
+.app-panel-container.mat-mdc-card p {
+    margin-top: 10px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.icon-ingreso {
+    transform: scale(2);
+    margin: 40px auto 20px auto;
+}
+
+mat-dialog-actions {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.mesDesc{
+    font-size: 12px;
+}

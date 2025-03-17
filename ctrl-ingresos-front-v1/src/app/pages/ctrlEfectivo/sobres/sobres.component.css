@@ -1,0 +1,11 @@
+span{
+    margin-bottom: 5px;
+}
+.filtros {
+    float: right;
+    padding-right: 55px;
+}
+.custom-green-button {
+    background-color: green;
+    color: white; 
+  }

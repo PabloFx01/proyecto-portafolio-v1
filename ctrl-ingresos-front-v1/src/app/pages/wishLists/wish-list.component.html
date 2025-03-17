@@ -1,0 +1,104 @@
+<app-nav-wish-list />
+<router-outlet />
+<br>
+<mat-toolbar>
+    <button (click)="addRegister()" mat-raised-button color="primary" class="my-2">
+        <mat-icon>add_circle_outline</mat-icon>
+        Nueva lista
+    </button>
+</mat-toolbar>
+
+
+<div class="filtros">
+    <mat-button-toggle-group name="filtros" aria-label="filtros">
+        <mat-button-toggle value="NOT-FIN" (click)="seleccionarFiltro('NOT-FIN')" checked>Sin
+            cumplir</mat-button-toggle>
+        <mat-button-toggle value="FIN" (click)="seleccionarFiltro('FIN')">Cumplidos</mat-button-toggle>
+        <mat-button-toggle value="ALL" (click)="seleccionarFiltro('ALL')">Todos</mat-button-toggle>
+    </mat-button-toggle-group>
+</div>
+
+<br />
+
+<div class="container my-3">
+
+    <mat-form-field class="myFilter">
+        <mat-label>Buscar</mat-label>
+        <input matInput (keyup)="applyFilter($event)" placeholder="Titulo: xxx" #input>
+    </mat-form-field>
+
+    <div class="row">
+        <div class="col">
+            <table mat-table [dataSource]="dataSource" class="table-responsive">
+                <!-- displayedColumns: string[] = ['titulo','fechaCreacion','cuenta','estado','fechaFin', 'acciones']; -->
+                <ng-container matColumnDef="titulo">
+                    <th class="th-left" mat-header-cell *matHeaderCellDef>Titulo</th>
+                    <td class="td-left" mat-cell *matCellDef="let row"> {{row.titulo}} </td>
+                </ng-container>
+
+                <ng-container matColumnDef="fechaCreacion">
+                    <th class="th-left" mat-header-cell *matHeaderCellDef>Fecha de creación</th>
+                    <td class="td-center" mat-cell *matCellDef="let row"> {{row.fechaCreacion | date:'dd-MM-yyyy'}}
+                    </td>
+                </ng-container>
+
+                <ng-container matColumnDef="cuenta">
+                    <th class="th-left" mat-header-cell *matHeaderCellDef>Cuentas asociada</th>
+                    <td class="td-right" mat-cell *matCellDef="let row"> {{row.cuentaOrigen.sobre.descripcion}}</td>
+                </ng-container>
+
+                <ng-container matColumnDef="estado">
+                    <th class="th-left" mat-header-cell *matHeaderCellDef>Estado</th>
+                    <td class="td-right" mat-cell *matCellDef="let row"> {{row.estado?'Cumplido':'Sin cumplir'}} </td>
+                </ng-container>
+
+                <ng-container matColumnDef="fechaFin">
+                    <th class="th-left" mat-header-cell *matHeaderCellDef>Fecha de finalización</th>
+                    <td class="td-right" mat-cell *matCellDef="let row"> {{row.fechaFin | date:'dd-MM-yyyy'}} </td>
+                </ng-container>
+
+
+                <ng-container matColumnDef="acciones">
+                    <th mat-header-cell *matHeaderCellDef></th>
+                    <td class="td-right" mat-cell *matCellDef="let row">
+                        <div class="acciones-button-container">
+                            @if (!row.estado) {
+                            <button title="Editar" mat-fab color="primary" (click)="editar(row.id)">
+                                <mat-icon>edit</mat-icon>
+                            </button>
+
+                            <button title="Eliminar" mat-fab color="warn" (click)="eliminar(row.id)">
+                                <mat-icon>delete</mat-icon>
+                            </button>
+
+                            <button title="Ir a detalles" mat-fab color="primary" (click)="irDetalles(row.id)">
+                                <span class="material-symbols-outlined">
+                                    forward
+                                </span>
+                            </button>
+                            
+                            }@else {
+                            <button title="Ir a detalles" mat-fab color="primary" (click)="irDetalles(row.id)">
+                                <span class="material-symbols-outlined">
+                                    forward
+                                </span>
+                            </button>
+                            }
+                        </div>
+                    </td>
+                </ng-container>
+
+
+                <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+                <tr class="mat-row" *matNoDataRow>
+                    <td class="mat-cell" colspan="4">No data matching the filter "{{input.value}}"</td>
+                </tr>
+            </table>
+            <mat-paginator #paginator (page)="cambiarPagina($event)" [length]="cantidadTotal"
+                [pageSize]="cantidadPorPagina" [showFirstLastButtons]="true" [pageSizeOptions]="opcionesDePaginado"
+                [pageIndex]="numeroDePagina">
+            </mat-paginator>
+        </div>
+    </div>
+</div>

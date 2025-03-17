@@ -1,0 +1,13 @@
+<div class="barra">
+    <div class="button-close">
+        <button (click)="cancel()">
+            <span class="material-symbols-outlined">
+                close
+            </span>
+        </button>
+    </div>
+</div>
+<p class="legend_1">¡Felicidades!</p>
+<p class="legend_2">¡Has finalizado los pagos de tu prestamo!</p>
+<ng-lottie width="500px" height="600px" containerClass="moving-box" [styles]="styles" [options]="options"
+    (animationCreated)="animationCreated($event)" />

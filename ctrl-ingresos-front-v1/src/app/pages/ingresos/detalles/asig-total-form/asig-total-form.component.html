@@ -1,0 +1,40 @@
+<h2 mat-dialog-title>{{title}}</h2>
+
+<mat-dialog-content class="miContainer">
+
+
+    <form [formGroup]="asigRestTotForm">
+
+        <div>
+            <mat-form-field appearance="fill">
+                <mat-label>Monto restante</mat-label>
+                <input matInput formControlName="montoTotRes" name="montoTotRes" type="number">
+            </mat-form-field>
+
+        </div>
+
+        <div>
+            <mat-form-field>
+                <mat-label>Concepto destino</mat-label>
+                <mat-select formControlName="conceptoDestino">
+                    @for (concepto of listConcepto; track $index) {
+                    <mat-option [value]="concepto.nombre">{{ concepto.nombre }}</mat-option>
+                    }
+                </mat-select>
+            </mat-form-field>
+        </div>
+
+        <div>
+            <mat-radio-group aria-label="Seleccionar destino" formControlName="optDestino">
+                <mat-radio-button value="EFECTIVO">Efectivo</mat-radio-button>
+                <mat-radio-button value="DIGITAL">Digital</mat-radio-button>
+            </mat-radio-group>
+        </div>
+    </form>
+</mat-dialog-content>
+
+
+<mat-dialog-actions>
+    <button mat-raised-button (click)="cancel()">Cancelar</button>
+    <button mat-raised-button color="primary" (click)="onSave()" [disabled]="asigRestTotForm.invalid">Guardar</button>
+</mat-dialog-actions>

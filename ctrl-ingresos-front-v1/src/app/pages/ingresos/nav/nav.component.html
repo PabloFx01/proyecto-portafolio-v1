@@ -1,0 +1,39 @@
+<!-- MENU START  -->
+<div class="navbar navbar-expand-lg navbar-dark bg-dark">
+  <!-- NAV CONTAINER START -->
+  <div class="container-fluid container">
+    <a routerLink="" [ngClass]="{active: menuOption == 'home'}" (click)="onOption('home')"
+      class="navbar-brand text-info fw-semibold fs-4"><i class='bx bxs-home'></i></a>
+    <p></p>
+    <!-- NAV BUTTON  -->
+    <button #miBoton class="navbar-toggler" type="button" (click)="toggleNavbarCollapse()" data-bs-toggle="collapse"
+      data-bs-target="#nav">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <div class="collapse navbar-collapse" id="nav">
+      <ul class="navbar-nav">
+
+        <li class="nav-item">
+          <a href="#" class="nav-link" data-bs-toggle="dropdown">{{title}}</a>
+        </li>
+
+        <li class="nav-item dropdown">
+          <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">Pagos</a>
+          <ul class="dropdown-menu dropdown-menu-dark">
+
+            <li><a class="dropdown-item" (click)="irAlink('ingreso')">Administrar pagos </a></li>
+            <li>
+              <a  class="dropdown-item">Mantenimiento &raquo;</a>
+              <ul class="dropdown-menu submenu dropdown-menu-dark">
+                <li><a class="dropdown-item" (click)="irAlink('concepto')">Administrar conceptos de pagos</a></li>
+                <li><a class="dropdown-item" (click)="irAlink('historialIngresos')">Historial de pagos</a></li>
+              </ul>
+            </li>
+          </ul>
+        </li>
+
+      </ul>
+    </div>
+  </div>
+</div>

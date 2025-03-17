@@ -1,0 +1,95 @@
+<div class='demo-app'>
+    <div class='demo-app-sidebar'>
+        <div class='demo-app-sidebar-section'>
+            <h2 class="tools_uno"><i class='bx bx-wrench'></i></h2>
+            <div class="tools">
+                @if (!ingresoData.asociarConceptos) {
+                <div class="edit">
+                    <button title="Editar" mat-raised-button color="primary" (click)="editar()">
+                        <mat-icon>edit</mat-icon>
+                    </button>
+                </div>
+                }
+                @if (ingresoData.asociarConceptos) {
+
+                <div class="details">
+                    <button title="Ir a detalles" mat-raised-button color="primary" (click)="irDetalles(idIngreso)">
+                        <span class="material-symbols-outlined">
+                            forward
+                        </span>
+                    </button>
+                </div>
+                }
+                <div class="delete">
+                    <button title="Eliminar" mat-raised-button color="warn" (click)="eliminar(idIngreso)">
+                        <mat-icon>delete</mat-icon>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <div class="demo-app-main">
+        <div class="header-app-main">
+            <header>
+                <h2 mat-dialog-title class="title-app-main">{{title}}</h2>
+            </header>
+        </div>
+
+        <mat-dialog-content class="miContainer">
+
+            <form [formGroup]="ingresoForm">
+
+                <div>
+                    <mat-form-field appearance="fill">
+                        <mat-label>Titulo</mat-label>
+                        <input matInput formControlName="comentario" name="comentario" type="text">
+                    </mat-form-field>
+                </div>
+
+                <mat-form-field appearance="fill">
+                    <mat-label>Monto</mat-label>
+                    <input matInput formControlName="monto" name="monto" type="number">
+                </mat-form-field>
+
+                <div class="fecha">
+                    <mat-form-field>
+                        <mat-label>Fecha del deposito</mat-label>
+                        <input matInput [matDatepicker]="picker" formControlName="fechaDeposito">
+                        <mat-hint>MM/DD/YYYY</mat-hint>
+                        <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
+                        <mat-datepicker #picker></mat-datepicker>
+                    </mat-form-field>
+                </div>
+
+
+
+                <div>
+                    <mat-radio-group aria-labelledby="example-radio-group-label" formControlName="tipoMoneda"
+                        name="tipoMoneda">
+                        @for (tMoneda of tMonedas; track tMoneda) {
+                        <mat-radio-button class="example-radio-button" [value]="tMoneda">{{tMoneda}}</mat-radio-button>
+                        }
+                    </mat-radio-group>
+                </div>
+
+
+                <div class="slide">
+                    <mat-slide-toggle formControlName="asociarConcepto">Asociar conceptos?</mat-slide-toggle>
+                </div>
+
+
+            </form>
+        </mat-dialog-content>
+
+
+        <mat-dialog-actions>
+            <button mat-raised-button (click)="cancel()">Cancelar</button>
+            @if (edit == true) {
+            <button mat-raised-button color="primary" (click)="onSave()"
+                [disabled]="ingresoForm.invalid">Guardar</button>
+            }
+        </mat-dialog-actions>
+    </div>
+</div>

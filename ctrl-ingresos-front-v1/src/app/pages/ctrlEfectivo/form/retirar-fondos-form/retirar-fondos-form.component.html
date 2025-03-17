@@ -1,0 +1,44 @@
+<h2 mat-dialog-title>{{title}}</h2>
+<mat-dialog-content class="miContainer">
+    <form [formGroup]="retirarFondosForm">
+
+        <mat-form-field>
+            <mat-label>Cuenta a retirar</mat-label>
+            <mat-select formControlName="sobre">              
+                @for (sobre of listSobre; track $index) {
+                <mat-option [value]="sobre.id">{{ sobre.descripcion }}</mat-option>
+                }
+            </mat-select>
+        </mat-form-field>
+
+        <div>
+            <mat-form-field appearance="fill">
+                <mat-label>Saldo en cuenta</mat-label>
+                <input matInput formControlName="saldoActual" name="saldoActual" type="number">
+            </mat-form-field>
+        </div>
+
+        <div>
+            <mat-form-field appearance="fill">
+                <mat-label>Monto a retirar</mat-label>
+                <input matInput formControlName="monto" name="monto" type="number">
+                @if(messageError!=null){
+                    <span class="text-danger">{{messageError}}</span>
+                         }
+            </mat-form-field>
+        </div>
+
+        <div>
+            <mat-form-field appearance="fill">
+                <mat-label>Comentarios</mat-label>
+                <input matInput formControlName="comentario" name="comentario" type="text">               
+            </mat-form-field>
+        </div>   
+    </form>
+</mat-dialog-content>
+
+
+<mat-dialog-actions>
+    <button mat-raised-button (click)="cancel()">Cancelar</button>
+    <button mat-raised-button color="primary" (click)="onSave()" [disabled]="retirarFondosForm.invalid">Guardar</button>
+</mat-dialog-actions>

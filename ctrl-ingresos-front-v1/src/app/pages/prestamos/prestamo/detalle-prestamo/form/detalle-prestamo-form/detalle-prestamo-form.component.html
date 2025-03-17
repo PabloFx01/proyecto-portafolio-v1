@@ -1,0 +1,38 @@
+<h2 mat-dialog-title>{{title}}</h2>
+
+<mat-dialog-content class="miContainer">
+
+
+    <form [formGroup]="detallePrestamoForm">
+        <div class="myForm">
+            <mat-form-field appearance="fill">
+                <mat-label>Cuenta beneficiaria</mat-label>
+                <input matInput formControlName="cBenefi" name="cBenefi" type="text">
+            </mat-form-field>
+
+            <mat-form-field appearance="fill">
+                <mat-label>Saldo disponible</mat-label>
+                <input matInput formControlName="saldoDisponible" name="saldoDisponible" type="number">
+            </mat-form-field>
+
+            <mat-form-field appearance="fill">
+                <mat-label>Pago sugerido por mes</mat-label>
+                <input matInput formControlName="pagoSugerido" name="pagoSugerido" type="number">
+            </mat-form-field>
+
+            <mat-form-field appearance="fill">
+                <mat-label>Pago</mat-label>
+                <input matInput formControlName="pago" name="pago" type="number" max={{maxPago}}>
+                @if(msjError!=null){
+                    <span class="text-danger">{{msjError}}</span>
+                         }
+            </mat-form-field>            
+        </div>
+    </form>
+
+</mat-dialog-content>
+
+<mat-dialog-actions>
+    <button mat-raised-button (click)="cancel()">Cancelar</button>
+    <button mat-raised-button color="primary" (click)="onSave()" [disabled]="detallePrestamoForm.invalid">Guardar</button>
+</mat-dialog-actions>

@@ -1,0 +1,22 @@
+<h2 mat-dialog-title>{{title}} cuenta</h2>
+<mat-dialog-content class="miContainer">
+    <form [formGroup]="sobreForm">
+
+        <div>
+            <mat-form-field appearance="fill">
+                <mat-label>Descripcion</mat-label>
+                <input matInput formControlName="descripcion" name="descripcion" type="text">
+                @if(hasError('descripcion','minlength')){
+                <span class="text-danger">Minimo 3 caracteres.</span>
+                }
+            </mat-form-field>
+        </div>     
+
+    </form>
+</mat-dialog-content>
+
+
+<mat-dialog-actions>
+    <button mat-raised-button (click)="cancel()">Cancelar</button>
+    <button mat-raised-button color="primary" (click)="onSave()" [disabled]="sobreForm.invalid">Guardar</button>
+</mat-dialog-actions>

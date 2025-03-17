@@ -1,0 +1,39 @@
+services:
+  ctrlpagos_app:
+    build: ctrl-ingresos-back-v1
+    mem_limit: 512m
+    ports:
+      - "8020:8020"
+    environment:
+      DB_URL: jdbc:mysql://ctrl_pagos_db_2:3306/rest_api_ctrlpagos_db_2?createDatabaseIfNotExist=true&serverTimezone=UTC
+      DB_USER_NAME: root
+      DB_PASSWORD: ArMxfigpab024$$
+    restart: always
+    depends_on:
+      ctrl_pagos_db_2:
+        condition: service_healthy
+  ctrl_pagos_db_2:
+    image: mysql:8.0.33
+    ports:
+      - "3307:3306"
+    environment:
+      MYSQL_ROOT_PASSWORD: ArMxfigpab024$$
+      MYSQL_PASSWORD: ArMxfigpab024$$
+      MYSQL_DATABASE: rest_api_ctrlpagos_db_2
+    restart: always
+    healthcheck:
+      test: ["CMD", "mysqladmin","ping", "-h", "localhost"]
+      timeout: 10s
+      retries: 10
+    volumes:
+      - my-db-2:/var/lib/mysql
+  ctrl_pagos_app_front:
+    build: ctrl-ingresos-front-v1
+    ports:
+      - "4201:4201"
+    depends_on:
+      - ctrlpagos_app
+volumes:
+  my-db-2:  
+    
+    

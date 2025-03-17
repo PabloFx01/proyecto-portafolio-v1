@@ -1,0 +1,172 @@
+<metales-nav-app />
+<router-outlet />
+<br>
+<mat-toolbar>
+  <button (click)="addRegister()" mat-raised-button color="primary" class="my-2">
+    <mat-icon>add_circle_outline</mat-icon>
+    Nueva compra
+  </button>
+</mat-toolbar>
+
+
+<br />
+<div class="container">
+  <div class="filtros">
+
+    @if (filtroSeleccionado == 'ACT') {
+    <button class="selected" (click)="seleccionarFiltro('ACT')">Solo
+      Compras</button>
+    }@else {
+    <button (click)="seleccionarFiltro('ACT')">Solo Compras</button>
+    }
+    @if (filtroSeleccionado=='INACT') {
+    <button class="selected" (click)="seleccionarFiltro('INACT')">Con Automático</button>
+    }@else {
+    <button (click)="seleccionarFiltro('INACT')">Con Automático</button>
+    }
+  </div>
+
+  <div class="totalizador">
+    <div class="totalComprado">
+      <h2>Total comprado: {{totalComprado | currency}}</h2>
+    </div>
+  </div>
+
+</div>
+<br>
+
+<div class="container my-3">
+
+
+  <div class="row">
+    <div class="contenedor-tabla col">
+      <table mat-table [dataSource]="dataSource" class="table-responsive">
+
+        <ng-container matColumnDef="id">
+          <th mat-header-cell *matHeaderCellDef> ID </th>
+          <td mat-cell *matCellDef="let row"> {{row.id}} </td>
+        </ng-container>
+
+        <ng-container matColumnDef="fechaCompra">
+          <th mat-header-cell *matHeaderCellDef> Fecha de la compra </th>
+          <td mat-cell *matCellDef="let row"> {{row.fechaCompra | date:'dd-MM-yyyy' }} </td>
+        </ng-container>
+
+        <ng-container matColumnDef="totalComprado">
+          <th mat-header-cell *matHeaderCellDef> Total comprado </th>
+          <td mat-cell *matCellDef="let row"> {{row.totalComprado | currency}} </td>
+        </ng-container>
+
+        <ng-container matColumnDef="cierre">
+          <th mat-header-cell *matHeaderCellDef> Cerrado? </th>
+          <td mat-cell *matCellDef="let row">
+            @if (row.cierre) {
+            <span class="check-ok material-symbols-outlined">
+              check_box
+            </span>
+            }@else {
+            <span class="check-off material-symbols-outlined">
+              check_box_outline_blank
+            </span>
+            }
+
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="ficticio">
+          <th mat-header-cell *matHeaderCellDef> Ficticio? </th>
+          <td mat-cell *matCellDef="let row">
+            @if (row.ficticio) {
+            <span class="check-ok material-symbols-outlined">
+              check_box
+            </span>
+            }@else {
+            <span class="check-off material-symbols-outlined">
+              check_box_outline_blank
+            </span>
+            }
+            <!-- <mat-checkbox [checked]="row.ficticio" disabled></mat-checkbox> -->
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="comentario">
+          <th mat-header-cell *matHeaderCellDef> Comentario </th>
+          <td mat-cell *matCellDef="let row">{{row.comentario}}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="editadoPor">
+          <th mat-header-cell *matHeaderCellDef>Editado por</th>
+          <td mat-cell *matCellDef="let row"> {{row.editadoPor}} </td>
+        </ng-container>
+
+        <ng-container matColumnDef="modificadoEl">
+          <th mat-header-cell *matHeaderCellDef>Modificado el</th>
+          <td mat-cell *matCellDef="let row"> {{row.modificadoEl | date:'dd-MM-yyyy'}} </td>
+        </ng-container>
+
+        @if (!this.responsive) {
+        <ng-container matColumnDef="acciones">
+          <th mat-header-cell *matHeaderCellDef></th>
+          <td mat-cell *matCellDef="let row">
+
+            <div class="acciones-button-container">
+
+              <button title="Editar fecha" mat-fab color="primary" (click)="editarCompra(row.id)"
+                [disabled]="row.cierre">
+                <mat-icon>edit</mat-icon>
+              </button>
+              @if (!row.cierre) {
+              <button title="Editar detalles" mat-fab color="primary" (click)="editar(row.id)" [disabled]="row.cierre">
+                <span class="material-symbols-outlined">
+                  forward
+                </span>
+              </button>
+              <button mat-fab color="warn" (click)="eliminar(row.id)" title="Eliminar elemento">
+                <mat-icon>delete</mat-icon>
+              </button>
+              }@else {
+              <button title="Ver detalles" mat-fab color="primary" (click)="irADetalles(row.id)">
+                <mat-icon>zoom_in</mat-icon>
+              </button>
+              }
+            </div>
+          </td>
+        </ng-container>
+        } @else {
+        <ng-container matColumnDef="acciones">
+          <th mat-header-cell *matHeaderCellDef></th>
+          <td mat-cell *matCellDef="let row">
+            <button mat-raised-button color="primary" class="my-2" [matMenuTriggerFor]="accion_menu">Acciones</button>
+            <mat-menu #accion_menu="matMenu" class="mat-menu-item">
+              <button mat-menu-item title="Editar fecha" (click)="editarCompra(row.id)" [disabled]="row.cierre">
+                Editar fecha
+              </button>
+              @if (!row.cierre) {
+              <button mat-menu-item title="Editar detalles" (click)="editar(row.id)" [disabled]="row.cierre">
+                Editar detalles
+              </button>
+              <button mat-menu-item title="Eliminar elemento" (click)="eliminar(row.id)" >
+                Eliminar elemento
+              </button>
+              }@else {
+              <button mat-menu-item title="Ver detalles" (click)="irADetalles(row.id)">
+                Ver detalles
+              </button>
+              }
+
+            </mat-menu>
+          </td>
+        </ng-container>
+
+        }
+
+        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+
+      </table>
+      <mat-paginator #paginator (page)="cambiarPagina($event)" [length]="cantidadTotal" [pageSize]="cantidadPorPagina"
+        [showFirstLastButtons]="true" [pageSizeOptions]="opcionesDePaginado" [pageIndex]="numeroDePagina">
+      </mat-paginator>
+    </div>
+  </div>
+</div>

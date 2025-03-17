@@ -1,0 +1,24 @@
+<h2 mat-dialog-title>{{title}}</h2>
+<mat-dialog-content class="miContainer">
+
+    <form [formGroup]="inventarioForm">
+        <div class="myForm">
+            <mat-form-field appearance="fill">
+                <mat-label>Material</mat-label>
+                <input matInput formControlName="material" name="material" type="text">
+            </mat-form-field>
+
+            <mat-form-field appearance="fill">
+                <mat-label >Stock</mat-label>
+                <input class="TotAPagar" matInput formControlName="stock" name="stock" type="number">
+            </mat-form-field>
+
+        </div>
+    </form>
+</mat-dialog-content>
+
+
+<mat-dialog-actions>
+    <button mat-raised-button (click)="cancel()">Cancelar</button>
+    <button mat-raised-button color="primary" (click)="onSave()" [disabled]="inventarioForm.invalid">Guardar</button>
+</mat-dialog-actions>

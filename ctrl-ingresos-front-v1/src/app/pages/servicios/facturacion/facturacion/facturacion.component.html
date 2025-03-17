@@ -1,0 +1,138 @@
+<app-nav-servicios />
+<router-outlet />
+<div class='demo-app'>
+    <div class='demo-app-sidebar'>
+        <div class='demo-app-sidebar-section'>
+            <header>{{title}}</header>
+            <div class="descVto">
+                @if (paid) {
+                <p [style.color]="'rgb(96, 238, 14)'">Para la fecha actual del vencimiento del servicio ya existe una
+                    factura pagada.</p>
+                }@else {
+                @if (diasIniVto<0) { <p class="text-muted-foreground">Faltan {{diasFinVto}} días para pasar el limite de
+                    pago.</p>
+                    }@else { <p class="text-muted-foreground">Faltan {{diasIniVto}} días para el sig. Vencimiento.</p>
+                    }
+                    }
+            </div>
+
+        </div>
+        <div class="container">
+
+            <div class="buttonFactura">
+                @if (!facturaActiva) {
+                <button (click)="saveFactura()" mat-raised-button color="primary" class="my-2">
+                    <mat-icon>add_circle_outline</mat-icon>
+                    Nuevo
+                </button>
+                }@else {
+                <button (click)="eliminarFactura(facturaData.id!)" mat-raised-button color="warn" class="my-2">
+                    <mat-icon>delete</mat-icon>
+                    Borrar
+                </button>
+                }
+            </div>
+            @if (facturaActiva) {
+            <div class="facturaDetails">
+                <p class="facturaTitle">Fecha de creación:</p>
+                <p class="facturaData">{{facturaData.fecha | date:'dd-MM-yyyy' }}</p>
+                <p class="facturaTitle">Servicio a pagar:</p>
+                <p class="facturaData">{{facturaData.servicio?.nombre}}</p>
+                <p class="facturaTitle">Valor del servicio:</p>
+                <p class="facturaData">{{facturaData.servicio?.valor | currency}}</p>
+                <p class="facturaTitle">Periodo de pago:</p>
+                <p class="facturaData">{{getDescriptionPeriodPay (facturaData.servicio?.periodoPago!) }}</p>
+                <p class="facturaTitle">Saldo restante:</p>
+                <p class="facturaData">{{facturaData.saldoRest | currency}}</p>
+                <p class="facturaTitle">total pagado:</p>
+                <p class="facturaData">{{facturaData.totPag| currency}}</p>
+            </div>
+            }@else {
+            <div class="sinFactura">
+                <p>No tienes una factura sin pagar para {{paramServicioName}}</p>
+                <p>Bien hecho!</p>
+            </div>
+            }
+        </div>
+
+    </div>
+
+    <div class='demo-app-main'>
+        @if (facturaActiva) {
+        <div class="container">
+            <div>
+                <button (click)="nuevoPago()" mat-raised-button color="primary" class="my-2">
+                    <mat-icon>add_circle_outline</mat-icon>
+                    Nuevo pago
+                </button>
+            </div>
+
+            <br />
+
+            <div class="contenedor-tabla">
+                <table mat-table [dataSource]="dataSource" class="table-responsive">
+
+                    <ng-container matColumnDef="fechaPago">
+                        <th mat-header-cell *matHeaderCellDef>Fecha de pago</th>
+                        <td mat-cell *matCellDef="let row"> {{row.fechaPago | date:'dd-MM-yyyy'}} </td>
+                    </ng-container>
+
+
+                    <ng-container matColumnDef="pago">
+                        <th mat-header-cell *matHeaderCellDef>Pago</th>
+                        <td mat-cell *matCellDef="let row">{{row.pago | currency}}</td>
+                    </ng-container>
+
+                    @if (!this.responsive) {
+                    <ng-container matColumnDef="acciones">
+                        <th mat-header-cell *matHeaderCellDef></th>
+                        <td mat-cell *matCellDef="let row">
+                            <div class="acciones-button-container">
+                                <button title="Editar elemento" mat-fab color="primary"
+                                    (click)="editar(row.detalleFacturaId.id, row.detalleFacturaId.idFactura, paramIdServicio!)">
+                                    <mat-icon>edit</mat-icon>
+                                </button>
+                                <button title="Desactivar elemento" mat-fab color="warn"
+                                    (click)="eliminarDetalleFactura(row.detalleFacturaId.id, row.detalleFacturaId.idFactura)">
+                                    <mat-icon>delete</mat-icon>
+                                </button>
+                            </div>
+                        </td>
+                    </ng-container>
+                    } @else {
+                    <ng-container matColumnDef="acciones">
+                        <th mat-header-cell *matHeaderCellDef></th>
+                        <td mat-cell *matCellDef="let row">
+                            <button mat-raised-button color="primary" class="my-2"
+                                [matMenuTriggerFor]="accion_menu">Acciones</button>
+                            <mat-menu #accion_menu="matMenu" class="mat-menu-item">
+                                <button mat-menu-item title="Editar elemento" color="primary"
+                                    (click)="editar(row.detalleFacturaId.id, row.detalleFacturaId.idFactura, paramIdServicio!)">
+                                    Editar elemento
+                                </button>
+                                <button mat-menu-item title="Desactivar elemento" color="warn"
+                                    (click)="eliminarDetalleFactura(row.detalleFacturaId.id, row.detalleFacturaId.idFactura)">
+                                    Desactivar elemento
+                                </button>
+
+                            </mat-menu>
+                        </td>
+                    </ng-container>
+
+                    }
+
+                    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                    <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+
+                </table>
+            </div>
+
+        </div>
+        }@else {
+        <div class="sinPago">
+            <p>Sin detalles de pagos</p>
+        </div>
+
+        }
+    </div>
+</div>

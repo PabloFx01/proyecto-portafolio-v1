@@ -1,0 +1,35 @@
+<h2 mat-dialog-title>{{title}} metal asociado para la venta</h2>
+<mat-dialog-content class="miContainer">
+    <form [formGroup]="metalVentaForm">
+        <div>
+            <mat-form-field appearance="fill">
+                <mat-label>Id Metal padre</mat-label>
+                <input matInput formControlName="idMetalCompra" name="idMetalCompra" type="text">
+            </mat-form-field>
+        </div>
+
+        <div>
+            <mat-form-field appearance="fill">
+                <mat-label>Id</mat-label>
+                <input matInput formControlName="idMetalVenta" name="idMetalVenta" type="text">
+            </mat-form-field>
+        </div>
+
+        <div>
+            <mat-form-field appearance="fill">
+                <mat-label>Descripcion</mat-label>
+                <input matInput formControlName="descripcion" name="descripcion" type="text">
+                @if(hasError('descripcion','minlength')){
+                <span class="text-danger">Minimo 3 caracteres.</span>
+                }
+            </mat-form-field>
+
+        </div>       
+    </form>
+</mat-dialog-content>
+
+
+<mat-dialog-actions>
+    <button mat-raised-button (click)="cancel()">Cancelar</button>
+    <button mat-raised-button color="primary" (click)="onSave()" [disabled]="metalVentaForm.invalid">Guardar</button>
+</mat-dialog-actions>

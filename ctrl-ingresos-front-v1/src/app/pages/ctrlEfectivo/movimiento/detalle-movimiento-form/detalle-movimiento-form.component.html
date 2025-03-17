@@ -1,0 +1,70 @@
+<h2 mat-dialog-title>{{title}}</h2>
+<mat-dialog-content class="miContainer">
+    <form [formGroup]="detalleForm">
+        <div class="fila1">
+            <!-- <div class="fecha">
+                <mat-form-field>
+                    <mat-label>Fecha del movimiento</mat-label>
+                    <input matInput [matDatepicker]="picker" formControlName="fecha">
+                    <mat-hint>DD/MM/YYYY</mat-hint>
+                    <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
+                    <mat-datepicker #picker></mat-datepicker>
+                </mat-form-field>
+            </div> -->
+            <div>
+                <mat-form-field appearance="fill">
+                    <mat-label>Fecha del movimiento</mat-label>
+                    <input matInput formControlName="fecha" name="fecha" type="text">
+                </mat-form-field>
+            </div>
+
+            <div>
+                <mat-form-field appearance="fill">
+                    <mat-label>Tipo de movimiento</mat-label>
+                    <input matInput formControlName="tipoMovimiento" name="tipoMovimiento" type="text">
+                </mat-form-field>
+            </div>
+        </div>
+
+        <div class="fila1">
+            <mat-form-field>
+                <mat-label>Cuenta origen</mat-label>
+                <mat-select formControlName="sobre">
+                    @for (sobre of listSobre; track $index) {
+                    <mat-option [value]="sobre.id">{{ sobre.descripcion }}</mat-option>
+                    }
+                </mat-select>
+            </mat-form-field>
+            @if (movimientoData.transaccion) {
+            <mat-form-field>
+                <mat-label>Cuenta destino</mat-label>
+                <mat-select formControlName="sobreDestino">
+                    @for (sobre of listSobre; track $index) {
+                    <mat-option [value]="sobre.id">{{ sobre.descripcion }}</mat-option>
+                    }
+                </mat-select>
+            </mat-form-field>
+            }
+            <div>
+                <mat-form-field appearance="fill">
+                    <mat-label>Monto</mat-label>
+                    <input matInput formControlName="monto" name="monto" type="number">
+                </mat-form-field>
+            </div>
+
+            <div>
+                <!-- <mat-form-field appearance="fill"> -->
+                    <!-- <mat-label>Comentarios</mat-label> -->
+                    <!-- <input matInput formControlName="comentario" name="comentario" type="text"> -->                    
+                    <textarea name="comentario" id="comentario" class="form-control text-area" formControlName="comentario" rows="3" ></textarea>
+                    
+                <!-- </mat-form-field> -->
+            </div>
+        </div>
+    </form>
+</mat-dialog-content>
+
+
+<mat-dialog-actions>
+    <button mat-raised-button (click)="cancel()">Salir</button>
+</mat-dialog-actions>

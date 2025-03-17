@@ -1,0 +1,63 @@
+.miContainer {
+    display: block;
+    align-items: start;
+  }
+  .myForm{
+    display: flexbox;
+    margin: 25px;
+  }
+
+  .myForm>.meta{
+    display: flex;
+    flex-direction: column;
+    justify-content: center; 
+    align-items: center;
+    height: 250px;
+  }
+
+  .contenido-meta{
+    display: block;
+    justify-content: left;
+    align-items: start;
+  }
+
+  .contenido-meta>.textArea-meta{
+    width:350px;
+    height: 200px;
+    max-height: 200px;
+  }
+
+  .label-meta{
+    display: block;
+    justify-content: left;
+    align-items: start;
+  }
+
+  mat-dialog-actions{
+    display: flex;
+    justify-content: center; 
+    align-items: center;
+  
+  }
+  mat-form-field{
+    width: 275px; /* Ajusta este valor según tus necesidades */
+    padding-right: 8px;
+    /* max-width: 500px; Opcional: para evitar que los inputs sean demasiado anchos en pantallas grandes */
+  }
+  
+  h2{
+    display: flex;
+    justify-content: center; 
+    align-items: center; 
+  }
+  
+  .slide{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  
+  }
+  .TotAPagar{
+    text-align: center;
+  }
+  

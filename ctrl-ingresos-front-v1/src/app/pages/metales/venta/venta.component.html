@@ -1,0 +1,133 @@
+<metales-nav-app />
+<router-outlet />
+<br>
+<mat-toolbar>
+  <button (click)="addRegister()" mat-raised-button color="primary" class="my-2">
+    <mat-icon>add_circle_outline</mat-icon>
+    Nueva venta
+  </button>
+</mat-toolbar>
+
+
+<br />
+
+<div class="container my-3">
+
+  <mat-form-field class="myFilter">
+    <mat-label>Buscar</mat-label>
+    <input matInput (keyup)="applyFilter($event)" placeholder="Ej. Cobre" #input>
+  </mat-form-field>
+
+  <div class="row">
+    <div class="contenedor-tabla col">
+      <table mat-table [dataSource]="dataSource" class="table-responsive">
+        <!-- ID Column -->
+        <ng-container matColumnDef="id">
+          <th mat-header-cell *matHeaderCellDef> ID </th>
+          <td mat-cell *matCellDef="let row"> {{row.id}} </td>
+        </ng-container>
+
+        <ng-container matColumnDef="descripcion">
+          <th mat-header-cell *matHeaderCellDef> Descripción </th>
+          <td mat-cell *matCellDef="let row"> {{row.descripcion}} </td>
+        </ng-container>
+
+        <ng-container matColumnDef="fechaVenta">
+          <th mat-header-cell *matHeaderCellDef> Fecha de la venta </th>
+          <td mat-cell *matCellDef="let row"> {{row.fechaVenta | date:'dd-MM-yyyy'}} </td>
+        </ng-container>
+
+        <ng-container matColumnDef="ventaIndividual">
+          <th mat-header-cell *matHeaderCellDef>Es venta individual </th>
+          <td mat-cell *matCellDef="let row">
+            @if (row.ventaIndividual) {
+            <span class="check-ok material-symbols-outlined">
+              check_box
+            </span>
+            }@else {
+            <span class="check-off material-symbols-outlined">
+              check_box_outline_blank
+            </span>
+            }
+            <!-- <mat-checkbox [checked]="row.ventaIndividual" disabled></mat-checkbox> -->
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="gananciaTotal">
+          <th mat-header-cell *matHeaderCellDef> Ganancia total </th>
+          <td mat-cell *matCellDef="let row"> {{row.gananciaTotal | currency}} </td>
+        </ng-container>
+
+        <ng-container matColumnDef="ticketDescripcion">
+          <th mat-header-cell *matHeaderCellDef> Ticket </th>
+          <td mat-cell *matCellDef="let row"> {{row.ticket?.descripcion ? row.ticket?.descripcion : 'Sin ticket'}} </td>
+        </ng-container>
+
+
+        @if (!this.responsive) {
+          <ng-container matColumnDef="acciones">
+            <th mat-header-cell *matHeaderCellDef></th>
+            <td mat-cell *matCellDef="let row">
+              <div class="acciones-button-container">
+                @if (row.gananciaTotal==0) {
+                <button title="Editar" mat-fab color="primary" (click)="editar(row.id)">
+                  <!-- <button mat-fab color="primary" (click)="editar(row.id)" > -->
+                  <mat-icon>edit</mat-icon>
+                </button>
+                <button title="Editar detalles" mat-fab color="primary" (click)="irADetalles(row.id)">
+                  <span class="material-symbols-outlined">
+                    forward
+                  </span>
+                </button>
+                <button title="Eliminar" mat-fab color="warn" (click)="eliminar(row.id)">
+                  <mat-icon>delete</mat-icon>
+                </button>
+                }
+                @else{
+                <button title="Ver detalles" mat-fab color="primary" (click)="verDetalles(row.id)">
+                  <mat-icon>zoom_in</mat-icon>
+                </button>
+                }
+              </div>
+            </td>
+          </ng-container>
+        }
+        @else {
+        <ng-container matColumnDef="acciones">
+          <th mat-header-cell *matHeaderCellDef></th>
+          <td mat-cell *matCellDef="let row">
+            <button mat-raised-button color="primary" class="my-2" [matMenuTriggerFor]="accion_menu">Acciones</button>
+            <mat-menu #accion_menu="matMenu" class="mat-menu-item">
+              @if (row.gananciaTotal==0) {
+                <button mat-menu-item title="Editar" (click)="editar(row.id)">     
+                  Editar elementos
+                </button>
+                <button mat-menu-item title="Editar detalles"  (click)="irADetalles(row.id)">
+                  Editar detalles
+                </button>
+                <button mat-menu-item title="Eliminar" (click)="eliminar(row.id)">
+                  Eliminar elemento
+                </button>
+                }
+                @else{
+                <button mat-menu-item  title="Ver detalles" (click)="verDetalles(row.id)">
+                  Ver detalle
+                </button>
+                }
+            </mat-menu>
+          </td>
+        </ng-container>
+
+        }
+
+       
+        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+
+      </table>
+      <mat-paginator #paginator (page)="cambiarPagina($event)" [length]="cantidadTotal" [pageSize]="cantidadPorPagina"
+        [showFirstLastButtons]="true" [pageSizeOptions]="opcionesDePaginado" [pageIndex]="numeroDePagina">
+      </mat-paginator>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,134 @@
+<app-nav-wish-list />
+<router-outlet />
+<div class='demo-app'>
+    <div class='demo-app-sidebar'>
+        <div class='demo-app-sidebar-section'>
+            <header>{{title}}</header>
+        </div>
+        <div class="container">
+
+            <div class="facturaDetails">
+                <p class="facturaTitle">Titulo:</p>
+                <p class="facturaData">{{wishListData.titulo}}</p>
+                <p class="facturaTitle">Fecha de creación:</p>
+                <p class="facturaData">{{wishListData.fechaCreacion | date:'dd-MM-yyyy' }}</p>
+                <p class="facturaTitle">Cuenta origen:</p>
+                <p class="facturaData">{{wishListData.cuentaOrigen?.sobre?.descripcion}}</p>
+                <p class="facturaTitle">Saldo en cuenta asociada:</p>
+                <p class="facturaData">{{wishListData.cuentaOrigen?.saldo | currency}} </p>
+                <p class="facturaTitle">Valor actual de la lista:</p>
+                <p class="facturaData">{{totValorList | currency}} </p>
+                @if (dataSource.data.length>0) {
+                <p class="facturaTitle">Porcentaje actual cumplido:</p>
+                <p class="facturaData">{{pcjeActual}}%</p>
+                @if (pcjeActual<100) { <p class="facturaTitle">Fecha estimada para poder cumplirlo:</p>
+                    <p class="facturaData">{{fechaEstimada | date:'dd-MM-yyyy' }}</p>
+                    }
+                    @if(pcjeActual==100){
+                    <div class="cumplir-deseo">
+                        <div class="cumplir-deseo-contenido">
+                            <button style="--i:#a955ff;--j:#ea51ff;" (click)="cumplirDeseos()">
+                                <span class="icon">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                                        class="bi bi-heart" viewBox="0 0 16 16">
+                                        <path
+                                            d="m8 2.748-.717-.737C5.6.281 2.514.878 1.4 3.053c-.523 1.023-.641 2.5.314 4.385.92 1.815 2.834 3.989 6.286 6.357 3.452-2.368 5.365-4.542 6.286-6.357.955-1.886.838-3.362.314-4.385C13.486.878 10.4.28 8.717 2.01L8 2.748zM8 15C-7.333 4.868 3.279-3.04 7.824 1.143c.06.055.119.112.176.171a3.12 3.12 0 0 1 .176-.17C12.72-3.042 23.333 4.867 8 15z">
+                                        </path>
+                                    </svg>
+                                </span>
+                                <span class="title">Cumplir deseos?</span>
+                            </button>
+                        </div>
+                    </div>
+                    }
+                    }
+
+            </div>
+        </div>
+    </div>
+
+    <div class='demo-app-main'>
+        <div class="container">
+            @if (!wishListData.estado) {
+            <div>
+                <button (click)="addRegister()" mat-raised-button color="primary" class="my-2">
+                    <mat-icon>add_circle_outline</mat-icon>
+                    Nuevo item
+                </button>
+            </div>
+            }
+            <br />
+
+            <div class="miTabla">
+                <table mat-table [dataSource]="dataSource">
+
+                    <ng-container matColumnDef="fechaCreacion">
+                        <th mat-header-cell *matHeaderCellDef>Fecha de creación</th>
+                        <td mat-cell *matCellDef="let row"> {{row.fechaDetail | date:'dd-MM-yyyy'}} </td>
+                    </ng-container>
+
+                    <ng-container matColumnDef="itemName">
+                        <th mat-header-cell *matHeaderCellDef>Item</th>
+                        <td mat-cell *matCellDef="let row"> {{row.itemName}} </td>
+                    </ng-container>
+
+
+                    <ng-container matColumnDef="precio">
+                        <th mat-header-cell *matHeaderCellDef>Precio</th>
+                        <td mat-cell *matCellDef="let row">{{row.precio | currency}}</td>
+                    </ng-container>
+
+                    <ng-container matColumnDef="link">
+                        <th mat-header-cell *matHeaderCellDef>Link</th>
+                        <td mat-cell *matCellDef="let row">
+                            <ng-container *ngIf="row.link; else noLink">
+                                <a [href]="row.link" target="_blank">link</a>
+                            </ng-container>
+                            <ng-template #noLink>sin link</ng-template>
+                        </td>
+                    </ng-container>
+
+                    <ng-container matColumnDef="comentario">
+                        <th mat-header-cell *matHeaderCellDef>Comentario</th>
+                        <td mat-cell *matCellDef="let row">{{row.comentario}}</td>
+                    </ng-container>
+
+                    <ng-container matColumnDef="cumplido">
+                        <th mat-header-cell *matHeaderCellDef>Cumplido?</th>
+                        <td mat-cell *matCellDef="let row">{{row.procesarDetail?'si':'no'}}</td>
+                    </ng-container>
+
+                    <ng-container matColumnDef="acciones">
+                        <th mat-header-cell *matHeaderCellDef></th>
+                        <td mat-cell *matCellDef="let row">
+                            <div class="acciones-button-container">
+                                @if (!row.procesarDetail) {
+
+                                <button title="Cumplir deseo" mat-fab color="warn" 
+                                    (click)="cumplirItemWish(row.wishDetailId.id, row.wishDetailId.idWish, row.precio, row.itemName)">
+                                    <mat-icon>favorite</mat-icon>
+                                </button>
+
+                                <button title="Editar item" mat-fab color="primary"
+                                    (click)="editar(row.wishDetailId.id, row.wishDetailId.idWish)">
+                                    <mat-icon>edit</mat-icon>
+                                </button>
+
+                                <button title="Eliminar item" mat-fab color="warn"
+                                    (click)="eliminarDetalleWish(row.wishDetailId.id, row.wishDetailId.idWish)">
+                                    <mat-icon>delete</mat-icon>
+                                </button>
+                                }
+                            </div>
+                        </td>
+                    </ng-container>
+
+                    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                    <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+
+                </table>
+            </div>
+
+        </div>
+    </div>
+</div>

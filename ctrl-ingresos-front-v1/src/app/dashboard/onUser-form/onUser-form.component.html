@@ -1,0 +1,12 @@
+<div class="miContainer">
+    <div class="space-y-4">
+        <h2 mat-dialog-title class="text-2xl font-bold text-primary">Información importante</h2>
+        <mat-dialog-content>
+            <p class="text-muted-foreground font-bold">Por favor, antes de ingresar a <b>{{title}}</b> ud. Debe <i>iniciar sesión.</i></p>
+        </mat-dialog-content>
+    </div>
+</div>
+
+<mat-dialog-actions>
+    <button mat-raised-button (click)="cancel()">Aceptar</button>
+</mat-dialog-actions>

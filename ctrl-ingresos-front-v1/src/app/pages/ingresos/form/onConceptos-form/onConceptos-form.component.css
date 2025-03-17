@@ -1,0 +1,17 @@
+.miContainer {
+    display: flex;
+    flex-direction: column;
+    justify-content: center; 
+    align-items: center;
+}
+
+mat-dialog-actions{
+    display: flex;
+    justify-content: center; 
+    align-items: center;
+    
+}
+
+p {
+    text-align: center;
+}

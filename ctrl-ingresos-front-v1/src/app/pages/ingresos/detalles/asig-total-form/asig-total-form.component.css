@@ -1,0 +1,32 @@
+.mat-mdc-radio-button~.mat-mdc-radio-button {
+    margin-left: 16px;
+}
+
+.miContainer {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+mat-dialog-actions {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+mat-form-field {
+    width: 120%;
+    /* Ajusta este valor según tus necesidades */
+    /* max-width: 500px; Opcional: para evitar que los inputs sean demasiado anchos en pantallas grandes */
+}
+
+span {
+    margin-bottom: 5px;
+}
+
+h2 {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}

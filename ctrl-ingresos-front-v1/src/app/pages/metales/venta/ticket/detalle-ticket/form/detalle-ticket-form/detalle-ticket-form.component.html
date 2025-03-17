@@ -1,0 +1,57 @@
+<h2>{{title}}</h2>
+
+<form [formGroup]="detalleTicketForm" class="myContainer">
+    <div class="fila1">
+        <mat-form-field appearance="fill">
+            <mat-label>Id ticket</mat-label>
+            <input matInput formControlName="idTicket" name="idTicket" type="number">
+        </mat-form-field>
+        <mat-form-field appearance="fill">
+            <mat-label>Id</mat-label>
+            <input matInput formControlName="id" name="id" type="number">
+        </mat-form-field>
+    </div>
+    <div class="fila2">
+        <mat-form-field>
+            <mat-label>Material</mat-label>
+            <mat-select formControlName="metalNombre">              
+                @for (metal of listMetal; track $index) {
+                <mat-option [value]="metal.metalId?.id">{{ metal.nombre }}</mat-option>
+                }
+            </mat-select>
+        </mat-form-field>
+
+        <mat-form-field>
+            <mat-label>Descripción</mat-label>
+            <mat-select formControlName="metalDescripcionTicket">
+                @for (metalVenta of listMetalVenta; track $index) {
+                <mat-option [value]="metalVenta.metalVentaId.id +
+                    '/' +metalVenta.metalVentaId.idMetalCompra">{{ metalVenta.descripcion}}</mat-option>
+                }
+            </mat-select>
+        </mat-form-field>
+
+        <mat-form-field appearance="fill">
+            <mat-label>Peso vendido</mat-label>
+            <input matInput formControlName="pesoVendido" name="pesoVendido" type="number">
+        </mat-form-field>
+
+        <mat-form-field appearance="fill">
+            <mat-label>Precio venta</mat-label>
+            <input matInput formControlName="precioVenta" name="precioVenta" type="number">
+        </mat-form-field>
+
+        <mat-form-field appearance="fill">
+            <mat-label>Importe</mat-label>
+            <input matInput formControlName="importe" name="importe" type="number">
+        </mat-form-field>
+
+    </div>
+
+    <div class="fila4">
+        <button mat-raised-button (click)="limpiar()">Limpiar</button>
+        <button mat-raised-button color="primary" (click)="onSave()"
+            [disabled]="detalleTicketForm.invalid">Guardar</button>
+    </div>
+
+</form>

@@ -1,0 +1,25 @@
+<h2 mat-dialog-title>{{title}}</h2>
+
+<mat-dialog-content class="miContainer">
+
+
+    <form [formGroup]="detalleFacturaForm">
+        <div class="myForm">
+            <mat-form-field appearance="fill">
+                <mat-label>Pago sugerido</mat-label>
+                <input matInput formControlName="pagoSugerido" name="pagoSugerido" type="number">
+            </mat-form-field>
+
+            <mat-form-field appearance="fill">
+                <mat-label>Pago</mat-label>
+                <input matInput formControlName="pago" name="pago" type="number" max={{maxPago}}>
+            </mat-form-field>            
+        </div>
+    </form>
+
+</mat-dialog-content>
+
+<mat-dialog-actions>
+    <button mat-raised-button (click)="cancel()">Cancelar</button>
+    <button mat-raised-button color="primary" (click)="onSave()" [disabled]="detalleFacturaForm.invalid">Guardar</button>
+</mat-dialog-actions>

@@ -1,0 +1,42 @@
+<h2 mat-dialog-title>{{title}}</h2>
+<mat-dialog-content class="miContainer">
+  <form [formGroup]="compraForm">
+    <div>
+      <mat-form-field appearance="fill">
+        <mat-label>Id</mat-label>
+        <input matInput formControlName="id" name="id" type="text">
+      </mat-form-field>
+    </div>
+
+
+    <div>
+      <mat-form-field appearance="fill">
+        <mat-label>Comentario</mat-label>
+        <input matInput formControlName="comentario" name="comentario" type="text">
+      </mat-form-field>
+    </div>
+
+    <div class="fecha">
+      <mat-form-field>
+        <mat-label>Fecha de la compra</mat-label>
+        <input matInput [matDatepicker]="picker" formControlName="fechaCompra">
+        <mat-hint>MM/DD/YYYY</mat-hint>
+        <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
+        <mat-datepicker #picker></mat-datepicker>
+      </mat-form-field>
+    </div>
+
+    
+    <div class="slide">
+      <mat-slide-toggle formControlName="ficticio">Es ficticio?</mat-slide-toggle>
+    </div>
+    
+  </form>
+</mat-dialog-content>
+
+<mat-dialog-actions>
+  <button mat-raised-button (click)="cancel()">Cancelar</button>
+  <button mat-raised-button color="primary" (click)="onSave()" [disabled]="compraForm.invalid">Guardar</button>
+</mat-dialog-actions>
+
+

@@ -1,0 +1,54 @@
+<h2 mat-dialog-title>{{title}}</h2>
+
+<mat-dialog-content class="miContainer">
+
+
+    <form [formGroup]="asigRestForm">
+        <div>
+            <mat-form-field appearance="fill">
+                <mat-label>Concepto origen</mat-label>
+                <input matInput formControlName="conceptoOrigen" name="conceptoOrigen" type="text">
+            </mat-form-field>
+        </div>
+
+        <div>
+            <mat-form-field appearance="fill">
+                <mat-label>Monto restante</mat-label>
+                <input matInput formControlName="montoRes" name="montoRes" type="number" >
+            </mat-form-field>
+            
+        </div>
+
+        <mat-form-field>
+            <mat-label>Concepto destino</mat-label>
+            <mat-select formControlName="conceptoDestino">              
+                @for (concepto of listConcepto; track $index) {
+                <mat-option [value]="concepto.nombre">{{ concepto.nombre }}</mat-option>
+                }
+            </mat-select>
+        </mat-form-field>
+
+
+        <div>
+            <mat-form-field appearance="fill">
+                <mat-label>Monto</mat-label>
+                <input matInput formControlName="monto" name="monto" type="number" max={{detalleData?.pctXCpto?.montoAsigRest}}>
+                @if(msjErrorOnsave!=null){
+                <span class="text-danger">{{msjErrorOnsave}}</span>
+                }
+            </mat-form-field>
+        </div>
+
+        <mat-radio-group aria-label="Seleccionar destino" formControlName="optDestino">
+            <mat-radio-button value="EFECTIVO">Efectivo</mat-radio-button>
+            <mat-radio-button value="DIGITAL">Digital</mat-radio-button>
+        </mat-radio-group>
+
+    </form>
+</mat-dialog-content>
+
+
+<mat-dialog-actions>
+    <button mat-raised-button (click)="cancel()">Cancelar</button>
+    <button mat-raised-button color="primary" (click)="onSave()" [disabled]="asigRestForm.invalid">Guardar</button>
+</mat-dialog-actions>

@@ -1,0 +1,165 @@
+.demo-app {
+  display: flex;
+  min-height: 100%;
+  font-family: Arial, Helvetica Neue, Helvetica, sans-serif;
+  font-size: 14px;
+}
+
+.demo-app-sidebar {
+  width: 300px;
+  line-height: 1.5;
+  background: #eaf9ff;
+  border-right: 1px solid #d3e2e8;
+}
+
+.demo-app-sidebar-section {
+  padding: 2em;
+}
+
+.demo-app-main {
+  flex-grow: 1;
+  padding: 3em;
+}
+
+#root {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+/* .container{
+    display: flex;
+    flex-grow: 1;
+} */
+main {
+  flex-grow: 1;
+
+}
+
+header {
+  text-align: center;
+}
+
+
+.itemValorTotal {  
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.valorTotal {
+  /* display: flex;
+  align-items: center;
+  justify-content: center; */
+  width: 100px;
+  height: 40px;
+  border: 1px solid #000;
+  border-radius: 20px;
+
+  -webkit-inner-spin-button {
+    opacity: 1;
+  }
+}
+
+.text-center {
+  /* display: flex;
+  align-items: center;
+  justify-content: center; */
+  margin-top: 7%;
+}
+
+.botones {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+}
+
+
+.miNav {
+  display: flex;
+  max-height: 485px;
+}
+
+.sidebar-title{
+  font-size: 25px;
+}
+.selected {
+  background-color: #eaf9ff;
+  /* Color de fondo para la fila seleccionada */
+}
+.notAccount{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  color: red;
+}
+
+.fondoSearch {    
+  display: block;
+  position: absolute;
+  top: 50%;
+  left: 60%;
+}
+
+.fondoSearch>.bx {
+  font-size: 100px;
+}
+.irA{
+  cursor: pointer;
+}
+
+.table-responsive{
+  cursor: pointer;
+}
+
+/* opciones responsive */
+@media (max-width: 600px) {
+  .contenedor-tabla{
+    max-width:500px;
+  }
+  .botones>button{
+    font-size: smaller;
+    height: auto;
+  }
+}
+
+@media (max-width:500px) {
+  .contenedor-tabla{
+    max-width:300px;
+  }
+  .botones>button{
+    font-size: smaller;
+    height: auto;
+  }
+}
+
+@media (max-width:400px) {
+  .contenedor-tabla{
+    max-width:200px;
+  }
+  .botones>button{
+    font-size: smaller;
+    height: auto;
+  }
+}
+
+
+.table-responsive {
+display: flex;
+flex-direction: column;
+}
+
+.table-responsive .mat-header-row,
+.table-responsive .mat-row {
+display: flex;
+flex-wrap: wrap;
+}
+
+.table-responsive .mat-cell,
+.table-responsive .mat-header-cell {
+flex: 1 1 auto;
+min-width: 100px;
+}
+              

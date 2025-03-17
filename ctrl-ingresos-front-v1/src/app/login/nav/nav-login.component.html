@@ -1,0 +1,28 @@
+<!-- MENU START  -->
+<div class="navbar navbar-expand-lg navbar-dark bg-dark">
+  <!-- NAV CONTAINER START -->
+  <div class="container-fluid container">
+    <a routerLink="" [ngClass]="{active: menuOption == 'home'}" (click)="onOption('home')"
+      class="navbar-brand text-info fw-semibold fs-4"><i class='bx bxs-home'></i></a>
+    <p></p>
+    <!-- NAV BUTTON  -->
+    <button #miBoton class="navbar-toggler" type="button" (click)="toggleNavbarCollapse()" data-bs-toggle="collapse"
+      data-bs-target="#nav">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <div class="collapse navbar-collapse" id="nav">
+      <ul class="navbar-nav">
+
+        <li class="nav-item">
+          @if(userLoginOn){
+            <a (click)="logout()" class="nav-link" data-bs-toggle="dropdown">LogOut</a>
+          }@else {
+          <a (click)="irAlink('login')" class="nav-link" data-bs-toggle="dropdown">{{title}}</a>
+          }
+        </li>
+
+      </ul>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,51 @@
+<h2 mat-dialog-title>{{title}}</h2>
+<mat-dialog-content class="miContainer">
+
+    <form [formGroup]="wishListForm">
+        <div class="myForm">
+            <mat-form-field appearance="fill">
+                <mat-label>Titulo</mat-label>
+                <input matInput formControlName="titulo" name="titulo" type="text">
+            </mat-form-field>
+
+            <mat-form-field>
+                <mat-label>Fecha de creación</mat-label>
+                <input matInput [matDatepicker]="picker" formControlName="fechaCreacion">
+                <mat-hint>MM/DD/YYYY</mat-hint>
+                <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
+                <mat-datepicker #picker></mat-datepicker>
+            </mat-form-field>
+
+            <mat-form-field>
+                <mat-label>Cuenta origen</mat-label>
+                <mat-select formControlName="cOrigen">
+                    @for (sobre of listSobre; track $index) {
+                    <mat-option [value]="sobre.id">{{ sobre.descripcion }}</mat-option>
+                    }
+                </mat-select>
+            </mat-form-field>
+
+            <mat-form-field appearance="fill">
+                <mat-label>Saldo en cuenta origen</mat-label>
+                <input matInput formControlName="saldoDisponibleOrigen" name="saldoDisponibleOrigen" type="number">
+            </mat-form-field>
+
+            <!-- <mat-form-field appearance="fill"> -->
+            <div class="meta">
+                <div class="contenido-meta">
+                    <div class="label-meta">
+                        <mat-label>Mi meta:</mat-label>
+                    </div>
+                    <textarea id="meta" class="textArea-meta" formControlName="meta"></textarea>
+                </div>
+            </div>
+            <!-- </mat-form-field>          -->
+        </div>
+    </form>
+</mat-dialog-content>
+
+
+<mat-dialog-actions>
+    <button mat-raised-button (click)="cancel()">Cancelar</button>
+    <button mat-raised-button color="primary" (click)="onSave()" [disabled]="wishListForm.invalid">Guardar</button>
+</mat-dialog-actions>

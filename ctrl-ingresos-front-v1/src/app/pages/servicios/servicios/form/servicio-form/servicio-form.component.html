@@ -1,0 +1,65 @@
+<h2 mat-dialog-title>{{title}}</h2>
+
+<mat-dialog-content class="miContainer">
+
+
+    <form [formGroup]="servicioForm">
+        <div class="myForm">
+            <mat-form-field appearance="fill">
+                <mat-label>Nombre</mat-label>
+                <input matInput formControlName="nombre" name="nombre" type="text">
+            </mat-form-field>
+
+            <mat-form-field appearance="fill">
+                <mat-label>Valor</mat-label>
+                <input matInput formControlName="valor" name="valor" type="number">
+            </mat-form-field>
+
+
+            <mat-form-field>
+                <mat-label>Fecha Ini. Vto</mat-label>
+                <input matInput [matDatepicker]="picker" formControlName="fechaIniVto">
+                <mat-hint>MM/DD/YYYY</mat-hint>
+                <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
+                <mat-datepicker #picker></mat-datepicker>
+            </mat-form-field>
+
+            <mat-form-field>
+                <mat-label>Fecha Fin vto</mat-label>
+                <input matInput [matDatepicker]="picker2" formControlName="fechaFinVto">
+                <mat-hint>MM/DD/YYYY</mat-hint>
+                <mat-datepicker-toggle matIconSuffix [for]="picker2"></mat-datepicker-toggle>
+                <mat-datepicker #picker2></mat-datepicker>
+            </mat-form-field>
+
+            <!-- <mat-form-field appearance="fill">
+                <mat-label>Periodo de pago</mat-label>
+                <input matInput formControlName="periodoPago" name="periodoPago" type="number">
+            </mat-form-field> -->
+
+            <mat-form-field>
+                <mat-label>Periodo de pago</mat-label>
+                <mat-select formControlName="periodoPago">
+                    @for (p of listPeriodPay; track $index) {
+                    <mat-option [value]="p.id">{{ p.descripcion }}</mat-option>
+                    }
+                </mat-select>
+            </mat-form-field>
+
+            <mat-form-field appearance="fill">
+                <mat-label>Comentario</mat-label>
+                <input matInput formControlName="comentario" name="comentario" type="text">
+            </mat-form-field>
+            <div class="slide">
+                <mat-slide-toggle formControlName="activo">Activo?</mat-slide-toggle>
+            </div>
+        </div>
+
+    </form>
+
+</mat-dialog-content>
+
+<mat-dialog-actions>
+    <button mat-raised-button (click)="cancel()">Cancelar</button>
+    <button mat-raised-button color="primary" (click)="onSave()" [disabled]="servicioForm.invalid">Guardar</button>
+</mat-dialog-actions>

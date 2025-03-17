@@ -1,0 +1,61 @@
+<h2 mat-dialog-title>{{title}} concepto {{nConcepto!=''?nConcepto:'desconocido'}}</h2>
+
+<mat-dialog-content>
+
+
+    <form [formGroup]="detalleIngresoForm">
+        <div class="fila1">
+            <mat-form-field appearance="fill">
+                <mat-label>Monto en efectivo</mat-label>
+                <input matInput formControlName="montoEfec" name="montoEfec" type="number">
+            </mat-form-field>
+
+
+            <mat-form-field appearance="fill">
+                <mat-label>Monto en digital</mat-label>
+                <input matInput formControlName="montoDig" name="montoDig" type="number">
+            </mat-form-field>
+        </div>
+        <div class="fila2">
+            <div>
+                <mat-form-field appearance="fill">
+                    <mat-label>Monto reasignado</mat-label>
+                    <input matInput formControlName="montoAsig" name="montoAsig" type="number">
+                </mat-form-field>
+            </div>
+
+            <div>
+                <mat-form-field appearance="fill">
+                    <mat-label>Monto restante</mat-label>
+                    <input matInput formControlName="montoRes" name="montoRes" type="number">
+                </mat-form-field>
+            </div>
+
+            <div>
+                <mat-form-field appearance="fill">
+                    <mat-label>Nuevo monto en efectivo</mat-label>
+                    <input matInput formControlName="montoAReasignarEfec" name="montoAReasignarEfec" type="number">
+                </mat-form-field>
+            </div>
+
+            <div>
+                <mat-form-field appearance="fill">
+                    <mat-label>Nuevo monto en digital</mat-label>
+                    <input matInput formControlName="montoAReasignarDig" name="montoAReasignarDig" type="number">
+                    @if(msjErrorOnsave!=null){
+                    <span class="msjErrorOnsave text-danger">{{msjErrorOnsave}}</span>
+                    }
+                </mat-form-field>
+
+            </div>
+
+        </div>
+    </form>
+</mat-dialog-content>
+
+
+<mat-dialog-actions>
+    <button mat-raised-button (click)="cancel()">Cancelar</button>
+    <button mat-raised-button color="primary" (click)="onSave()"
+        [disabled]="detalleIngresoForm.invalid">Guardar</button>
+</mat-dialog-actions>

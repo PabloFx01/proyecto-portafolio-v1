@@ -1,0 +1,19 @@
+mat-dialog-actions{
+    display: flex;
+    justify-content: center; 
+    align-items: center;
+    
+}
+
+mat-form-field{
+    width: 80%; 
+    
+}
+
+span{
+    margin-bottom: 5px;
+}
+.text-area{
+    background-color: whitesmoke;
+}
+

@@ -1,0 +1,51 @@
+
+<form [formGroup]="detalleVentaForm" class="myContainer">
+    <div class="fila1">
+        <mat-form-field appearance="fill">
+            <mat-label>Id venta</mat-label>
+            <input matInput formControlName="idVenta" name="idVenta" type="number">
+        </mat-form-field>
+        <mat-form-field appearance="fill">
+            <mat-label>Id</mat-label>
+            <input matInput formControlName="id" name="id" type="number">
+        </mat-form-field>
+    </div>
+    <div class="fila2">
+        <mat-form-field>
+            <mat-label>Material</mat-label>
+            <mat-select formControlName="metalNombre">
+                @for (metal of listMetal; track $index) {
+                <mat-option [value]="metal.metalId?.id">{{ metal.nombre }}</mat-option>
+                }
+            </mat-select>
+        </mat-form-field>
+
+        <mat-form-field>
+            <mat-label>Descripción</mat-label>
+            <mat-select formControlName="metalDescripcionVenta">
+                @for (metalVenta of listMetalVenta; track $index) {
+                <mat-option [value]="metalVenta.metalVentaId.id +
+                    '/' +metalVenta.metalVentaId.idMetalCompra ">{{ metalVenta.descripcion}}</mat-option>
+                }
+            </mat-select>
+        </mat-form-field>
+
+
+        <mat-form-field appearance="fill">
+            <mat-label>Peso vendido</mat-label>
+            <input matInput formControlName="pesoVendido" name="pesoVendido" type="number">
+        </mat-form-field>
+
+        <mat-form-field appearance="fill">
+            <mat-label>Stock</mat-label>
+            <input matInput formControlName="stockInventario" name="stockInventario" type="number">
+        </mat-form-field>
+    </div>
+
+    <div class="fila3">
+        <button mat-raised-button (click)="limpiar()">Limpiar</button>
+        <button mat-raised-button color="primary" (click)="onSave()"
+            [disabled]="detalleVentaForm.invalid">Guardar</button>
+    </div>
+
+</form>

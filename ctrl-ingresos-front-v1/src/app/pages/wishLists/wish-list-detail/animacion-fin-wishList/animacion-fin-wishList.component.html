@@ -1,0 +1,16 @@
+<div class="barra">
+    <div class="button-close">
+        <button (click)="cancel()">
+            <span class="material-symbols-outlined">
+                close
+            </span>
+        </button>
+    </div>
+</div>
+<p class="legend_1">¡Felicidades!</p>
+<p class="legend_2">{{wishListData.titulo}}</p>
+<p class="legend_3">Mis metas:</p>
+<p class="legend_4">{{wishListData.meta}}</p>
+<p class="legend_5">¡Has finalizado uno de tus deseos!</p>
+<ng-lottie width="500px" height="600px" containerClass="moving-box" [styles]="styles" [options]="options"
+    (animationCreated)="animationCreated($event)" />

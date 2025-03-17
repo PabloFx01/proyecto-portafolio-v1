@@ -1,0 +1,149 @@
+<app-nav-ctrl-efectivo />
+<router-outlet />
+
+<div class="parent">
+    <!-- <header class="section coral">{{title}}</header> -->
+    <div class="left-side">
+      <div class="container">
+        <h2 class="left-title">{{title}}</h2>
+        <form [formGroup]="consultaMovimientoForm" class="filtro">
+            <mat-form-field>
+                <mat-label>Rango de fechas</mat-label>
+                <mat-date-range-input [formGroup]="fechaMovimientoForm" [rangePicker]="picker">
+                    <input matStartDate formControlName="startMov" placeholder="Start date">
+                    <input matEndDate formControlName="endMov" placeholder="End date">
+                </mat-date-range-input>
+                <mat-hint>MM/DD/YYYY – MM/DD/YYYY</mat-hint>
+                <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
+                <mat-date-range-picker #picker></mat-date-range-picker>
+            </mat-form-field>
+
+            <mat-form-field>
+                <mat-label>Sobres</mat-label>
+                <mat-select formControlName="sobre">
+                    @for (sobre of listSobre; track $index) {
+                    <mat-option [value]="sobre.id">{{ sobre.descripcion }}</mat-option>
+                    }
+                </mat-select>
+            </mat-form-field>
+
+            <mat-form-field>
+                <mat-label>Tipo de movimiento</mat-label>
+                <mat-select formControlName="tipoMovimiento">
+                    @for (tm of listTipoMov; track $index) {
+                    <mat-option [value]="tm.id">{{ tm.descripcion }}</mat-option>
+                    }
+                </mat-select>
+            </mat-form-field>
+
+            <div class="button-filter">
+                <button mat-raised-button color="warn" title="Borrar filtro" (click)="limpiar()"><i
+                        class='bx bx-trash-alt'></i></button>
+                <button mat-raised-button color="primary" title="Buscar" (click)="search()"
+                    [disabled]="consultaMovimientoForm.invalid"><i class='bx bx-search-alt'></i></button>
+            </div>
+        </form>
+      </div>
+    </div>
+
+    <main class="section green">
+        @if(dataSourceMovimiento.data.length > 0){
+        <div class="barra">
+            <div class="button-close">
+                <button title="Detalles de la consulta" (click)="visibleInfo()">
+                    <span class="material-symbols-outlined">
+                        manage_search
+                    </span>
+                </button>
+                <button title="Estadisticas" (click)="visibleEstadisticas()">
+                    <span class="material-symbols-outlined">
+                        query_stats
+                    </span>
+                </button>
+            </div>
+        </div>
+
+        @if (!estadisticas) {
+        <div class="container my-3">
+            <div class="row">
+                <div class="col">
+                    <table mat-table [dataSource]="dataSourceMovimiento">
+
+                        <ng-container matColumnDef="fecha">
+                            <th mat-header-cell *matHeaderCellDef> Fecha </th>
+                            <td mat-cell *matCellDef="let row"> {{row.fecha | date:'d/MM/yy, h:mm a' }} </td>
+                        </ng-container>
+
+                        <ng-container matColumnDef="tipoMovimiento">
+                            <th mat-header-cell *matHeaderCellDef> Tipo de movimiento </th>
+                            <td mat-cell *matCellDef="let row"> {{row.tipoMovimiento}} </td>
+                        </ng-container>
+
+                        <ng-container matColumnDef="monto">
+                            <th mat-header-cell *matHeaderCellDef> Monto </th>
+                            <td mat-cell *matCellDef="let row"> {{row.monto | currency}} </td>
+                        </ng-container>
+
+                        <ng-container matColumnDef="sobre">
+                            <th mat-header-cell *matHeaderCellDef> sobre </th>
+                            <td mat-cell *matCellDef="let row"> {{row.cuenta.sobre.descripcion}} </td>
+                        </ng-container>
+
+                        <tr mat-header-row *matHeaderRowDef="displayedColumnsMovimiento"></tr>
+                        <tr mat-row *matRowDef="let row; columns: displayedColumnsMovimiento;"></tr>
+
+                    </table>
+                    <mat-paginator #paginator (page)="cambiarPagina($event)" [length]="cantidadTotal"
+                        [pageSize]="cantidadPorPagina" [showFirstLastButtons]="true"
+                        [pageSizeOptions]="opcionesDePaginado" [pageIndex]="numeroDePagina">
+                    </mat-paginator>
+                </div>
+
+            </div>
+        </div>
+        }@else {
+        <div class="contenedor11">
+
+            <div class="container my-3">
+                <h2>Estadisticas</h2>
+                <div class="opcionesEstadisticas">
+                    <button mat-raised-button color="primary" title="Grafica de ingresos"
+                        (click)="actualizarGraficoIngreso()">
+                        Ingresos
+                    </button>
+                    <button mat-raised-button color="primary" title="Grafica de retiros"
+                     (click)="actualizarGraficoRetiro()">
+                        Retiros
+                    </button>
+                    <button mat-raised-button color="primary" title="Grafica de transferencia"
+                        (click)="actualizarGraficoTranferencia()">
+                        Tranferencias
+                    </button>
+                </div>
+
+
+                <div class="chart-container">
+                    <!-- <echarts [initOpts]="initOpts" [options]="options" class="chart"></echarts> -->
+                    <div echarts [options]="options" class="demo-chart" (chartInit)="onChartEvent($event, 'chartInit')"
+                        (chartClick)="onChartEvent($event, 'chartClick')"
+                        (chartDblClick)="onChartEvent($event, 'chartDblClick')"
+                        (chartMouseDown)="onChartEvent($event, 'chartMouseDown')"
+                        (chartMouseUp)="onChartEvent($event, 'chartMouseUp')"
+                        (chartMouseOver)="onChartEvent($event, 'chartMouseOver')"
+                        (chartMouseOut)="onChartEvent($event, 'chartMouseOut')"
+                        (chartGlobalOut)="onChartEvent($event, 'chartGlobalOut')"
+                        (chartContextMenu)="onChartEvent($event, 'chartContextMenu')"
+                        (chartDataZoom)="onChartEvent($event, 'chartDataZoom')"></div>
+                </div>
+            </div>
+        </div>
+        }
+        }
+
+        @else {
+        <div class="fondoSearch">
+            <i class='bx bx-search-alt-2'></i>
+        </div>
+        }
+    </main>
+</div>

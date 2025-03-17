@@ -1,0 +1,33 @@
+<h2 mat-dialog-title>{{title}}</h2>
+<mat-dialog-content class="miContainer">
+    <form [formGroup]="agregarFondosForm">
+        <div>
+            <mat-form-field appearance="fill">
+                <mat-label>Monto a agregar</mat-label>
+                <input matInput formControlName="monto" name="monto" type="number">
+            </mat-form-field>
+        </div>
+
+        <mat-form-field>
+            <mat-label>Sobre a asignar</mat-label>
+            <mat-select formControlName="sobre">              
+                @for (sobre of listSobre; track $index) {
+                <mat-option [value]="sobre.id">{{ sobre.descripcion }}</mat-option>
+                }
+            </mat-select>
+        </mat-form-field>
+
+        <div>
+            <mat-form-field appearance="fill">
+                <mat-label>Comentarios</mat-label>
+                <input matInput formControlName="comentario" name="comentario" type="text">               
+            </mat-form-field>
+        </div>   
+    </form>
+</mat-dialog-content>
+
+
+<mat-dialog-actions>
+    <button mat-raised-button (click)="cancel()">Cancelar</button>
+    <button mat-raised-button color="primary" (click)="onSave()" [disabled]="agregarFondosForm.invalid">Guardar</button>
+</mat-dialog-actions>

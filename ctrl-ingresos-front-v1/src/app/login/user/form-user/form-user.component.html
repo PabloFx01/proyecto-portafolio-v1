@@ -1,0 +1,47 @@
+<h2 mat-dialog-title>{{title}} usuario</h2>
+<mat-dialog-content class="miContainer">
+    <form [formGroup]="userForm">
+        <div>
+            <mat-form-field appearance="fill">
+                <mat-label>Id</mat-label>
+                <input matInput formControlName="id" name="id" type="text">
+            </mat-form-field>
+        </div>
+
+        <div>
+            <mat-form-field appearance="fill">
+                <mat-label>Username</mat-label>
+                <input matInput formControlName="username" name="username" type="text">
+                @if(hasError('username','minlength')){
+                <span class="text-danger">Minimo 3 caracteres.</span>
+                }
+            </mat-form-field>
+        </div>
+        @if (idUser==null) {
+        <div>
+            <mat-form-field appearance="fill">
+                <mat-label>Password</mat-label>
+                <input matInput formControlName="password" name="password" type="password">
+                @if(hasError('password','minlength')){
+                <span class="text-danger">Minimo 3 caracteres.</span>
+                }
+            </mat-form-field>
+
+        </div>
+        }
+
+        <div>
+            <mat-radio-group aria-labelledby="example-radio-group-label" formControlName="role" name="role">
+                @for (role of roles; track role) {
+                <mat-radio-button class="example-radio-button" [value]="role">{{role}}</mat-radio-button>
+                }
+            </mat-radio-group>
+        </div>
+    </form>
+</mat-dialog-content>
+
+
+<mat-dialog-actions>
+    <button mat-raised-button (click)="cancel()">Cancelar</button>
+    <button mat-raised-button color="primary" (click)="onSave()" [disabled]="userForm.invalid">Guardar</button>
+</mat-dialog-actions>

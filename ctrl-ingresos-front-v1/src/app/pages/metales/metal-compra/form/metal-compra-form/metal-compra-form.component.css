@@ -1,0 +1,18 @@
+.miContainer {
+    display: flex;
+    flex-direction: column;
+    justify-content: center; 
+    align-items: center;
+}
+
+mat-dialog-actions{
+    display: flex;
+    justify-content: center; 
+    align-items: center;
+}
+mat-form-field{
+    width: auto;
+}
+span{
+    margin-bottom: 5px;
+}

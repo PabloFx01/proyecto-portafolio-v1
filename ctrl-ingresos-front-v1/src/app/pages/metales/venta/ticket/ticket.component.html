@@ -1,0 +1,135 @@
+<metales-nav-app />
+<router-outlet />
+<br>
+<mat-toolbar>
+  <button (click)="addRegister()" mat-raised-button color="primary" class="my-2">
+    <mat-icon>add_circle_outline</mat-icon>
+    Nuevo ticket
+  </button>
+</mat-toolbar>
+
+
+<br />
+
+<div class="container my-3">
+
+  <mat-form-field class="myFilter">
+    <mat-label>Buscar</mat-label>
+    <input matInput (keyup)="applyFilter($event)" placeholder="Ej. Ticket carga marzo" #input>
+  </mat-form-field>
+
+  <div class="row">
+    <div class="contenedor-tabla col">
+      <table mat-table [dataSource]="dataSource" class="table-responsive">
+
+        <ng-container matColumnDef="id">
+          <th mat-header-cell *matHeaderCellDef> ID </th>
+          <td mat-cell *matCellDef="let row"> {{row.id}} </td>
+        </ng-container>
+
+        <ng-container matColumnDef="descripcion">
+          <th mat-header-cell *matHeaderCellDef> Descripción </th>
+          <td mat-cell *matCellDef="let row"> {{row.descripcion}} </td>
+        </ng-container>
+
+        <ng-container matColumnDef="importeTotal">
+          <th mat-header-cell *matHeaderCellDef> Importe total </th>
+          <td mat-cell *matCellDef="let row"> {{(row.importeTotal?row.importeTotal:'0') | currency}} </td>
+        </ng-container>
+
+        <ng-container matColumnDef="fechaTicket">
+          <th mat-header-cell *matHeaderCellDef> Fecha del ticket </th>
+          <td mat-cell *matCellDef="let row"> {{row.fechaTicket| date:'dd-MM-yyyy'}} </td>
+        </ng-container>
+
+        <ng-container matColumnDef="used">
+          <th mat-header-cell *matHeaderCellDef> Usado? </th>
+          <td mat-cell *matCellDef="let row">
+            @if (row.used) {
+            <span class="check-ok material-symbols-outlined">
+              check_box
+            </span>
+            }@else {
+            <span class="check-off material-symbols-outlined">
+              check_box_outline_blank
+            </span>
+            }
+            <!-- <mat-checkbox [checked]="row.used" disabled></mat-checkbox> -->
+          </td>
+        </ng-container>
+
+
+        @if (!this.responsive) {
+          <ng-container matColumnDef="acciones">
+            <th mat-header-cell *matHeaderCellDef></th>
+            <td mat-cell *matCellDef="let row">
+              <div class="acciones-button-container">
+                @if(!row.used){
+                <button title="Editar elemento" mat-fab color="primary" (click)="editar(row.id)">
+                  <mat-icon>edit</mat-icon>
+                </button>
+                <button title="Ir a detalles" mat-fab color="primary" (click)="irADetalles(row.id)">
+                  <span class="material-symbols-outlined">
+                    forward
+                  </span>
+                </button>
+                <button title="Eliminar elemento" mat-fab color="warn" (click)="eliminar(row.id)">
+                  <mat-icon>delete</mat-icon>
+                </button>
+                }@else {
+                <button title="Ver detalles" mat-fab color="primary" (click)="verDetalles(row.id)">
+                  <mat-icon>zoom_in</mat-icon>
+                </button>
+                }
+                <button title="Refrescar elemento" mat-fab color="primary" (click)="refresh(row.id)">
+                  <span class="material-symbols-outlined">
+                    sync
+                  </span>
+                </button>
+              </div>
+            </td>
+          </ng-container>
+        }
+        @else {
+        <ng-container matColumnDef="acciones">
+          <th mat-header-cell *matHeaderCellDef></th>
+          <td mat-cell *matCellDef="let row">
+            <button mat-raised-button color="primary" class="my-2" [matMenuTriggerFor]="accion_menu">Acciones</button>
+            <mat-menu #accion_menu="matMenu" class="mat-menu-item">
+              @if(!row.used){
+                <button mat-menu-item title="Editar elemento"  (click)="editar(row.id)">
+                  Editar elemento
+                </button>
+                <button mat-menu-item title="Ir a detalles" (click)="irADetalles(row.id)">
+                  Ir a detalles
+                </button>
+                <button mat-menu-item title="Eliminar elemento" (click)="eliminar(row.id)">
+                  Eliminar elemento
+                </button>
+                }@else {
+                <button mat-menu-item title="Ver detalles" (click)="verDetalles(row.id)">
+                  Ver detalles
+                </button>
+                }
+                <button mat-menu-item title="Refrescar elemento"  (click)="refresh(row.id)">
+                  Refrescar elemento
+                </button>
+
+            </mat-menu>
+          </td>
+        </ng-container>
+        }
+
+       
+
+
+        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+
+      </table>
+      <mat-paginator #paginator (page)="cambiarPagina($event)" [length]="cantidadTotal" [pageSize]="cantidadPorPagina"
+        [showFirstLastButtons]="true" [pageSizeOptions]="opcionesDePaginado" [pageIndex]="numeroDePagina">
+      </mat-paginator>
+    </div>
+  </div>
+</div>

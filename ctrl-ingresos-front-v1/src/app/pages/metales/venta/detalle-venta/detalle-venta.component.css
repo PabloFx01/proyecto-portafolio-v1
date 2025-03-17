@@ -1,0 +1,112 @@
+.asociarTicket{
+    border: 10px solid rgb(43, 200, 206);
+    padding: 10px;
+}
+.btnAsociarTicket{   
+    display: flex;
+    justify-content: center;
+    margin-top: 5px;
+    gap: 5px;
+}
+
+.calcular{
+    display: flex;
+    justify-content: right;   
+    button{
+        width: 80px;
+        height: 80px;
+    }
+}
+.sinItemsVenta{
+    display: flex;
+    justify-content: center;
+    margin-top: 5px;
+    gap: 5px;
+}
+
+.material-symbols-outlined{    
+    margin-top: 10px;
+}
+
+.AsociarCompraDiaria{
+    border: 10px solid rgb(43, 200, 206);
+    padding: 10px;
+}
+
+.btnAsociarCompraDiaria{   
+    display: flex;
+    justify-content: left;
+    margin-top: 5px;
+    gap: 5px;
+}
+
+.subtitulos{
+    font-family: 'Arial Narrow Bold', sans-serif;
+    color: black;
+}
+.fechasCompra{
+    margin-left: 50px;
+}
+.titulo{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-top: 15px;
+}
+
+.form{
+    min-width: 375px;
+}
+
+/* opciones responsive */
+@media (max-width: 600px) {
+    .contenedor-tabla{
+      max-width:500px;
+    }
+    .btnAsociarTicket>button{
+        font-size: x-small;
+        width: auto;
+        height: auto;
+    }
+    .btnAsociarCompraDiaria>button{
+        font-size: x-small;
+        width: auto;
+        height: auto;
+    }
+    .btnAsociarTicket>h5{
+      font-size: x-small;
+      width: auto;
+      height: auto;
+  }
+  }
+
+  @media (max-width:500px) {
+    .contenedor-tabla{
+      max-width:375px;
+    }
+  }
+
+  @media (max-width:400px) {
+    .contenedor-tabla{
+      max-width:375px;
+    }
+  }
+
+
+.table-responsive {
+  display: flex;
+  flex-direction: column;
+}
+
+.table-responsive .mat-header-row,
+.table-responsive .mat-row {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.table-responsive .mat-cell,
+.table-responsive .mat-header-cell {
+  flex: 1 1 auto;
+  min-width: 100px;
+}
+								

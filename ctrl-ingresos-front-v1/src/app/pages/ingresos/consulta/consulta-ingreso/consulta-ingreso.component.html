@@ -1,0 +1,199 @@
+<app-nav />
+<router-outlet />
+<div class='parent'>
+    <div class='left-side'>
+        <div class="container">
+            <h2 class='left-title'>Filtros</h2>
+
+            <form [formGroup]="consultaIngresoForm" class="filtro">
+                <div class="facturaDetails">
+                    <p class="facturaTitle">fechas:</p>
+                    <mat-form-field>
+                        <mat-label>Rango de fechas</mat-label>
+                        <mat-date-range-input [formGroup]="consultaIngresoForm" [rangePicker]="picker">
+                            <input matStartDate formControlName="fechaDesde" placeholder="Start date">
+                            <input matEndDate formControlName="fechaHasta" placeholder="End date">
+
+                        </mat-date-range-input>
+                        <mat-hint>MM/DD/YYYY – MM/DD/YYYY</mat-hint>
+                        <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
+                        <mat-date-range-picker #picker></mat-date-range-picker>
+                    </mat-form-field>
+
+                    <p class="facturaTitle">Titulo:</p>
+                    <mat-form-field appearance="fill">
+                        <mat-label>Titulo</mat-label>
+                        <input matInput formControlName="titulo" name="titulo" type="text">
+                    </mat-form-field>
+                </div>
+
+
+
+                <div class="button-filter">
+                    <button mat-raised-button color="warn" title="Borrar filtro" (click)="limpiar()"><i
+                            class='bx bx-trash-alt'></i></button>
+                    <button mat-raised-button color="primary" title="Buscar" (click)="search()"
+                        [disabled]="consultaIngresoForm.invalid"><i class='bx bx-search-alt'></i></button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <main class="section">
+
+        @if(dataSourceIngreso.data.length > 0){
+        <div class="barra">
+            <div class="button-close">
+                <button title="Detalles de la consulta" (click)="visibleInfo()">
+                    <span class="material-symbols-outlined">
+                        manage_search
+                    </span>
+                </button>
+                <button title="Estadisticas" (click)="visibleEstadisticas()">
+                    <span class="material-symbols-outlined">
+                        query_stats
+                    </span>
+                </button>
+            </div>
+        </div>
+        @if (!estadisticas) {
+        <div class="contenedor1">
+
+            <div class="container my-3">
+                <h2>Ingresos</h2>
+                <div class="row">
+                    <div class="contenedor-tabla col">
+                        <div class="tablaInteractiva">
+                            <table mat-table [dataSource]="dataSourceIngreso" class="table-responsive">
+
+                                <ng-container matColumnDef="titulo">
+                                    <th mat-header-cell *matHeaderCellDef>Titulo</th>
+                                    <td mat-cell *matCellDef="let row"> {{row.comentario}} </td>
+                                </ng-container>
+
+                                <ng-container matColumnDef="monto">
+                                    <th mat-header-cell *matHeaderCellDef>Monto</th>
+                                    <td mat-cell *matCellDef="let row"> {{row.montoIngreso | currency}} </td>
+                                </ng-container>
+
+                                <ng-container matColumnDef="fechaDeposito">
+                                    <th mat-header-cell *matHeaderCellDef> Fecha deposito</th>
+                                    <td mat-cell *matCellDef="let row"> {{row.fechaDeposito | date:'dd/MM/yyyy' }} </td>
+                                </ng-container>
+
+
+
+                                <ng-container matColumnDef="tipoMoneda">
+                                    <th mat-header-cell *matHeaderCellDef>Pago en</th>
+                                    <td mat-cell *matCellDef="let row"> {{row.tmoneda}}
+                                    </td>
+                                </ng-container>
+
+                                <tr mat-header-row *matHeaderRowDef="displayedColumnsIngreso"></tr>
+                                <tr mat-row *matRowDef="let row; columns: displayedColumnsIngreso;"
+                                    (click)="onRowClicked(row)" [class.selected]="selectedRow === row"></tr>
+
+                            </table>
+
+                            <mat-paginator #paginator (page)="cambiarPagina($event)" [length]="cantidadTotal"
+                                [pageSize]="cantidadPorPagina" [showFirstLastButtons]="true"
+                                [pageSizeOptions]="opcionesDePaginado" [pageIndex]="numeroDePagina">
+                            </mat-paginator>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+        </div>
+        @if(dataSourceDIngreso.data.length > 0){
+        <div class="contenedor2">
+
+            <div class="container my-3">
+                <h2>Detalles del ingreso</h2>
+                <div class="row">
+                    <div class="contenedor-tabla col">
+
+                        <table mat-table [dataSource]="dataSourceDIngreso" class="table-responsive">
+
+                            <ng-container matColumnDef="nConcepto">
+                                <th mat-header-cell *matHeaderCellDef>Concepto</th>
+                                <td mat-cell *matCellDef="let row"> {{row.concepto.nombre}} </td>
+                            </ng-container>
+
+                            <ng-container matColumnDef="montoPct">
+                                <th mat-header-cell *matHeaderCellDef>Monto asignado</th>
+                                <td mat-cell *matCellDef="let row"> {{row.montoPorcentaje | currency}} </td>
+                            </ng-container>
+
+                            <ng-container matColumnDef="montoReasig">
+                                <th mat-header-cell *matHeaderCellDef>Monto reasignado</th>
+                                <td mat-cell *matCellDef="let row"> {{row.montoPorcentajeRest | currency}} </td>
+                            </ng-container>
+
+                            <ng-container matColumnDef="montoEfect">
+                                <th mat-header-cell *matHeaderCellDef>Monto en efectivo</th>
+                                <td mat-cell *matCellDef="let row"> {{row.pctXCpto.montoAsigRealEfec | currency}} </td>
+                            </ng-container>
+
+                            <ng-container matColumnDef="montoDig">
+                                <th mat-header-cell *matHeaderCellDef>Monto en digital</th>
+                                <td mat-cell *matCellDef="let row"> {{row.pctXCpto.montoAsigRealDig | currency}} </td>
+                            </ng-container>
+
+
+
+                            <tr mat-header-row *matHeaderRowDef="displayedColumnsDIngreso"></tr>
+                            <tr mat-row *matRowDef="let row; columns: displayedColumnsDIngreso;"></tr>
+
+                        </table>
+
+                    </div>
+
+                </div>
+            </div>
+
+        </div>
+        }
+        }@else {
+        <div class="contenedor11">
+
+            <div class="container my-3">
+                <h2>Estadisticas</h2>
+                <div class="opcionesEstadisticas">
+                    <button mat-raised-button color="primary" title="Grafica de promedio"
+                        (click)="actualizarGraficoPromedio()">
+                        Promedio
+                    </button>
+                    <button mat-raised-button color="primary" title="Grafica de suma" (click)="actualizarGraficoSuma()">
+                        Suma
+                    </button>
+                    <button mat-raised-button color="primary" title="Grafica de cantidad"
+                        (click)="actualizarGraficoCantidad()">
+                        Cantidad
+                    </button>
+                </div>
+
+
+                <div class="chart-container">
+                    <div echarts [options]="options" class="demo-chart" (chartInit)="onChartEvent($event, 'chartInit')"
+                        (chartClick)="onChartEvent($event, 'chartClick')"
+                        (chartDblClick)="onChartEvent($event, 'chartDblClick')"
+                        (chartMouseDown)="onChartEvent($event, 'chartMouseDown')"
+                        (chartMouseUp)="onChartEvent($event, 'chartMouseUp')"
+                        (chartMouseOver)="onChartEvent($event, 'chartMouseOver')"
+                        (chartMouseOut)="onChartEvent($event, 'chartMouseOut')"
+                        (chartGlobalOut)="onChartEvent($event, 'chartGlobalOut')"
+                        (chartContextMenu)="onChartEvent($event, 'chartContextMenu')"
+                        (chartDataZoom)="onChartEvent($event, 'chartDataZoom')"></div>
+                </div>
+            </div>
+        </div>
+        }
+        }@else {
+        <div class="fondoSearch">
+            <i class='bx bx-search-alt-2'></i>
+        </div>
+        }
+    </main>
+</div>

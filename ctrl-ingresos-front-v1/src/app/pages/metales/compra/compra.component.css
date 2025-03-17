@@ -1,0 +1,109 @@
+.myContainer {
+    border: 10px solid rgba(255, 255, 0);
+    padding: 10px;
+
+
+}
+
+.fila1 {
+    display: flex;
+    justify-content: center;
+}
+
+
+.fila1,
+.fila2,
+.fila4 {
+    display: flex;
+    gap: 10px;
+
+}
+
+.fila3 {
+    display: flex;
+    justify-content: center;
+}
+
+
+.fila4 {
+    display: flex;
+    justify-content: right;
+}
+
+.check-ok {
+    color: green;
+}
+
+.check-off {
+    color: red;
+}
+
+.totalComprado {
+    display: flex;
+    justify-content: center;
+    
+}
+
+.totalizador {
+    border: 10px solid rgb(43, 200, 206);
+    padding: 10px;
+    min-width: 375px;
+}
+
+.filtros {
+    float: right;
+    padding: 17px;
+}
+
+.filtros>button{
+    width: auto;
+    height: 50px;
+    border-radius: 5px;
+    border: none;
+    box-shadow: 0 1px 2px 0 #0fdddd, 0 2px 3px 0 #0fdd2b !important;
+}
+
+.selected {
+    background-color: rgb(21, 212, 62);
+    color: white;
+
+    /* Opcional: para cambiar el color del texto */
+}
+
+/* opciones responsive */
+@media (max-width: 600px) {
+    .contenedor-tabla{
+      max-width:500px;
+    }
+  }
+
+  @media (max-width:500px) {
+    .contenedor-tabla{
+      max-width:375px;
+    }
+  }
+
+  @media (max-width:400px) {
+    .contenedor-tabla{
+      max-width:375px;
+    }
+  }
+
+
+.table-responsive {
+  display: flex;
+  flex-direction: column;
+}
+
+.table-responsive .mat-header-row,
+.table-responsive .mat-row {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.table-responsive .mat-cell,
+.table-responsive .mat-header-cell {
+  flex: 1 1 auto;
+  min-width: 100px;
+}
+								

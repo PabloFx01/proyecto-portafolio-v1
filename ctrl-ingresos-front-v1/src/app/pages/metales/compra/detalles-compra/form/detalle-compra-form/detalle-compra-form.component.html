@@ -1,0 +1,50 @@
+<h2>{{title}}</h2>
+
+<form [formGroup]="detalleCompraForm" class="myContainer">
+    <div class="fila1">
+        <mat-form-field appearance="fill">
+            <mat-label>Id compra</mat-label>
+            <input matInput formControlName="idCompra" name="idCompra" type="number">
+        </mat-form-field>
+        <mat-form-field appearance="fill">
+            <mat-label>Id</mat-label>
+            <input matInput formControlName="id" name="id" type="number">
+        </mat-form-field>
+    </div>
+    <div class="fila2">
+        <mat-form-field>
+            <mat-label>Material</mat-label>
+            <mat-select formControlName="metalNombre">              
+                @for (metal of listMetal; track $index) {
+                <mat-option [value]="metal.metalId?.id">{{ metal.nombre }}</mat-option>
+                }
+            </mat-select>
+        </mat-form-field>
+
+        <mat-form-field appearance="fill">
+            <mat-label>Peso</mat-label>
+            <input matInput formControlName="peso" name="peso" type="number">
+        </mat-form-field>
+
+        <mat-form-field appearance="fill">
+            <mat-label>Importe</mat-label>
+            <input matInput formControlName="importe" name="importe" type="number">
+        </mat-form-field>
+        
+    </div>
+
+    <div class="fila3">
+
+        <mat-form-field appearance="fill">
+            <mat-label>Precio</mat-label>
+            <input matInput formControlName="precio" name="precio" type="number" >
+        </mat-form-field>
+
+    </div>
+    <div class="fila4">
+        <button mat-raised-button (click)="limpiar()">Limpiar</button>
+        <button mat-raised-button color="primary" (click)="onSave()"
+            [disabled]="detalleCompraForm.invalid">Guardar</button>
+    </div>
+
+</form>

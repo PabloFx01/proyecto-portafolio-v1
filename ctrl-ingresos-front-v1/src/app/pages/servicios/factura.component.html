@@ -1,0 +1,43 @@
+<app-nav-servicios />
+<router-outlet />
+<div class='demo-app'>
+
+  <div class='demo-app-sidebar'>
+    <div class='demo-app-sidebar-section'>
+      <header>{{title}}</header>
+    </div>
+
+    <div class="notAccount">
+      <a class="irA" title="Servicios > Mantenimiento > Administrar servicios"
+        (click)="irAlink('historialFacturas')">Historial de facturación</a>
+    </div>
+
+    <div class='demo-app-sidebar-section'>
+      @if (currentEvents().length>0) {
+      <h2>Todos los servicios ({{currentEvents().length}})</h2>
+      <ul>
+        <li *ngFor='let event of currentEvents()'>
+          <a class="irA" title="Servicio"
+            (click)="vistaPrevia(event.id)">{{event.title}}</a>
+        </li>
+      </ul>
+      }@else {
+      <div class="notAccount">
+        <p>No existen servicios asociados</p>
+        <a class="irA" title="Servicios > Mantenimiento > Administrar servicios"
+          (click)="irAlink('servicios')">Administrar servicios</a>
+      </div>
+      }
+    </div>
+  </div>
+
+  <div class='demo-app-main'>
+    <full-calendar *ngIf='calendarVisible()' [options]='calendarOptions()'>
+      <ng-template #eventContent let-arg>
+        <b>{{ arg.timeText }}</b>
+        <i>{{ arg.event.title }}</i>
+      </ng-template>
+    </full-calendar>
+  </div>
+
+</div>

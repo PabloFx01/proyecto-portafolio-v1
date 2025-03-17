@@ -1,0 +1,45 @@
+<app-nav-login/>
+<router-outlet/>
+
+<div class="myBodySession">
+    <div class="container-form">
+        <div class="information">
+            <div class="info-childs">
+                <h2>¡Bienvenido!</h2>
+                <p>Para unirte a nuestra comunidad por favor Inicia Sesión con tus datos</p>
+            </div>
+        </div>
+        <div class="form-information">
+            <div class="form-information-childs">
+                <form [formGroup]="loginForm">
+                    <div class="fila1">
+                        <mat-form-field appearance="fill">
+                            <mat-label>Username</mat-label>
+                            <input matInput formControlName="username" name="username" type="text">
+                        </mat-form-field>
+                    </div>
+
+                    <div class="fila2">
+                        <mat-form-field appearance="fill">
+                            <mat-label>Password</mat-label>
+                            <input matInput formControlName="password" name="password" type="password">                            
+                        </mat-form-field>
+                    </div>
+
+                    <div>
+                        @if(messageError!=null){
+                            <span class="text-danger">{{messageError}}</span>
+                            }
+                    </div>
+
+
+                    <div class="fila3">
+                        <button mat-raised-button color="primary" (click)="login()"
+                            [disabled]="loginForm.invalid">Iniciar
+                            sesión</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,20 @@
+<app-nav />
+<router-outlet />
+
+
+
+<div class='demo-app-main'>
+  <div class="notAccount">
+    <a class="irA" title="Pagos > Mantenimiento > Historial de pagos"
+      (click)="irAlink('historialIngresos')">Historial de pagos</a>
+  </div>
+
+  <full-calendar *ngIf='calendarVisible()' [options]='calendarOptions()'>
+    <ng-template #eventContent let-arg>
+      <b>{{ arg.timeText }}</b>
+      <i>{{ arg.event.title }}</i>
+    </ng-template>
+  </full-calendar>
+</div>
+
+<!-- </div> -->

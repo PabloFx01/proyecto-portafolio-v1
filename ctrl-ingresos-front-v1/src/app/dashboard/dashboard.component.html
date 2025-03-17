@@ -1,0 +1,79 @@
+<app-dashboard-nav />
+<div class="app-panel-container">
+
+    <div class="container">
+        <div class="row">
+            <div class="col-6 col-sm-4 col-md-3 col-lg-2 p-2">
+                <mat-card class="card" (click)="irAlink('ingreso', 'Control de pagos')">
+                    <h2 class="icon-ingreso"><span class="material-symbols-outlined">
+                            payments
+                        </span></h2>
+                    <p class="description">Control de pagos</p>
+                </mat-card>
+            </div>
+
+            <div class="col-6 col-sm-4 col-md-3 col-lg-2 p-2">
+                <mat-card class="card" (click)="irAlink('factura', 'Pago de servicios')">
+                    <h2 class="icon-ingreso"><span class="material-symbols-outlined">
+                            credit_card_clock
+                        </span></h2>
+                    <p class="description">Pago de servicios</p>
+                </mat-card>
+            </div>
+
+            <div class="col-6 col-sm-4 col-md-3 col-lg-2 p-2">
+                <mat-card class="card" (click)="irAlink('control-efectivo', 'Control de efectivo')">
+                    <h2 class="icon-ingreso"><span class="material-symbols-outlined">
+                            assured_workload
+                        </span></h2>
+                    <p class="description">Control de efectivo</p>
+                </mat-card>
+            </div>
+
+            <div class="col-6 col-sm-4 col-md-3 col-lg-2 p-2">
+                <mat-card class="card" (click)="irAlink('wishList', 'Mi lista de deseos')">
+                    <h2 class="icon-ingreso"><span class="material-symbols-outlined">
+                            favorite
+                        </span></h2>
+                    <p class="description">Mi lista de deseos</p>
+                </mat-card>
+            </div>
+
+            <div class="col-6 col-sm-4 col-md-3 col-lg-2 p-2">
+                <mat-card class="card" (click)="irAlink('prestamos', 'Prestamos')">
+                    <h2 class="icon-ingreso"><span class="material-symbols-outlined">
+                            balance
+                        </span></h2>
+                    <p class="description">Prestamos</p>
+                </mat-card>
+            </div>
+
+            @if(role=='ADMIN' || role == 'METAL_APP'){
+
+            <div class="col-6 col-sm-4 col-md-3 col-lg-2 p-2">
+                <mat-card class="card" (click)="irAlink('metalesHome', 'Metales App')">
+                    <h2 class="icon-ingreso"><span class="material-symbols-outlined">
+                            id_card
+                        </span></h2>
+                    <p class="description">MetalesApp</p>
+                </mat-card>
+            </div>
+
+            }
+
+        </div>
+
+        <section id="sobremi" class="sobremi">
+            <div class="contenido-seccion">
+                <a href="../../../assets/doc/Manual-de-usuario-GFP.docx" download="Manual-de-usuario-GFP.docx"
+                    class="download">
+                    <button>
+                        Descargar manual de usuario <i class="fa-solid fa-download"></i>
+                        <span class="overlay"></span>
+                    </button>
+                </a>
+            </div>
+        </section>
+
+    </div>
+</div>

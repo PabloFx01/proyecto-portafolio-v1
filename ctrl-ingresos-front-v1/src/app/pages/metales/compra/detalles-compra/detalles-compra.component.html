@@ -1,0 +1,108 @@
+<metales-nav-app />
+<router-outlet />
+@if (paramAccion!='onlyRead') {
+<div class="container">
+  <app-detalle-compra-form />
+</div>
+}
+<br />
+
+<div id="myContainer" class="container my-3">
+
+
+  <div>
+    <h2>Total comprado: {{getTotalComprado()!=null?(getTotalComprado() | currency):'Sin información'}}</h2>
+  </div>
+
+  @if (paramAccion!='onlyRead') {
+  <mat-toolbar class="btnCerrarDia">
+    <button (click)="cerrarDia()" mat-raised-button color="primary" class="my-2">
+      <mat-icon>add_circle_outline</mat-icon>
+      Cerrar el día
+    </button>
+  </mat-toolbar>
+  }
+
+  <div class="row">
+    <div class="contenedor-tabla col">
+      <table mat-table [dataSource]="dataSource" class="table-responsive">
+
+        <!-- ID Column -->
+        <ng-container matColumnDef="id">
+          <th mat-header-cell *matHeaderCellDef> ID </th>
+          <td mat-cell *matCellDef="let row"> {{row.detalleId.id}} </td>
+        </ng-container>
+
+        <ng-container matColumnDef="metal.nombre">
+          <th mat-header-cell *matHeaderCellDef> Material </th>
+          <td mat-cell *matCellDef="let row"> {{row.metal.nombre}} </td>
+        </ng-container>
+
+        <ng-container matColumnDef="precio">
+          <th mat-header-cell *matHeaderCellDef> Precio </th>
+          <td mat-cell *matCellDef="let row"> {{row.precioCompra}} </td>
+        </ng-container>
+
+
+        <ng-container matColumnDef="peso">
+          <th mat-header-cell *matHeaderCellDef> Peso </th>
+          <td mat-cell *matCellDef="let row"> {{row.peso + ' KG'}} </td>
+        </ng-container>
+
+
+        <ng-container matColumnDef="importe">
+          <th mat-header-cell *matHeaderCellDef> Importe </th>
+          <td mat-cell *matCellDef="let row"> {{row.importe | currency}} </td>
+        </ng-container>
+
+
+        @if (!this.responsive) {
+        <ng-container matColumnDef="acciones">
+          <th mat-header-cell *matHeaderCellDef></th>
+          <td mat-cell *matCellDef="let row">
+            <div class="acciones-button-container">
+              <button mat-fab color="primary" title="Editar elemento"
+                (click)="editar(row.detalleId.idCompra, row.detalleId.id)" [disabled]="paramAccion=='onlyRead'">
+                <mat-icon>edit</mat-icon>
+              </button>
+              <button mat-fab color="warn" title="Eliminar elemento"
+                (click)="eliminar(row.detalleId.idCompra, row.detalleId.id)" [disabled]="paramAccion=='onlyRead'">
+                <mat-icon>delete</mat-icon>
+              </button>
+            </div>
+          </td>
+        </ng-container>
+        }
+        @else {
+        <ng-container matColumnDef="acciones">
+          <th mat-header-cell *matHeaderCellDef></th>
+          <td mat-cell *matCellDef="let row">
+            <button mat-raised-button color="primary" class="my-2" [matMenuTriggerFor]="accion_menu">Acciones</button>
+            <mat-menu #accion_menu="matMenu" class="mat-menu-item">
+              <button mat-menu-item title="Editar elemento" (click)="editar(row.detalleId.idCompra, row.detalleId.id)"
+                [disabled]="paramAccion=='onlyRead'">
+                Editar elemento
+              </button>
+              <button mat-menu-item title="Eliminar elemento"
+                (click)="eliminar(row.detalleId.idCompra, row.detalleId.id)" [disabled]="paramAccion=='onlyRead'">
+                Eliminar elemento
+              </button>
+
+            </mat-menu>
+          </td>
+        </ng-container>
+
+        }
+
+
+
+
+        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+
+
+      </table>
+
+    </div>
+  </div>
+</div>

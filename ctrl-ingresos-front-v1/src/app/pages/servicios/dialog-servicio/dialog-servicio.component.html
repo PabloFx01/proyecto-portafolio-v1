@@ -1,0 +1,53 @@
+<div class="text-center space-y-2 mb-6">
+    <h1 class="text-3xl font-bold">Calendario de {{mesAct}} {{yearAct}}</h1>
+    <p class="text-muted-foreground">Servicio: {{servicioData.nombre}}.</p>
+    <p class="text-muted-foreground">Vencimiento del {{diaIni}}/{{mesIni}} al {{diaFin}}/{{mesFin}} del {{yearVto}}.</p>
+    @if (paid) {
+        <p  [style.color]="'rgb(96, 238, 14)'">Para la fecha actual del vencimiento del servicio ya existe una factura pagada.</p>
+    }@else {
+        @if (diasIniVto<0) { <p class="text-muted-foreground">Faltan {{diasFinVto}} días para pasar el limite de pago.</p>
+    }@else { <p class="text-muted-foreground">Faltan {{diasIniVto}} días para el sig. Vencimiento.</p>
+    }
+    }
+
+</div>
+
+<mat-dialog-content>
+    <div class="app-panel-container">
+        <div class="row">
+            <div *ngFor="let tarjeta of tarjetas" class="col-6 col-sm-4 col-md-3 col-lg-2 p-2">
+                @if (fechaActual === tarjeta.fechaCompleta) {
+
+                @if (late) {
+                <mat-card class="cardDanger" [style.color]="'red'" title="Cerca de fecha de vencimiento">
+                    <p class="mesDesc">{{tarjeta.mes}}</p>
+                    <h2 class="icon-ingreso">{{ tarjeta.fecha}}</h2>
+                    <p class="description">{{ tarjeta.diaSemana }}</p>
+                </mat-card>
+                }@else {
+                <mat-card class="cardOk" [style.color]="'rgb(96, 238, 14)'" title="Lejos de fecha de vencimiento">
+                    <p class="mesDesc">{{tarjeta.mes}}</p>
+                    <h2 class="icon-ingreso">{{ tarjeta.fecha}}</h2>
+                    <p class="description">{{ tarjeta.diaSemana }}</p>
+                </mat-card>
+                }
+                }
+                @else{
+                <mat-card class="card">
+                    <!-- <p class="mesDesc">{{fechaActual}}</p>
+                    <p class="mesDesc">{{tarjeta.fechaCompleta}}</p> -->
+                    <p class="mesDesc">{{tarjeta.mes}}</p>
+                    <h2 class="icon-ingreso">{{ tarjeta.fecha}}</h2>
+                    <p class="description">{{ tarjeta.diaSemana }}</p>
+                </mat-card>
+                }
+
+            </div>
+        </div>
+    </div>
+</mat-dialog-content>
+
+<mat-dialog-actions>
+    <button mat-raised-button (click)="cancel()">Cancelar</button>
+    <button mat-raised-button (click)="aFacturacion()">Ir a Facturacíon</button>
+</mat-dialog-actions>
