@@ -3,7 +3,7 @@ services:
     build: ctrl-ingresos-back-v1
     mem_limit: 512m
     ports:
-      - "8020:8020"
+      - "8011:8011"
     environment:
       DB_URL: jdbc:mysql://ctrl_pagos_db_2:3306/rest_api_ctrlpagos_db_2?createDatabaseIfNotExist=true&serverTimezone=UTC
       DB_USER_NAME: root
