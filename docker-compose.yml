@@ -15,7 +15,7 @@ services:
   ctrl_pagos_db_2:
     image: mysql:8.0.33
     ports:
-      - "3307:3306"
+      - "3308:3306"
     environment:
       MYSQL_ROOT_PASSWORD: ArMxfigpab024$$
       MYSQL_PASSWORD: ArMxfigpab024$$
