@@ -1,5 +1,5 @@
 services:
-  ctrlpagos_app:
+  ctrlpagos_app_v1:
     build: ctrl-ingresos-back-v1
     mem_limit: 512m
     ports:
@@ -27,12 +27,12 @@ services:
       retries: 10
     volumes:
       - my-db-2:/var/lib/mysql
-  ctrl_pagos_app_front:
+  ctrl_pagos_app_front_v1:
     build: ctrl-ingresos-front-v1
     ports:
       - "4201:4201"
     depends_on:
-      - ctrlpagos_app
+      - ctrlpagos_app_v1
 volumes:
   my-db-2:  
     
