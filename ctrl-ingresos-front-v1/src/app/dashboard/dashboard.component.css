@@ -49,6 +49,13 @@
     margin: auto;
 }
 
+.sobremi {
+    display: block;
+    position: absolute;
+    top: 65%;
+    left: 40%;
+}
+
 .sobremi h2 {
     font-size: 48px;
     font-family: 'Righteous';
@@ -113,10 +120,8 @@
 }
 
 .sobremi {
-    display: block;
-    position: absolute;
-    top: 75%;
-    left: 40%;
+    display: flex;
+    margin-top: 50px;
 }
 
 .sobremi .fila .col .contenedor-intereses .interes {
@@ -185,14 +190,27 @@
     }
 
     .app-panel-container .mat-mdc-card {
-        width: 125px;
-        height: 100px;
+        width: 170px;
+        height: 125px;
     }
 
-    .icon-ingreso {
+    .description {
+        display: block;
+        padding: 10px;
+        z-index: 1000;
+    }
+
+    .sobremi {
+        display: flex;
+        position: initial;
+        /* top: 85%;
+        left: 40%; */
+    }
+
+    /* .icon-ingreso {
         transform: scale(2);
         margin: 20px auto 10px auto;
-    }
+    } */
 
     .app-panel-container {
         /* height: calc(100% - 64px); */
