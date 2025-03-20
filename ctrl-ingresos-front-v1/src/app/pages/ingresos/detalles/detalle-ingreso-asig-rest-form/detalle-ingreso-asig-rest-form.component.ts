@@ -72,7 +72,6 @@ export class DetalleIngresoAsigRestFormComponent implements OnInit {
     this.isUserLogin();
     this.initForm();
     this.idDetalleData = this.getIdDetalle(data.idIngreso, data.idDetalle);
-    console.log(data.idIngreso);
   }
 
   async ngOnInit(): Promise<void> {
@@ -263,7 +262,6 @@ export class DetalleIngresoAsigRestFormComponent implements OnInit {
 
 
   async updateMontoRest(id: IDetalleIngresoId, dIngreso?: IDetalleIngreso): Promise<IResponse> {
-    console.log("update");
     try {
       const response: IResponse =
         await firstValueFrom(this._detalleIngresoService.updateDIngresoMontoRest(id.id!, id.idIngreso!, dIngreso!));
@@ -275,7 +273,6 @@ export class DetalleIngresoAsigRestFormComponent implements OnInit {
   }
 
   async updateTranferir(id: IDetalleIngresoId, dIngreso?: IDetalleIngreso): Promise<IResponse> {
-    console.log("update");
     try {
       const response: IResponse =
         await firstValueFrom(this._detalleIngresoService.updateDIngresoTransferir(id.id!, id.idIngreso!, dIngreso!));

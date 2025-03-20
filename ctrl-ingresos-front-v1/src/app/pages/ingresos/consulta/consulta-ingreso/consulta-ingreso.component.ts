@@ -361,13 +361,9 @@ export class ConsultaIngresoComponent implements OnInit {
     this.listIngreso = await this.getAllIngresos();
     if (this.listIngreso.length > 0) {
       let max = this.listIngreso.length - 1;
-      console.log("fecha1 " + this.listIngreso[0].fechaDeposito!);
-      console.log("fecha2 " + this.listIngreso[max].fechaDeposito!);
       
       let fecha1 = new Date(this.listIngreso[0].fechaDeposito!);
       let fecha2 = new Date(this.listIngreso[max].fechaDeposito!);
-      console.log("fecha1 " + fecha1);
-      console.log("fecha2 " + fecha2 );
       let info: IInfoIngreso[] = [];
       if (this.promedio) {
         info = this.obtenerPromedio(fecha1, fecha2);

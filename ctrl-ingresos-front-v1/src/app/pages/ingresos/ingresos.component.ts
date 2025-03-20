@@ -78,7 +78,6 @@ export class IngresosComponent implements OnInit {
 
     this.iniciar();
 
-
   }
 
   // handleDateClick(arg: DateClickArg) {
@@ -121,11 +120,9 @@ export class IngresosComponent implements OnInit {
 
   handleCalendarToggle() {
     this.calendarVisible.update((bool) => !bool);
-    console.log("1");
   }
 
   handleWeekendsToggle() {
-    console.log("2");
     this.calendarOptions.update((options: { weekends: any; }) => ({
       ...options,
       weekends: !options.weekends,
@@ -133,40 +130,15 @@ export class IngresosComponent implements OnInit {
     }));
   }
 
-  handleDateSelect(selectInfo: DateSelectArg) {
-    console.log("3");
-    
+  handleDateSelect(selectInfo: DateSelectArg) {  
     this.nuevoIngreso(null, 'Nuevo', selectInfo.start);
-    // const title = prompt('Please enter a new title for your event');
-    // const calendarApi = selectInfo.view.calendar;
-
-    // calendarApi.unselect(); // clear date selection
-
-    // if (title) {
-    //   calendarApi.addEvent({
-    //     id: createEventId(),
-    //     title,
-    //     start: selectInfo.startStr,
-    //     end: selectInfo.endStr,
-    //     allDay: selectInfo.allDay
-    //   });
-    // }
   }
 
   handleEventClick(clickInfo: EventClickArg) {
-    console.log("4");
-    console.log('id ' + clickInfo.event.id);
     this.nuevoIngreso(parseInt(clickInfo.event.id), 'Actualizar', clickInfo.event.start)
-    // if (confirm(`Are you sure you want to delete the event '${clickInfo.event.title}'`)) {
-    //   clickInfo.event.remove();
-    // }
   }
 
   handleEvents(events: EventApi[]) {
-    console.log("5");
-
-
-    console.log(events.length);
     this.currentEvents.set(events);
     this.changeDetector.detectChanges(); // workaround for pressionChangedAfterItHasBeenCheckedError
   }
@@ -183,12 +155,18 @@ export class IngresosComponent implements OnInit {
   }
 
 
+
   async iniciar(): Promise<void> {
     this.ingresos = await this.getAllIngresos();
-    console.log("iniciar" + this.ingresos.length);
-    if (this.ingresos.length > 0) {
+    this.eventsInitial = [];
 
-      console.log("entra" + this.ingresos.length);
+    this.calendarOptions.update((options: any) => ({
+      ...options,
+      events: this.eventsInitial,
+
+    }));
+
+    if (this.ingresos.length > 0) {
 
       this.eventsInitial = this.ingresos.map((ingreso) => {
         return {

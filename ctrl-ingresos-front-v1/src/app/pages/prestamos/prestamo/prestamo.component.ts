@@ -243,7 +243,6 @@ export class PrestamoComponent implements OnInit{
       });
 
     dialogRef.afterClosed().subscribe(result => {
-      console.log(`Dialog result: ${result}`);
       this.reloadData();
     });
   }
@@ -291,11 +290,9 @@ export class PrestamoComponent implements OnInit{
     //origen es beneficiario
     //destino es el origen
     let idSobreOrigen = this.prestamoData.cuentaOrigen?.sobre?.id;
-    console.log("cuenta origen " + idSobreOrigen);
 
     let cuentaOrigen = await this.getCuentaByIdSobre(idSobreOrigen!);
     if (cuentaOrigen) {
-      console.log("pago " + pago);
 
       //Actualiza cuenta
       let monto = pago;
@@ -311,7 +308,6 @@ export class PrestamoComponent implements OnInit{
       if (responseCuenta) {
         //Actualizar cuenta destino
         let idSobreDestino = this.prestamoData.cuentaBeneficiario?.sobre?.id;
-        console.log("cuenta idSobreDestino " + idSobreDestino);
         this.cuentaDestinoData.saldo = monto;
         this.cuentaDestinoData.id = null;
         this.sobreDataDestino.id = idSobreDestino!;

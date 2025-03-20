@@ -217,14 +217,12 @@ export class ControlEfectivoComponent implements OnInit {
       });
 
     dialogRef.afterClosed().subscribe(result => {
-      console.log(`Dialog result: ${result}`);
       this.reloadData();
     });
   }
 
   onRowClicked(row: any) {
     this.selectedRow = row;
-    console.log(row.descripcion);
     this.filtrarPorSobre(row.descripcion);
   }
 

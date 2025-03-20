@@ -151,7 +151,6 @@ export class MetalCompraFormComponent implements OnInit {
   }
 
   async saveMetalCompra(metalCompra?: IMetalCompra): Promise<IResponse> {
-    console.log("save");
     try {
       const response: IResponse =
         await firstValueFrom(this._ApiService.saveMetalCompra(metalCompra!));
@@ -163,7 +162,6 @@ export class MetalCompraFormComponent implements OnInit {
   }
 
   async update(id: MetalId, metalCompra?: IMetalCompra): Promise<IResponse> {
-    console.log("update");
     try {
       const response: IResponse =
         await firstValueFrom(
@@ -194,7 +192,6 @@ export class MetalCompraFormComponent implements OnInit {
   ngOnDestroy(): void {
     //Called once, before the instance is destroyed.
     //Add 'implements OnDestroy' to the class.
-    console.log("destroy");
     const metalId: MetalId = {
       id: ''
     }

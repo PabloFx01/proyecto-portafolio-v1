@@ -74,7 +74,6 @@ export class AsigTotalFormComponent {
     this.isUserLogin();
     this.initForm();
     this.idIngresoParam = data.idIngreso;
-    console.log(data.idIngreso);
   }
 
   async ngOnInit(): Promise<void> {
@@ -264,7 +263,6 @@ export class AsigTotalFormComponent {
 
 
   async update(id: IDetalleIngresoId, dIngreso?: IDetalleIngreso): Promise<IResponse> {
-    console.log("update");
     try {
       const response: IResponse =
         await firstValueFrom(this._detalleIngresoService.updateDIngresoAndTotRest(id.id!, id.idIngreso!, dIngreso!));

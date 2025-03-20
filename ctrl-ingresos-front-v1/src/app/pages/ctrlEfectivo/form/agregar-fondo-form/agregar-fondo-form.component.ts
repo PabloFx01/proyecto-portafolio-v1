@@ -141,7 +141,6 @@ export class AgregarFondoFormComponent implements OnInit {
 
       let responseCuenta = await this.updateCuenta(idSobre, this.cuentaData)
       if (responseCuenta) {
-        console.log(responseCuenta.message);
       
         //Crea movimiento
         const tipoMovimiento = 'Agregar fondo';

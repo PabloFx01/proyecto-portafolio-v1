@@ -119,8 +119,6 @@ export class MetalVentaFormComponent implements OnInit {
       let nextId: MetalVentaId = await this.obtenerMetalVentaId(this.idMetalVentaData.idMetalCompra)
       if (nextId) {
         this.metalVentaData.metalVentaId = nextId;
-        console.log("nextId " + nextId);
-
         response = await this.saveMetalVenta(this.metalVentaData);
       }
     }
@@ -143,7 +141,6 @@ export class MetalVentaFormComponent implements OnInit {
 
 
   async saveMetalVenta(metalVenta?: IMetalVenta): Promise<IResponse> {
-    console.log("save");
     try {
       const response: IResponse =
         await firstValueFrom(this._ApiMetalVentaService.saveMetalVenta(metalVenta!));
@@ -155,8 +152,6 @@ export class MetalVentaFormComponent implements OnInit {
   }
 
   async update(id: MetalVentaId, metalVenta?: IMetalVenta): Promise<IResponse> {
-    console.log("update");
-
     try {
       const response: IResponse =
         await firstValueFrom(this._ApiMetalVentaService.updateMetalVenta(id.id, id.idMetalCompra, metalVenta!));

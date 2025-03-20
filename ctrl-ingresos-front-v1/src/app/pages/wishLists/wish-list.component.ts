@@ -217,7 +217,6 @@ export class WishListComponent implements OnInit{
       });
 
     dialogRef.afterClosed().subscribe(result => {
-      console.log(`Dialog result: ${result}`);
       this.reloadData();
     });
   }
@@ -256,72 +255,6 @@ export class WishListComponent implements OnInit{
     }
   }
 
-
-  // async transferirFondos(pago: number): Promise<void> {
-  //   const user: IUser = {
-  //     id: null,
-  //     username: this.username!
-  //   }
-  //   //origen es beneficiario
-  //   //destino es el origen
-  //   let idSobreOrigen = this.prestamoData.cuentaOrigen?.sobre?.id;
-  //   console.log("cuenta origen " + idSobreOrigen);
-
-  //   let cuentaOrigen = await this.getCuentaByIdSobre(idSobreOrigen!);
-  //   if (cuentaOrigen) {
-  //     console.log("pago " + pago);
-
-  //     //Actualiza cuenta
-  //     let monto = pago;
-  //     let saldoActual: number = cuentaOrigen.saldo!;
-
-  //     this.cuentaOrigenData.saldo = monto;
-  //     this.cuentaOrigenData.id = null;
-  //     this.sobreDataOrigen.id = idSobreOrigen!;
-  //     this.sobreDataOrigen.usuario = user;
-  //     this.cuentaOrigenData.sobre = this.sobreDataOrigen;
-
-  //     let responseCuenta = await this.updateCuentaRestFondo(idSobreOrigen!, this.cuentaOrigenData)
-  //     if (responseCuenta) {
-  //       //Actualizar cuenta destino
-  //       let idSobreDestino = this.prestamoData.cuentaBeneficiario?.sobre?.id;
-  //       console.log("cuenta idSobreDestino " + idSobreDestino);
-  //       this.cuentaDestinoData.saldo = monto;
-  //       this.cuentaDestinoData.id = null;
-  //       this.sobreDataDestino.id = idSobreDestino!;
-  //       this.sobreDataDestino.usuario = user;
-  //       this.cuentaDestinoData.sobre = this.sobreDataDestino;
-
-  //       let responseCuentaDestino = await this.updateCuenta(idSobreDestino!, this.cuentaDestinoData)
-  //       if (responseCuentaDestino) {
-  //         //Crea transaccion
-  //         this.transaccionData.cuentaOrigen = this.cuentaOrigenData;
-  //         this.transaccionData.cuentaDestino = this.cuentaDestinoData;
-  //         this.transaccionData.fecha = new Date();
-  //         this.transaccionData.cantidad = monto;
-
-  //         //Crea movimiento
-  //         const tipoMovimiento = 'Transferir fondo por pago de prestamo';
-  //         this.movimientoData.usuario = user;
-  //         this.movimientoData.fecha = new Date();
-  //         this.movimientoData.cuenta = this.cuentaOrigenData;
-  //         this.movimientoData.tipoMovimiento = tipoMovimiento;
-  //         this.movimientoData.monto = monto;
-  //         this.movimientoData.comentario = "Transferencia por pago de prestamo";
-  //         this.movimientoData.transaccion = this.transaccionData;
-  //         // this.movimientoData.transaccion = null;
-
-  //         let responseMovimiento = await this.saveMovimiento(this.movimientoData);
-  //         if (responseMovimiento) {
-  //           this.showSuccess('Se ha guardado correctamente.', tipoMovimiento)
-  //         }
-
-  //       }
-  //     }
-
-
-  //   }
-  // }
 
   async getCuentaByIdSobre(idSobre: number): Promise<ICuenta> {
     try {

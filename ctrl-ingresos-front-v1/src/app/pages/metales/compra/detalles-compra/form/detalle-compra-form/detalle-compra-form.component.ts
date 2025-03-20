@@ -186,7 +186,6 @@ export class DetalleCompraFormComponent implements OnInit, OnDestroy {
 
     if (metalSeleccionado) {
       let descripcion = metalSeleccionado.nombre;
-      console.log(descripcion);
     }
 
     this.metalData.metalId = this.metalIdData
@@ -230,7 +229,6 @@ export class DetalleCompraFormComponent implements OnInit, OnDestroy {
     this._ApiMetalService.getMetalesCompra(this.username!).subscribe((metales: IMetalCompra[]) => {
       this.listMetal = metales;
     })
-    console.log("list metales" + this.listMetal.length);
     
   }
 
@@ -271,7 +269,6 @@ export class DetalleCompraFormComponent implements OnInit, OnDestroy {
       idCompra: 0
     };
     this._DataService.setSelectedDetalleCompraItemId(this.detalleCompraIdData)
-    console.log("destroy");
   }
 
   isUserLogin() {

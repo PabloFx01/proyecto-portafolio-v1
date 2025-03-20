@@ -125,7 +125,6 @@ export class DetalleVentaComponent implements OnInit {
       this.paramIdVenta = params['id'];
       this.paramAccion = params['accion'];
     })
-    console.log("params " + this.paramIdVenta);
 
     this.allDetalleVentaInDataSourcePaginador(this.paramIdVenta, null);
     this._DataService.dataUpdated$.subscribe(() => {

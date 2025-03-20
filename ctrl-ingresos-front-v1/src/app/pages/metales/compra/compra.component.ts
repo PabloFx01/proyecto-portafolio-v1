@@ -148,29 +148,6 @@ export class CompraComponent implements OnInit {
     return encontro;
   }
 
-  // async empezarDia() {  
-  //   let compra: ICompra = {
-  //     id: null,
-  //     fechaCompra: new Date(),
-  //     totalComprado: 0,
-  //     cierre: false,
-  //     venta: null,
-  //     editadoPor: this.userLoginResponse.username,
-  //     detalleCompra: [],
-  //     modificadoEl: null
-  //   };
-
-  //   let response: any = await this.initCompra(compra);
-  //   let maxIdCompra: number = await this.getMaxIdCompra();
-  //   console.log("maxid" + maxIdCompra);
-
-  //   if (maxIdCompra == null) {
-  //     maxIdCompra = 1;
-
-  //   }
-  //   this._DataService.setSelectedCompraItemId(maxIdCompra)
-  //   this._router.navigate(["/detallesCompra", maxIdCompra])
-  // }
 
   async getMaxIdCompra(): Promise<number> {
     try {

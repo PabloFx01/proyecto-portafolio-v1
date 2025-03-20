@@ -54,6 +54,7 @@ export class IngresoFormComponent {
   private _conceptoService = inject(ConceptoService);
   private loginServices = inject(LoginService);
   public dialog = inject(MatDialog)
+  private _DataService = inject(DataService);
   title?: string;
   idIngreso: number | null = null;
   dateCalendar: Date | null = null;
@@ -81,7 +82,6 @@ export class IngresoFormComponent {
   habilitar(): void {
     this.ingresoForm.enable();
     this.edit = true;
-    console.log(this.edit);
 
   }
   constructor(private formBuilder: FormBuilder,
@@ -91,7 +91,6 @@ export class IngresoFormComponent {
     this.idIngreso = data.idItem;
     this.dateCalendar = new Date(this.getShortDate(data.dateCalendar))
     this.initForm();
-    console.log('viene el siguiente id: ' + data.idItem);
 
   }
 
@@ -102,7 +101,6 @@ export class IngresoFormComponent {
     } else {
       this.habilitar();
     }
-    console.log(this.edit);
   }
 
   isUserLogin() {
@@ -288,7 +286,6 @@ export class IngresoFormComponent {
     if (window.confirm('¿Seguro que deseas eliminar este elemento?')) {
       const response = await this.eliminarIngreso(idIngreso!);
       if (response) {
-        console.log(response.message);
         this.showSuccess(response.message, 'Ingreso');
         this.dialogRef.close();
       }

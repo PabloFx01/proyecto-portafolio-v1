@@ -106,9 +106,6 @@ export class CompraFormComponent implements OnInit {
 
     const compra: ICompra = await this.getCompra(itemId);
     if (compra) {
-      console.log("id" + compra.id);
-      console.log("fecha" + compra.fechaCompra);
-      console.log("fecha format" + this.getShortDate(compra.fechaCompra));
 
       let nuevaFecha = this.getShortDate(compra.fechaCompra)
       this.compraForm.patchValue({

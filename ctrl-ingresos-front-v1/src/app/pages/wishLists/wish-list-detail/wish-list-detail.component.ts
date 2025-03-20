@@ -193,20 +193,7 @@ export class WishListDetailComponent implements OnInit {
 
   }
 
-  // async getHayPagoSinProcesar(): Promise<void> {
-  //   this.pagoSinProcesar = this.dataSource.data?.some(detalle => detalle.pagoEfectuado === false)!
 
-  // }
-
-  // async checkEndPrestamo(): Promise<void>{
-  //   await this.getHayPagoSinProcesar();     
-  //   if(!this.pagoSinProcesar && this.prestamoData.saldoRest ==0){
-  //     console.log("fin de prestamo");
-  //     this.finPrestamo();
-  //   }else{
-  //     console.log("prestamo sin finalizar");      
-  //   }
-  // }
 
 
 
@@ -253,11 +240,8 @@ export class WishListDetailComponent implements OnInit {
 
 
 
-      console.log("size " + this.wishListData.wishListDetails?.length);
-
       this.wishListData.wishListDetails?.forEach(async items => {
         if (!items.procesarDetail) {
-          console.log("item " + items.itemName);
           await this.procesarWishDetails(items.wishDetailId?.id!, items.wishDetailId?.idWish!, items.precio!, items.itemName!)
         }
       })
@@ -391,7 +375,6 @@ export class WishListDetailComponent implements OnInit {
       });
 
     dialogRef.afterClosed().subscribe(result => {
-      console.log(`Dialog result: ${result}`);
       this.reloadData();
     });
   }
@@ -412,7 +395,6 @@ export class WishListDetailComponent implements OnInit {
       });
 
     dialogRef.afterClosed().subscribe(result => {
-      console.log(`Dialog result: ${result}`);
       this.reloadData();
     });
   }
@@ -464,11 +446,9 @@ export class WishListDetailComponent implements OnInit {
     //origen es beneficiario
     //destino es el origen
     let idSobreOrigen = this.wishListData.cuentaOrigen?.sobre?.id;
-    console.log("cuenta origen " + idSobreOrigen);
 
     let cuentaOrigen = await this.getCuentaByIdSobre(idSobreOrigen!);
     if (cuentaOrigen) {
-      console.log("pago " + pago);
 
       //Actualiza cuenta
       let monto = pago;
@@ -583,16 +563,9 @@ export class WishListDetailComponent implements OnInit {
       if (dif > 0) {
         prom = sum / this.listMovimiento.length;
         let mesesAprox: number = Number((dif! / prom).toFixed(2));
-        console.log("sum " + sum);
-        console.log("prom " + prom);
-        console.log("valorActLista " + valorActLista);
-        console.log("mesesAprox " + mesesAprox);
-        console.log("dif " + dif);
-
 
         let dias = Math.floor(mesesAprox * 30.44); // Convierte meses a días aproximados
         nuevaFecha.setDate(nuevaFecha.getDate() + dias);
-        console.log(this.getShortDate(nuevaFecha));
 
       }
 

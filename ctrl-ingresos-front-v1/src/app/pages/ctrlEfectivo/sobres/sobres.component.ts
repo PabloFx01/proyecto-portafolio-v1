@@ -203,7 +203,6 @@ export class SobresComponent implements OnInit {
       });
 
     dialogRef.afterClosed().subscribe(result => {
-      console.log(`Dialog result: ${result}`);
       this.reloadData();
     });
   }

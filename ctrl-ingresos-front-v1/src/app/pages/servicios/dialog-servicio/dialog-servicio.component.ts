@@ -143,11 +143,9 @@ export class DialogServicioComponent implements OnInit {
         let factura: IFactura = await this.getFactura(this.servicioData.id!);
         if (factura) {
           this.paid = true;
-          console.log("factura pagada");
         }
       } catch (error) {
         this.paid = false;
-        console.log("factura sin pagar");
       }
 
 

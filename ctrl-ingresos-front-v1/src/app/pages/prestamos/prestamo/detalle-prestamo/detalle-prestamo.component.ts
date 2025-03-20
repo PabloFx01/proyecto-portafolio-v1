@@ -228,7 +228,6 @@ export class DetallePrestamoComponent implements OnInit {
   async checkEndPrestamo(): Promise<void>{
     await this.getHayPagoSinProcesar();     
     if(!this.pagoSinProcesar && this.prestamoData.saldoRest ==0){
-      console.log("fin de prestamo");
       this.finPrestamo();
     }else{
       console.log("prestamo sin finalizar");      
@@ -249,7 +248,6 @@ export class DetallePrestamoComponent implements OnInit {
 
   async nuevoPago() {
     await this.getHayPagoSinProcesar();
-    console.log(this.pagoSinProcesar);
     if (this.pagoSinProcesar) {
       if (window.confirm('¿Existen pagos sin procesar, seguro desea registrar otro pago?')) {
         this.newOrUpdate('Nuevo', null, this.prestamoData.id)
@@ -311,7 +309,6 @@ export class DetallePrestamoComponent implements OnInit {
       });
 
     dialogRef.afterClosed().subscribe(result => {
-      console.log(`Dialog result: ${result}`);
       this.reloadData();
     });
   }
@@ -332,7 +329,6 @@ export class DetallePrestamoComponent implements OnInit {
       });
 
     dialogRef.afterClosed().subscribe(result => {
-      console.log(`Dialog result: ${result}`);
       this.reloadData();
     });
   }
@@ -378,11 +374,9 @@ export class DetallePrestamoComponent implements OnInit {
     //origen es beneficiario
     //destino es el origen
     let idSobreOrigen = this.prestamoData.cuentaBeneficiario?.sobre?.id;
-    console.log("cuenta origen " + idSobreOrigen);
 
     let cuentaOrigen = await this.getCuentaByIdSobre(idSobreOrigen!);
     if (cuentaOrigen) {
-      console.log("pago " + pago);
 
       //Actualiza cuenta
       let monto = pago;
@@ -398,7 +392,6 @@ export class DetallePrestamoComponent implements OnInit {
       if (responseCuenta) {
         //Actualizar cuenta destino
         let idSobreDestino = this.prestamoData.cuentaOrigen?.sobre?.id;
-        console.log("cuenta idSobreDestino " + idSobreDestino);
         this.cuentaDestinoData.saldo = monto;
         this.cuentaDestinoData.id = null;
         this.sobreDataDestino.id = idSobreDestino!;

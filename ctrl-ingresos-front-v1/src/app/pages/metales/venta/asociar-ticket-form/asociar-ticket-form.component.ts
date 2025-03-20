@@ -93,7 +93,6 @@ export class AsociarTicketFormComponent implements OnInit, OnDestroy {
     this.initForm();
     this.title = data.titulo;
     this.idVentaParam = data.idVenta;
-    console.log("id param " + this.idVentaParam);
 
   }
 
@@ -150,7 +149,6 @@ export class AsociarTicketFormComponent implements OnInit, OnDestroy {
 
           let response: IResponse = await this.actualizarVenta(this.idVentaParam, this.ventaData!);
           if (response) {
-            console.log(response.message);
             this._DataService.dataUpdated$.next();
             this.close();
           }

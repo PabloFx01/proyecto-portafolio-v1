@@ -132,7 +132,6 @@ export class ConsultaDetalleMovimientoComponent {
   }
 
   onChartEvent(event: ECElementEvent | ECActionEvent, type: string) {
-    // console.log('chart event:', type, event);
   }
 
   initOpts = {
@@ -242,7 +241,6 @@ export class ConsultaDetalleMovimientoComponent {
         this.listMovConsulta.push(movConsulta);
       })
 
-      console.log("listMovConsulta lenght" + this.listMovConsulta.length);
 
       // Crear una hoja de trabajo con los datos JSON
       const ws: XLSX.WorkSheet = XLSX.utils.json_to_sheet(this.listMovConsulta);
@@ -420,32 +418,6 @@ export class ConsultaDetalleMovimientoComponent {
   }
 
 
-  // irADetalles(itemId: number) {
-  //   this.openForm('Detalle de la compra', itemId, 'onlyRead')
-  // }
-
-  // openForm(titulo: String, itemId: number | null, accion: string) {
-  //   const dialogRef = this.dialog.open(DetalleConsultaCompraComponent,
-  //     {
-  //       disableClose: true,
-  //       autoFocus: true,
-  //       closeOnNavigation: false,
-  //       position: { top: '30px' },
-  //       width: '1000px',
-  //       height: '1000px',
-  //       data: {
-
-  //         titulo: titulo,
-  //         itemId: itemId,
-  //         accion: accion
-  //       }
-
-  //     });
-
-  //   dialogRef.afterClosed().subscribe(result => {
-  //     console.log(`Dialog result: ${result}`);
-  //   });
-  // }
 
   limpiar() {
     this.consultaMovimientoForm.reset();
