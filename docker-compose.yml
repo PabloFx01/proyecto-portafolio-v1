@@ -6,8 +6,8 @@ services:
       - "8011:8011"
     environment:
       DB_URL: jdbc:mysql://ctrl_pagos_db_2:3306/rest_api_ctrlpagos_db_2?createDatabaseIfNotExist=true&serverTimezone=UTC
-      DB_USER_NAME: root
-      DB_PASSWORD: ArMxfigpab024$$
+      DB_USER_NAME: ${DB_USER_NAME}
+      DB_PASSWORD: ${MYSQL_PASSWORD}
     restart: always
     depends_on:
       ctrl_pagos_db_2:
@@ -17,8 +17,8 @@ services:
     ports:
       - "3308:3306"
     environment:
-      MYSQL_ROOT_PASSWORD: ArMxfigpab024$$
-      MYSQL_PASSWORD: ArMxfigpab024$$
+      MYSQL_ROOT_PASSWORD: ${MYSQL_PASSWORD}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
       MYSQL_DATABASE: rest_api_ctrlpagos_db_2
     restart: always
     healthcheck:
