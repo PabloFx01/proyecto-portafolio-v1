@@ -23,6 +23,7 @@ import { VentaService } from '../../../../../../services/metales/venta.service';
 import { DataService } from '../../../../../../shared/data.service';
 import { ILoginResponse } from '../../../../../../models/login.models';
 import { LoginService } from '../../../../../../services/login.service';
+import { SpinnerComponent } from "../../../../../../shared/spinner/spinner.component";
 
 
 @Component({
@@ -36,7 +37,7 @@ import { LoginService } from '../../../../../../services/login.service';
     MatDatepickerModule,
     MatNativeDateModule,
     MatDialogModule,
-    MatSelectModule],
+    MatSelectModule, SpinnerComponent],
   templateUrl: './detalle-venta-form.component.html',
   styleUrl: './detalle-venta-form.component.css'
 })
@@ -108,7 +109,15 @@ export class DetalleVentaFormComponent implements OnInit, OnDestroy {
     username: '',
     role: ''
   }
-
+  isLoading: boolean = false;
+  
+  spinnerShow(): void {
+    this.isLoading = true
+  }
+  
+    spinnerHide(): void {
+    this.isLoading = false
+  }
   constructor(private formBuilder: FormBuilder) {
     this.isUserLogin();
     this.initForm();
@@ -250,6 +259,7 @@ export class DetalleVentaFormComponent implements OnInit, OnDestroy {
 
 
   async onSave() {
+    this.spinnerShow();
     let ventaId: number = this.detalleVentaForm.get('idVenta')?.value;
     let detalleId: number = this.detalleVentaForm.get('id')?.value;
     this.detalleVentaData.pesoVendido = this.detalleVentaForm.get('pesoVendido')?.value;
@@ -280,6 +290,7 @@ export class DetalleVentaFormComponent implements OnInit, OnDestroy {
     let msj: string = '';
     msj = metalSeleccionado ? metalSeleccionado.nombre : 'el material';
     this.showSuccess(`Se asignó correctamente.`, `El material ${msj}`)
+    this.spinnerHide();
     this._DataService.dataUpdated$.next();
   }
 

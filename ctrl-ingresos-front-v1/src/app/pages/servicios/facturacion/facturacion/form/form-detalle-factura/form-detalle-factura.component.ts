@@ -22,6 +22,7 @@ import { IResponse } from '../../../../../../models/response.models';
 import { FacturaService } from '../../../../../../services/servicios/factura.service';
 import { di } from '@fullcalendar/core/internal-common';
 import { facturaPagadaFormComponent } from '../form-factura-pagada/factura-pagada-form.component';
+import { SpinnerComponent } from "../../../../../../shared/spinner/spinner.component";
 
 
 @Component({
@@ -38,7 +39,7 @@ import { facturaPagadaFormComponent } from '../form-factura-pagada/factura-pagad
     MatSlideToggleModule,
     MatRadioModule,
     MatRadioGroup,
-    MatIconModule],
+    MatIconModule, SpinnerComponent],
   templateUrl: './form-detalle-factura.component.html',
   styleUrl: './form-detalle-factura.component.css'
 })
@@ -90,7 +91,15 @@ export class FormDetalleFacturaComponent implements OnInit {
   username: string | null = '';
   role: String | null = '';
 
+  isLoading: boolean = false;
 
+  spinnerShow(): void {
+    this.isLoading = true
+  }
+
+  spinnerHide(): void {
+    this.isLoading = false
+  }
   constructor(private formBuilder: FormBuilder,
     @Inject(MAT_DIALOG_DATA) public data: any,
     public dialogRef: MatDialogRef<FormDetalleFacturaComponent>) {
@@ -103,7 +112,7 @@ export class FormDetalleFacturaComponent implements OnInit {
 
   }
 
-  async ngOnInit(): Promise<void> {    
+  async ngOnInit(): Promise<void> {
     this.initForm();
     await this.loadGralData();
 
@@ -111,19 +120,19 @@ export class FormDetalleFacturaComponent implements OnInit {
 
   async loadGralData(): Promise<void> {
     if (this.idServicio != null) {
-     
+
       this.servicioData = await this.getServicio(this.idServicio);
       if (this.servicioData) {
         this.facturaData = await this.getFactura(this.idFactura!);
-        if (this.facturaData) {          
+        if (this.facturaData) {
           this.maxPago = this.facturaData.saldoRest!;
           this.loadPagoSugerido();
-          if (this.idDetalleFactura != null) {                  
+          if (this.idDetalleFactura != null) {
             await this.loadItemData(this.idDetalleFactura, this.idFactura!);
-            if(this.idDetalleFactura!=null){
+            if (this.idDetalleFactura != null) {
               let restActual = this.maxPago;
-              this.maxPago = restActual + this.pagoActual;              
-            }            
+              this.maxPago = restActual + this.pagoActual;
+            }
             this.findFacturaPagada();
           }
         }
@@ -132,7 +141,7 @@ export class FormDetalleFacturaComponent implements OnInit {
   }
 
 
-  loadPagoSugerido():void{
+  loadPagoSugerido(): void {
     let nPagoSugerido: number = Number((this.servicioData.valor! / (this.servicioData.periodoPago! * 4)).toFixed(2));
     this.detalleFacturaForm.patchValue({
       pagoSugerido: nPagoSugerido
@@ -151,13 +160,13 @@ export class FormDetalleFacturaComponent implements OnInit {
 
   async loadItemData(idDetalleFactura: number, idFactura: number) {
 
-    const dFactura: IDetalleFactura = await this.getDetFactura(idDetalleFactura, idFactura);    
-    if (dFactura) {     
+    const dFactura: IDetalleFactura = await this.getDetFactura(idDetalleFactura, idFactura);
+    if (dFactura) {
       this.detalleFacturaForm.patchValue({
         pago: dFactura.pago
       })
       this.pagoActual = dFactura.pago!;
-      
+
     }
 
   }
@@ -214,7 +223,7 @@ export class FormDetalleFacturaComponent implements OnInit {
     }
   }
 
-  async getServicio(itemId: number): Promise<IServicio> {   
+  async getServicio(itemId: number): Promise<IServicio> {
     try {
       const servicio: IServicio =
         await firstValueFrom(this._servicioServices.getServicio(itemId));
@@ -226,15 +235,16 @@ export class FormDetalleFacturaComponent implements OnInit {
   }
 
   async onSave() {
+    this.spinnerShow();
     let msj = 'Se ha creado correctamente.';
     let idDetalleFactura = this.idDetalleFactura;
     if (idDetalleFactura != null) {
       this.detalleFacturaData = await this.getDetFactura(idDetalleFactura, this.idFactura!);
       msj = 'Se ha actualizado correctamente.';
-    }else{
-      let detalleFacturaId : IDetalleFacturaId = {
-        id : null,
-        idFactura : this.idFactura!
+    } else {
+      let detalleFacturaId: IDetalleFacturaId = {
+        id: null,
+        idFactura: this.idFactura!
       }
       this.detalleFacturaData.detalleFacturaId = detalleFacturaId;
     }
@@ -244,21 +254,23 @@ export class FormDetalleFacturaComponent implements OnInit {
     this.detalleFacturaData.fechaPago = new Date();
     let difPago = this.maxPago - pago;
     await this.findFacturaPagada();
-   
-    if((this.paid && difPago>0) || (!this.paid)){
+
+    if ((this.paid && difPago > 0) || (!this.paid)) {
       let response!: IResponse;
       if (idDetalleFactura != null) {
         response = await this.update(idDetalleFactura, this.idFactura!, this.detalleFacturaData)
       } else {
         response = await this.save(this.detalleFacturaData)
       }
-  
+
       if (response) {
         this.showSuccess(msj, "Facturación")
+        this.spinnerHide();
         this.dialogRef.close();
       }
-    }else{
-        this.openForm();
+    } else {
+      this.spinnerHide();
+      this.openForm();
     }
 
 

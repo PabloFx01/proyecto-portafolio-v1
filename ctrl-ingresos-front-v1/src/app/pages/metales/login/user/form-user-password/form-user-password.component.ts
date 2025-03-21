@@ -13,6 +13,7 @@ import { IResponse } from '../../../../../models/response.models';
 import { IUser, IUserChangePass } from '../../../../../models/user.models';
 import { UserService } from '../../../../../services/user.service';
 import { DataService } from '../../../../../shared/data.service';
+import { SpinnerComponent } from "../../../../../shared/spinner/spinner.component";
 
 @Component({
   selector: 'app-form-user-password',
@@ -24,8 +25,9 @@ import { DataService } from '../../../../../shared/data.service';
     MatFormFieldModule,
     MatInputModule,
     MatNativeDateModule,
-    FormsModule
-  ],
+    FormsModule,
+    SpinnerComponent
+],
   templateUrl: './form-user-password.component.html',
   styleUrl: './form-user-password.component.css'
 })
@@ -56,7 +58,15 @@ export class FormUserPasswordComponent implements OnInit {
     username: '',
     role: ''
   }
-
+  isLoading: boolean = false;
+  
+  spinnerShow(): void {
+    this.isLoading = true
+  }
+  
+    spinnerHide(): void {
+    this.isLoading = false
+  }
   constructor(private formBuilder: FormBuilder) {
     this.initForm();
   }
@@ -101,6 +111,7 @@ export class FormUserPasswordComponent implements OnInit {
   }
 
   async onSave() {
+    this.spinnerShow();
     this.messageError = null;
     this.userChangeData!.username = this.userForm.get("username")?.value;
     this.userChangeData!.oldPassword = this.userForm.get("oldPassword")?.value;
@@ -111,9 +122,12 @@ export class FormUserPasswordComponent implements OnInit {
 
     if (response.idMessage == '501') {
       this.messageError = response.message;
+      this.spinnerHide();
     } else {
-      this.router.navigateByUrl('/home')
+      
       this.showSuccess('Se ha guardado correctamente.', 'Password')
+      this.spinnerHide();
+      this.router.navigateByUrl('/home')
     }
   }
 

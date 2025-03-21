@@ -20,6 +20,7 @@ import { MetalCompraApiService } from '../../../../../../services/metales/metal-
 import { DataService } from '../../../../../../shared/data.service';
 import { ILoginResponse } from '../../../../../../models/login.models';
 import { LoginService } from '../../../../../../services/login.service';
+import { SpinnerComponent } from "../../../../../../shared/spinner/spinner.component";
 
 
 @Component({
@@ -33,7 +34,7 @@ import { LoginService } from '../../../../../../services/login.service';
     MatDatepickerModule,
     MatNativeDateModule,
     MatDialogModule,
-    MatSelectModule],
+    MatSelectModule, SpinnerComponent],
   templateUrl: './detalle-compra-form.component.html',
   styleUrl: './detalle-compra-form.component.css'
 })
@@ -92,7 +93,15 @@ export class DetalleCompraFormComponent implements OnInit, OnDestroy {
     username: '',
     role: ''
   }
-
+  isLoading: boolean = false;
+  
+  spinnerShow(): void {
+    this.isLoading = true
+  }
+  
+    spinnerHide(): void {
+    this.isLoading = false
+  }
   constructor(private formBuilder: FormBuilder) {
     this.isUserLogin();
     this.loadMetalesCompra();
@@ -176,6 +185,7 @@ export class DetalleCompraFormComponent implements OnInit, OnDestroy {
 
   }
   async onSave() {
+    this.spinnerShow();
     let compraId: number = this.detalleCompraForm.get('idCompra')?.value;
     let detalleId: number = this.detalleCompraForm.get('id')?.value;
     this.detalleCompraData.importe = this.detalleCompraForm.get('importe')?.value;
@@ -205,6 +215,7 @@ export class DetalleCompraFormComponent implements OnInit, OnDestroy {
     this.limpiar();
     let msj: string = '';
     this.showSuccess(`Se guardo correctamente.`, `La compra del material`)
+    this.spinnerHide();
     this._DataService.dataUpdated$.next();
   }
 

@@ -20,6 +20,7 @@ import { MetalCompraApiService } from '../../../../services/metales/metal-compra
 import { MetalVentaService } from '../../../../services/metales/metal-venta.service';
 import { DataService } from '../../../../shared/data.service';
 import { MetalesNavComponent } from "../../metales-nav/metales-nav.component";
+import { SpinnerComponent } from "../../../../shared/spinner/spinner.component";
 
 @Component({
   selector: 'app-detalle-metal-compra',
@@ -34,7 +35,7 @@ import { MetalesNavComponent } from "../../metales-nav/metales-nav.component";
     MatDialogModule,
     MatIconModule,
     MatPaginatorModule,
-    MatTableModule, MetalesNavComponent,RouterOutlet],
+    MatTableModule, MetalesNavComponent, RouterOutlet, SpinnerComponent],
   templateUrl: './detalle-metal-compra.component.html',
   styleUrl: './detalle-metal-compra.component.css'
 })
@@ -69,7 +70,16 @@ export class DetalleMetalCompraComponent implements OnInit {
   }
 
   title?: string;
-
+  isLoading: boolean = false;
+  
+  spinnerShow(): void {
+    this.isLoading = true
+  }
+  
+    spinnerHide(): void {
+    this.isLoading = false
+  }
+  
   constructor(private formBuilder: FormBuilder, public dialog: MatDialog) {
     this.initForm();
   }

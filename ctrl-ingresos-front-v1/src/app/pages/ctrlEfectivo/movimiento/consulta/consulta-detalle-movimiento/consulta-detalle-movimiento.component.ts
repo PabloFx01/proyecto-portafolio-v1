@@ -30,6 +30,7 @@ import { NgxEchartsDirective } from 'ngx-echarts';
 import type { ECElementEvent, EChartsOption } from 'echarts';
 import type { ECActionEvent } from 'echarts/types/src/util/types';
 import LinearGradient from 'zrender/lib/graphic/LinearGradient';
+import { SpinnerComponent } from "../../../../../shared/spinner/spinner.component";
 
 @Component({
   selector: 'app-consulta-detalle-movimiento',
@@ -49,7 +50,8 @@ import LinearGradient from 'zrender/lib/graphic/LinearGradient';
     MatIconModule,
     NavCtrlEfectivoComponent,
     RouterOutlet,
-    NgxEchartsDirective
+    NgxEchartsDirective,
+    SpinnerComponent
   ],
   templateUrl: './consulta-detalle-movimiento.component.html',
   styleUrl: './consulta-detalle-movimiento.component.css'
@@ -104,7 +106,7 @@ export class ConsultaDetalleMovimientoComponent {
 
   dataSourceMovimiento: MatTableDataSource<IMovimiento> = new MatTableDataSource<IMovimiento>([]);
   displayedColumnsMovimiento: string[] = ['fecha', 'tipoMovimiento', 'monto', 'sobre'];
-  listMovimiento : IMovimiento[] = [];
+  listMovimiento: IMovimiento[] = [];
   idMovimiento!: number;
 
   loginServices = inject(LoginService);
@@ -120,7 +122,15 @@ export class ConsultaDetalleMovimientoComponent {
   }
 
   estadisticas: boolean = false;
+  isLoading: boolean = false;
 
+  spinnerShow(): void {
+    this.isLoading = true
+  }
+
+  spinnerHide(): void {
+    this.isLoading = false
+  }
   constructor(private formBuilder: FormBuilder, public dialog: MatDialog) {
     this.initForms();
     this.isUserLogin();
@@ -132,6 +142,7 @@ export class ConsultaDetalleMovimientoComponent {
   }
 
   onChartEvent(event: ECElementEvent | ECActionEvent, type: string) {
+    // console.log('chart event:', type, event);
   }
 
   initOpts = {
@@ -295,6 +306,7 @@ export class ConsultaDetalleMovimientoComponent {
   }
 
   async search() {
+    this.spinnerShow();
     this.startMovFilter = this.getShortDate(this.fechaMovimientoForm.get("startMov")?.value)
     this.endMovFilter = this.getShortDate(this.fechaMovimientoForm.get("endMov")?.value);
     this.sobreFilter = this.consultaMovimientoForm.get("sobre")?.value;
@@ -302,7 +314,7 @@ export class ConsultaDetalleMovimientoComponent {
 
     this.allMovInDataSourcePaginador();
     await this.actualizarGrafico();
-
+    this.spinnerHide();
   }
 
   visibleInfo() {
@@ -377,45 +389,46 @@ export class ConsultaDetalleMovimientoComponent {
   }
 
   async actualizarGrafico() {
-    let tipoDMovimiento : string = '';
+    let tipoDMovimiento: string = '';
     if (this.agregar) {
       tipoDMovimiento = this.listTipoMov[0].id;
-    } else  if(this.retirar){
+    } else if (this.retirar) {
       tipoDMovimiento = this.listTipoMov[1].id;;
-    } else if(this.tranferencia){
+    } else if (this.tranferencia) {
       tipoDMovimiento = this.listTipoMov[2].id;;
     }
 
     this.listMovimiento = await this.getAllMovimientosByTipoMov(tipoDMovimiento);
-    
+
     if (this.listMovimiento.length > 0) {
       let max = this.listMovimiento.length - 1;
 
       let fecha1 = new Date(this.listMovimiento[0].fecha!);
       let fecha2 = new Date(this.listMovimiento[max].fecha!);
-      let info: IInfoMovimiento[] = [];      
+      let info: IInfoMovimiento[] = [];
       info = this.obtenerData(fecha1, fecha2);
       this.updateChartData(info);
 
     }
   }
 
-  async getAllMovimientosByTipoMov(tipoMov:string): Promise<IMovimiento[]> {
+  async getAllMovimientosByTipoMov(tipoMov: string): Promise<IMovimiento[]> {
     try {
       const movimientos: IMovimiento[] =
-      await firstValueFrom(this._movimientoService.getAllConsultaMovByUsername(
-        this.startMovFilter,
-        this.endMovFilter,
-        null,
-        tipoMov,
-        this.username!
-      ));
+        await firstValueFrom(this._movimientoService.getAllConsultaMovByUsername(
+          this.startMovFilter,
+          this.endMovFilter,
+          null,
+          tipoMov,
+          this.username!
+        ));
       return movimientos;
     } catch (error) {
       console.error('Error al buscar movimientos:', error);
       throw error;
     }
   }
+
 
 
 
@@ -519,7 +532,7 @@ export class ConsultaDetalleMovimientoComponent {
       fechaActual.setDate(1); // Asegurarse de que siempre sea el primer día del mes
     }
 
-    if(this.retirar){
+    if (this.retirar) {
 
     }
 

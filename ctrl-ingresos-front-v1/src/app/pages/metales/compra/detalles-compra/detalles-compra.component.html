@@ -1,5 +1,8 @@
 <metales-nav-app />
 <router-outlet />
+@if (isLoading) {
+  <app-spinner></app-spinner>
+  }
 @if (paramAccion!='onlyRead') {
 <div class="container">
   <app-detalle-compra-form />

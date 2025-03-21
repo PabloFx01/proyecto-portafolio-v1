@@ -23,6 +23,7 @@ import { IngresoService } from '../../../../services/ingresos/ingreso.service';
 import { LoginService } from '../../../../services/login.service';
 import { ILoginResponse } from '../../../../models/login.models';
 import { IUser } from '../../../../models/user.models';
+import { SpinnerComponent } from "../../../../shared/spinner/spinner.component";
 
 @Component({
   selector: 'app-detalle-ingreso-asig-rest-form',
@@ -36,7 +37,7 @@ import { IUser } from '../../../../models/user.models';
     MatNativeDateModule,
     MatDialogModule,
     MatRadioModule,
-    MatSelectModule],
+    MatSelectModule, SpinnerComponent],
   templateUrl: './detalle-ingreso-asig-rest-form.component.html',
   styleUrl: './detalle-ingreso-asig-rest-form.component.css'
 })
@@ -64,7 +65,15 @@ export class DetalleIngresoAsigRestFormComponent implements OnInit {
     username: '',
     role: ''
   }
-
+  isLoading: boolean = false;
+  
+  spinnerShow(): void {
+    this.isLoading = true
+  }
+  
+    spinnerHide(): void {
+    this.isLoading = false
+  }
 
   constructor(private formBuilder: FormBuilder,
     @Inject(MAT_DIALOG_DATA) public data: any,
@@ -191,6 +200,7 @@ export class DetalleIngresoAsigRestFormComponent implements OnInit {
   async onSave() {
 
     if (this.detalleData?.detalleIngresoId!.id != null) {
+      this.spinnerShow();
       const user: IUser = {
         id: null,
         username: this.username!
@@ -251,6 +261,7 @@ export class DetalleIngresoAsigRestFormComponent implements OnInit {
           response = await this.updateTranferir(dIngresoCpto.detalleIngresoId!, dIngresoCpto)
           if (response) {
             this.showSuccess('Se ha actualizado correctamente.', this.detalleData.concepto!.nombre!);
+            this.spinnerHide();
             this.dialogRef.close();
           }
         }

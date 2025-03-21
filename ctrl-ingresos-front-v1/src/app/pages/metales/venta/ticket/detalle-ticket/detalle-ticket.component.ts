@@ -19,6 +19,7 @@ import { DetalleTicketService } from '../../../../../services/metales/detalle-ti
 import { DataService } from '../../../../../shared/data.service';
 import { MetalesNavComponent } from "../../../metales-nav/metales-nav.component";
 import { MatMenuModule } from '@angular/material/menu';
+import { SpinnerComponent } from "../../../../../shared/spinner/spinner.component";
 
 @Component({
   selector: 'app-detalle-ticket',
@@ -38,7 +39,7 @@ import { MatMenuModule } from '@angular/material/menu';
     DetalleTicketFormComponent,
     CurrencyPipe, MetalesNavComponent,
     RouterOutlet,
-    MatMenuModule]
+    MatMenuModule, SpinnerComponent]
 })
 export class DetalleTicketComponent implements OnInit {
 
@@ -68,7 +69,15 @@ export class DetalleTicketComponent implements OnInit {
 
   dataSource: MatTableDataSource<IDetalleTicket> = new MatTableDataSource<IDetalleTicket>([]);
   displayedColumns: string[] = ['idTicket', 'id', 'metalNombre', 'metalDescripcionTicket', 'pesoVendido', 'precioVenta', 'importe', 'acciones'];
-
+  isLoading: boolean = false;
+  
+  spinnerShow(): void {
+    this.isLoading = true
+  }
+  
+    spinnerHide(): void {
+    this.isLoading = false
+  }
   ngOnInit(): void {
     this.getScreenSize();
     this._route.params.subscribe(params => {
@@ -85,6 +94,7 @@ export class DetalleTicketComponent implements OnInit {
   }
   async eliminar(idTicket: number, idDetalle: number) {
     if (window.confirm('¿Seguro que deseas eliminar este elemento?')) {
+      this.spinnerShow();
       let detalleId: DetalleTicketId = {
         idTicket: idTicket,
         id: idDetalle
@@ -93,6 +103,7 @@ export class DetalleTicketComponent implements OnInit {
       if (response.idMessage == '200') {
         console.log(response.message);
       }
+      this.spinnerHide();
       this._DataService.dataUpdated$.next();
     }
   }

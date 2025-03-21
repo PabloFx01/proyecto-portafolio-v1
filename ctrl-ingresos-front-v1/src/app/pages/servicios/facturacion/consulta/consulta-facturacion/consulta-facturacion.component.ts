@@ -24,6 +24,7 @@ import { IServicio } from '../../../../../models/servicios/servicio.models';
 import { ServicioService } from '../../../../../services/servicios/servicio.service';
 import { IDetalleFactura, IEstados, IFactura, IFacturas } from '../../../../../models/servicios/factura.models';
 import { FacturaService } from '../../../../../services/servicios/factura.service';
+import { SpinnerComponent } from "../../../../../shared/spinner/spinner.component";
 
 
 @Component({
@@ -48,7 +49,7 @@ import { FacturaService } from '../../../../../services/servicios/factura.servic
     MatSlideToggleModule,
     NavServiciosComponent,
     MatRadioModule,
-    MatRadioGroup,],
+    MatRadioGroup, SpinnerComponent],
   templateUrl: './consulta-facturacion.component.html',
   styleUrl: './consulta-facturacion.component.css'
 })
@@ -88,7 +89,15 @@ export class ConsultaFacturacionComponent {
   dataSourceDFactura: MatTableDataSource<IDetalleFactura> = new MatTableDataSource<IDetalleFactura>([]);
   displayedColumnsDFactura: string[] = ['fechaPago', 'pago'];
 
+  isLoading: boolean = false;
 
+  spinnerShow(): void {
+    this.isLoading = true
+  }
+
+  spinnerHide(): void {
+    this.isLoading = false
+  }
   constructor(private formBuilder: FormBuilder) {
 
     this.isUserLogin();
@@ -135,13 +144,14 @@ export class ConsultaFacturacionComponent {
   }
 
   search() {
+    this.spinnerShow();
     this.fechaDesde = this.getShortDate(this.consultaFacturaForm.get("fechaDesde")?.value);
     this.fechaHasta = this.getShortDate(this.consultaFacturaForm.get("fechaHasta")?.value);
     this.idServicio = this.consultaFacturaForm.get("servicio")?.value;
     this.estado = this.consultaFacturaForm.get("estado")?.value;
 
     this.allFacturaInDataSourcePaginador();
-
+    this.spinnerHide();
   }
 
   cambiarPagina(event: PageEvent) {
@@ -164,7 +174,7 @@ export class ConsultaFacturacionComponent {
   }
 
   onRowClicked(row: any) {
-    this.selectedRow = row;   
+    this.selectedRow = row;
     this.allDFacturaInDataSourcePaginador(row.detallesFactura)
   }
 
@@ -177,12 +187,12 @@ export class ConsultaFacturacionComponent {
     this.limpiarDataSource();
   }
 
-  limpiarDataSource():void{
+  limpiarDataSource(): void {
     this.dataSourceFactura.data = [];
     this.dataSourceDFactura.data = [];
     this.cantidadTotal = 0;
-    this.cantidadPorPagina= 5;
-    this.numeroDePagina = 0;    
+    this.cantidadPorPagina = 5;
+    this.numeroDePagina = 0;
   }
 
   isUserLogin() {

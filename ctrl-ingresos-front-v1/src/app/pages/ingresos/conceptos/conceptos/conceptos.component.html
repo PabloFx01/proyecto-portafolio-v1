@@ -1,5 +1,8 @@
 <app-nav />
 <router-outlet />
+@if (isLoading) {
+    <app-spinner></app-spinner>
+    }
 <div class='demo-app'>
     <div class='demo-app-sidebar'>
         <div class='demo-app-sidebar-section'>

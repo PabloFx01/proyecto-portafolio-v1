@@ -25,6 +25,7 @@ import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { NavComponent } from "../../nav/nav.component";
 import { MatMenuModule } from '@angular/material/menu';
 import { IUser } from '../../../../models/user.models';
+import { SpinnerComponent } from "../../../../shared/spinner/spinner.component";
 
 @Component({
   selector: 'app-conceptos',
@@ -41,7 +42,7 @@ import { IUser } from '../../../../models/user.models';
     MatToolbarModule,
     MatButtonToggleModule,
     MatCheckboxModule,
-    MatSlideToggleModule, NavComponent, MatMenuModule],
+    MatSlideToggleModule, NavComponent, MatMenuModule, SpinnerComponent],
   templateUrl: './conceptos.component.html',
   styleUrl: './conceptos.component.css'
 })
@@ -90,7 +91,15 @@ export class ConceptosComponent {
 
   dataSource: MatTableDataSource<IConcepto> = new MatTableDataSource<IConcepto>([]);
   displayedColumns: string[] = ['nombre', 'porcentaje', 'activo', 'acciones'];
-
+  isLoading: boolean = false;
+  
+  spinnerShow(): void {
+    this.isLoading = true
+  }
+  
+    spinnerHide(): void {
+    this.isLoading = false
+  }
   constructor(public dialog: MatDialog) { }
 
   ngOnInit(): void {
@@ -134,11 +143,12 @@ export class ConceptosComponent {
   async eliminar(itemId: number) {
 
     if (window.confirm('¿Seguro que deseas desactivar este elemento?')) {
-
+      this.spinnerShow(); 
       let response: IResponse = await this.softDelete(itemId, this.username!)
 
       if (response) {
         this.showSuccess(response.message, "Concepto")
+        this.spinnerHide();
         this.reloadData();
       }
     }

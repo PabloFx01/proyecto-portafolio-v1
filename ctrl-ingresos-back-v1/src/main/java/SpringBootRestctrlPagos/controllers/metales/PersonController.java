@@ -25,7 +25,6 @@ import java.util.Optional;
 
 @RestController
 @RequestMapping("tools/ctrlPagos/metalesApp/persona")
-@CrossOrigin(origins = {"http://localhost:4200"})
 public class PersonController {
     @Autowired
     private IPersonService personService;

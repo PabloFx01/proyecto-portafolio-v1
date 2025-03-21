@@ -24,6 +24,7 @@ import { MovimientoService } from '../../../../../services/ctrlEfectivo/movimien
 import { MatSelectModule } from '@angular/material/select';
 import { IUser } from '../../../../../models/user.models';
 import { IResponse } from '../../../../../models/response.models';
+import { SpinnerComponent } from "../../../../../shared/spinner/spinner.component";
 
 
 @Component({
@@ -41,7 +42,7 @@ import { IResponse } from '../../../../../models/response.models';
     MatRadioModule,
     MatRadioGroup,
     MatIconModule,
-    MatSelectModule],
+    MatSelectModule, SpinnerComponent],
   templateUrl: './prestamo-form.component.html',
   styleUrl: './prestamo-form.component.css'
 })
@@ -76,7 +77,7 @@ export class PrestamoFormComponent implements OnInit {
     saldoRest: null,
     totPag: null,
     estado: null,
-    procesarPrestamo:null,
+    procesarPrestamo: null,
     fechaTotPagado: null,
     usuario: null
   };
@@ -128,7 +129,15 @@ export class PrestamoFormComponent implements OnInit {
   userLoginOn: boolean = false;
   username: string | null = '';
   role: String | null = '';
+  isLoading: boolean = false;
 
+  spinnerShow(): void {
+    this.isLoading = true
+  }
+
+  spinnerHide(): void {
+    this.isLoading = false
+  }
 
   constructor(private formBuilder: FormBuilder,
     @Inject(MAT_DIALOG_DATA) public data: any,
@@ -235,7 +244,7 @@ export class PrestamoFormComponent implements OnInit {
     }
   }
 
-  enableElementByCuentaOrigen():void{
+  enableElementByCuentaOrigen(): void {
     this.prestamoForm.get('cOrigen')?.valueChanges.subscribe(async (cOrigen) => {
       this.prestamoForm.get("montoAPrestar")?.enable();
       this.prestamoForm.get("coutas")?.enable();
@@ -266,7 +275,7 @@ export class PrestamoFormComponent implements OnInit {
             let monto: number = this.prestamoForm.get("montoAPrestar")?.value;
             if (monto != 0 && monto != null) {
               this.prestamoForm.patchValue({
-                interes: null,                
+                interes: null,
                 totAPagar: Number(monto.toFixed(0)),
                 pagoPorMes: monto
               })
@@ -340,6 +349,7 @@ export class PrestamoFormComponent implements OnInit {
 
 
   async onSave() {
+    this.spinnerShow();
     let msj = 'El prestamo se ha generado con éxito.';
     let idPrestamo = this.idPrestamo;
     if (idPrestamo != null) {
@@ -361,10 +371,10 @@ export class PrestamoFormComponent implements OnInit {
     let coutas = this.prestamoForm.get("coutas")?.value;
     let totAPagar = this.prestamoForm.get("totAPagar")?.value;
 
-    let cuentaOrigenData :ICuenta = await this.getCuentaByIdSobre(cOrigen);
-    let cuentaBeneficiario : ICuenta = await this.getCuentaByIdSobre(cBenefi);
+    let cuentaOrigenData: ICuenta = await this.getCuentaByIdSobre(cOrigen);
+    let cuentaBeneficiario: ICuenta = await this.getCuentaByIdSobre(cBenefi);
 
-    this.cuentaOrigenData.id =cuentaOrigenData.id;
+    this.cuentaOrigenData.id = cuentaOrigenData.id;
     this.cuentaDestinoData.id = cuentaBeneficiario.id
     this.prestamoData.titulo = titulo;
     this.prestamoData.fechaCreacion = fechaCreacion;
@@ -372,14 +382,14 @@ export class PrestamoFormComponent implements OnInit {
     this.prestamoData.cuentaBeneficiario = this.cuentaDestinoData;
     this.prestamoData.monto = montoAPrestar;
     this.prestamoData.cuotas = coutas;
-    this.prestamoData.interes =  this.getInteresCoutasPay(coutas);
+    this.prestamoData.interes = this.getInteresCoutasPay(coutas);
     this.prestamoData.totAPagar = totAPagar;
     this.prestamoData.saldoRest = totAPagar;
     this.prestamoData.totPag = 0;
     this.prestamoData.estado = false;
     this.prestamoData.fechaTotPagado = null;
 
-    let detalle : IDetallePrestamo[] = [];
+    let detalle: IDetallePrestamo[] = [];
     this.prestamoData.detallePrestamo = detalle;
 
     let response!: IResponse;
@@ -391,6 +401,7 @@ export class PrestamoFormComponent implements OnInit {
 
     if (response) {
       this.showSuccess(msj, "Prestamo")
+      this.spinnerHide();
       this.dialogRef.close();
     }
 

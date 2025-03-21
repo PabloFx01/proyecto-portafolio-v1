@@ -21,6 +21,7 @@ import { DataService } from '../../../../shared/data.service';
 import { ILoginResponse } from '../../../../models/login.models';
 import { LoginService } from '../../../../services/login.service';
 import { IUser } from '../../../../models/user.models';
+import { SpinnerComponent } from "../../../../shared/spinner/spinner.component";
 
 @Component({
   selector: 'app-asociar-ticket-form',
@@ -33,8 +34,7 @@ import { IUser } from '../../../../models/user.models';
     MatDialogModule,
     MatSelectModule,
     MatIconModule,
-    MatToolbarModule
-  ],
+    MatToolbarModule, SpinnerComponent],
   templateUrl: './asociar-ticket-form.component.html',
   styleUrl: './asociar-ticket-form.component.css'
 })
@@ -86,6 +86,16 @@ export class AsociarTicketFormComponent implements OnInit, OnDestroy {
     role: ''
   }
 
+  isLoading: boolean = false;
+  
+  spinnerShow(): void {
+    this.isLoading = true
+  }
+  
+    spinnerHide(): void {
+    this.isLoading = false
+  }
+
   constructor(private formBuilder: FormBuilder,
     @Inject(MAT_DIALOG_DATA) public data: any,
     public dialogRef: MatDialogRef<AsociarTicketFormComponent>) {
@@ -93,7 +103,6 @@ export class AsociarTicketFormComponent implements OnInit, OnDestroy {
     this.initForm();
     this.title = data.titulo;
     this.idVentaParam = data.idVenta;
-
   }
 
   ngOnInit(): void {
@@ -123,6 +132,7 @@ export class AsociarTicketFormComponent implements OnInit, OnDestroy {
 
   async onSave() {
     if (this.idVentaParam > 0) {
+      this.spinnerShow();
       let ventaUpdate: IVenta = await this.getVenta(this.idVentaParam);
       if (ventaUpdate) {
 
@@ -150,6 +160,7 @@ export class AsociarTicketFormComponent implements OnInit, OnDestroy {
           let response: IResponse = await this.actualizarVenta(this.idVentaParam, this.ventaData!);
           if (response) {
             this._DataService.dataUpdated$.next();
+            this.spinnerHide();
             this.close();
           }
         }

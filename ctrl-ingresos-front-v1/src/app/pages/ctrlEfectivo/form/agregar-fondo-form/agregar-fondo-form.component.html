@@ -1,3 +1,6 @@
+@if (isLoading) {
+    <app-spinner></app-spinner>
+    }
 <h2 mat-dialog-title>{{title}}</h2>
 <mat-dialog-content class="miContainer">
     <form [formGroup]="agregarFondosForm">
@@ -9,7 +12,7 @@
         </div>
 
         <mat-form-field>
-            <mat-label>Sobre a asignar</mat-label>
+            <mat-label>Cuenta a asignar</mat-label>
             <mat-select formControlName="sobre">              
                 @for (sobre of listSobre; track $index) {
                 <mat-option [value]="sobre.id">{{ sobre.descripcion }}</mat-option>

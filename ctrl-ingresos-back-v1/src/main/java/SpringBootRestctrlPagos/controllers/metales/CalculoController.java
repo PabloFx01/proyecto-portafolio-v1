@@ -12,7 +12,6 @@ import java.util.Optional;
 
 @RestController
 @RequestMapping("tools/ctrlPagos/metalesApp/compra/calculo")
-@CrossOrigin(origins = {"http://localhost:4200"})
 public class CalculoController {
     @Autowired
     private ICalculosService calculosService;

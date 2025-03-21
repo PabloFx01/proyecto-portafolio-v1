@@ -17,6 +17,7 @@ import { MetalCompraApiService } from '../../../../../services/metales/metal-com
 import { DataService } from '../../../../../shared/data.service';
 import { IUser } from '../../../../../models/user.models';
 import { LoginService } from '../../../../../services/login.service';
+import { SpinnerComponent } from "../../../../../shared/spinner/spinner.component";
 
 
 @Component({
@@ -29,7 +30,7 @@ import { LoginService } from '../../../../../services/login.service';
     MatInputModule,
     MatDatepickerModule,
     MatNativeDateModule,
-    MatDialogModule],
+    MatDialogModule, SpinnerComponent],
   templateUrl: './metal-compra-form.component.html',
   styleUrl: './metal-compra-form.component.css'
 })
@@ -69,7 +70,15 @@ export class MetalCompraFormComponent implements OnInit {
 
   title?: string;
   messageError: string | null = null;
-
+  isLoading: boolean = false;
+  
+  spinnerShow(): void {
+    this.isLoading = true
+  }
+  
+    spinnerHide(): void {
+    this.isLoading = false
+  }
   constructor(private formBuilder: FormBuilder,
     @Inject(MAT_DIALOG_DATA) public data: any,
     public dialogRef: MatDialogRef<MetalCompraFormComponent>) {
@@ -116,6 +125,7 @@ export class MetalCompraFormComponent implements OnInit {
   }
 
   async onSave() {
+    this.spinnerShow();
     let usuario: IUser = {
       id: null,
       username: this.username!
@@ -143,7 +153,9 @@ export class MetalCompraFormComponent implements OnInit {
       // this._DataService.setSelectedMetalCompraItemId(metalId);
       // this.suscripcion?.unsubscribe();
       this.showSuccess('Se ha guardado correctamente.', this.metalData.nombre)
+      this.spinnerHide();
     } else if (response.idMessage == '409') {
+      this.spinnerHide();
       this.messageError = 'El metal ya existe o su código coincide con uno existente.'
     } else {
       console.log("error " + response.message);
@@ -190,8 +202,6 @@ export class MetalCompraFormComponent implements OnInit {
   }
 
   ngOnDestroy(): void {
-    //Called once, before the instance is destroyed.
-    //Add 'implements OnDestroy' to the class.
     const metalId: MetalId = {
       id: ''
     }

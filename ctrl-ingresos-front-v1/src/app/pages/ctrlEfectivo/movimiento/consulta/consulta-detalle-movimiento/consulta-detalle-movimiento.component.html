@@ -1,6 +1,8 @@
 <app-nav-ctrl-efectivo />
 <router-outlet />
-
+@if (isLoading) {
+    <app-spinner></app-spinner>
+    }
 <div class="parent">
     <!-- <header class="section coral">{{title}}</header> -->
     <div class="left-side">

@@ -29,6 +29,7 @@ import type { ECActionEvent } from 'echarts/types/src/util/types';
 import LinearGradient from 'zrender/lib/graphic/LinearGradient';
 import { NgxEchartsDirective } from 'ngx-echarts';
 import { IInfoIngreso } from '../../../../../models/ingresos/ingreso.models';
+import { SpinnerComponent } from "../../../../../shared/spinner/spinner.component";
 
 @Component({
   selector: 'app-consulta-compras',
@@ -48,8 +49,9 @@ import { IInfoIngreso } from '../../../../../models/ingresos/ingreso.models';
     MatIconModule,
     MetalesNavComponent,
     RouterOutlet,
-    NgxEchartsDirective
-  ],
+    NgxEchartsDirective,
+    SpinnerComponent
+],
   templateUrl: './consulta-compras.component.html',
   styleUrl: './consulta-compras.component.css'
 })
@@ -203,7 +205,16 @@ export class ConsultaComprasComponent {
     ],
   };
   onChartEvent(event: ECElementEvent | ECActionEvent, type: string) {
-    // console.log('chart event:', type, event);
+  }
+
+  isLoading: boolean = false;
+  
+  spinnerShow(): void {
+    this.isLoading = true
+  }
+  
+    spinnerHide(): void {
+    this.isLoading = false
   }
 
   constructor(private formBuilder: FormBuilder, public dialog: MatDialog) {
@@ -303,7 +314,7 @@ export class ConsultaComprasComponent {
 
   async search() {
 
-
+    this.spinnerShow();
     this.startBuy = this.getShortDate(this.fechaCompraForm.get("startCompra")?.value)
     this.endBuy = this.getShortDate(this.fechaCompraForm.get("endCompra")?.value);
     this.startSale = this.getShortDate(this.fechaVentaForm.get("startVenta")?.value);
@@ -312,6 +323,7 @@ export class ConsultaComprasComponent {
 
     this.allCompraInDataSourcePaginador();
     await this.actualizarGrafico();
+    this.spinnerHide();
   }
 
   irADetalles(itemId: number) {

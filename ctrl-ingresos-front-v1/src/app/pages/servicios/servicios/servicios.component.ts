@@ -24,6 +24,7 @@ import { ILoginResponse } from '../../../models/login.models';
 import { IResponse } from '../../../models/response.models';
 import { ServicioFormComponent } from './form/servicio-form/servicio-form.component';
 import { MatMenuModule } from '@angular/material/menu';
+import { SpinnerComponent } from "../../../shared/spinner/spinner.component";
 @Component({
   selector: 'app-servicios',
   standalone: true,
@@ -41,7 +42,7 @@ import { MatMenuModule } from '@angular/material/menu';
     MatCheckboxModule,
     MatSlideToggleModule,
     NavServiciosComponent,
-    MatMenuModule],
+    MatMenuModule, SpinnerComponent],
   templateUrl: './servicios.component.html',
   styleUrl: './servicios.component.css'
 })
@@ -93,7 +94,15 @@ export class ServiciosComponent implements OnInit {
   displayedColumns: string[] = ['nombre', 'valor', 'periodoPago',
     'fechaIniVto', 'fechaFinVto', 'comentario',
     'activo', 'acciones'];
-
+    isLoading: boolean = false;
+  
+    spinnerShow(): void {
+      this.isLoading = true
+    }
+    
+      spinnerHide(): void {
+      this.isLoading = false
+    }
   constructor(public dialog: MatDialog) { }
 
   ngOnInit(): void {
@@ -137,11 +146,13 @@ export class ServiciosComponent implements OnInit {
   async eliminar(itemId: number) {
 
     if (window.confirm('¿Seguro que deseas desactivar este elemento?')) {
+      this.spinnerShow();
 
       let response: IResponse = await this.softDelete(itemId)
 
       if (response) {
         this.showSuccess(response.message, "Servicio")
+        this.spinnerHide();
         this.reloadData();
       }
     }

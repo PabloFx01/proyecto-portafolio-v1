@@ -20,12 +20,13 @@ import { LoginService } from '../../../../../../services/login.service';
 import { IConcepto } from '../../../../../../models/ingresos/concepto.models';
 import { IUser } from '../../../../../../models/user.models';
 import { IResponse } from '../../../../../../models/response.models';
+import { SpinnerComponent } from "../../../../../../shared/spinner/spinner.component";
 
 
 @Component({
   selector: 'app-concepto-form',
   standalone: true,
-  imports: [ CommonModule,
+  imports: [CommonModule,
     ReactiveFormsModule,
     MatButtonModule,
     MatFormFieldModule,
@@ -36,7 +37,7 @@ import { IResponse } from '../../../../../../models/response.models';
     MatSlideToggleModule,
     MatRadioModule,
     MatRadioGroup,
-    MatIconModule],
+    MatIconModule, SpinnerComponent],
   templateUrl: './concepto-form.component.html',
   styleUrl: './concepto-form.component.css'
 })
@@ -62,7 +63,15 @@ export class ConceptoFormComponent implements OnInit{
   username: string | null = '';
   role: String | null = '';
 
-
+  isLoading: boolean = false;
+  
+  spinnerShow(): void {
+    this.isLoading = true
+  }
+  
+    spinnerHide(): void {
+    this.isLoading = false
+  }
   constructor(private formBuilder: FormBuilder,
     @Inject(MAT_DIALOG_DATA) public data: any,
     public dialogRef: MatDialogRef<ConceptoFormComponent>) {
@@ -141,6 +150,7 @@ export class ConceptoFormComponent implements OnInit{
   }
 
   async onSave() {
+    this.spinnerShow();
     let msj = 'Se ha creado correctamente.';
     let idConcepto = this.idConcepto;
     if (idConcepto != null) {
@@ -167,6 +177,7 @@ export class ConceptoFormComponent implements OnInit{
     if (response) {
       this.showSuccess(msj, "Concepto")
       this.dialogRef.close();
+      this.spinnerHide();
     }
 
   }

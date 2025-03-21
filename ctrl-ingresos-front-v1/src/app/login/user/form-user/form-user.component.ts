@@ -15,6 +15,7 @@ import { UserService } from '../../../services/user.service';
 import { DataService } from '../../../shared/data.service';
 import { IUser } from '../../../models/user.models';
 import { IResponse } from '../../../models/response.models';
+import { SpinnerComponent } from "../../../shared/spinner/spinner.component";
 
 @Component({
   selector: 'app-form-user',
@@ -30,8 +31,9 @@ import { IResponse } from '../../../models/response.models';
     MatSlideToggleModule,
     MatRadioModule,
     MatRadioGroup,
-    FormsModule
-  ],
+    FormsModule,
+    SpinnerComponent
+],
   templateUrl: './form-user.component.html',
   styleUrl: './form-user.component.css'
 })
@@ -50,7 +52,15 @@ export class FormUserComponent implements OnInit{
   };
   chosenRole!: string;
   roles: string[] = ['ADMIN', 'USER', 'METAL_APP'];
-
+  isLoading: boolean = false;
+  
+  spinnerShow(): void {
+    this.isLoading = true
+  }
+  
+    spinnerHide(): void {
+    this.isLoading = false
+  }
   constructor(private formBuilder: FormBuilder,
     @Inject(MAT_DIALOG_DATA) public data: any,
     public dialogRef: MatDialogRef<FormUserComponent>) {
@@ -101,7 +111,7 @@ export class FormUserComponent implements OnInit{
   }
 
   async onSave() {    
-    
+    this.spinnerShow();
     this.userData!.id = this.userForm.get("id")?.value;
     this.userData!.username = this.userForm.get("username")?.value;
     this.userData!.password = this.userForm.get("password")?.value;
@@ -116,6 +126,7 @@ export class FormUserComponent implements OnInit{
 
     if (response) {
       this.showSuccess('Se ha guardado correctamente.', this.userData!.username)
+      this.spinnerHide();
       this.dialogRef.close();
     }
   }

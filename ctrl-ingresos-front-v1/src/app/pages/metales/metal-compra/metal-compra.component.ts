@@ -22,6 +22,7 @@ import { LoginService } from '../../../services/login.service';
 import { firstValueFrom } from 'rxjs';
 import { ToastrService } from 'ngx-toastr';
 import { MatMenuModule } from '@angular/material/menu';
+import { SpinnerComponent } from "../../../shared/spinner/spinner.component";
 
 @Component({
   selector: 'app-metal-compra',
@@ -38,7 +39,7 @@ import { MatMenuModule } from '@angular/material/menu';
     MatDialogModule,
     MatButtonToggleModule,
     CurrencyPipe, MetalesNavComponent, RouterOutlet,
-    MatMenuModule],
+    MatMenuModule, SpinnerComponent],
   templateUrl: './metal-compra.component.html',
   styleUrl: './metal-compra.component.css'
 })
@@ -79,7 +80,15 @@ export class MetalCompraComponent implements OnInit {
   dataSource: MatTableDataSource<IMetalCompra> = new MatTableDataSource<IMetalCompra>([]);
   displayedColumns: string[] = ['nombre', 'precio',
     'fechaIni', 'fechaFin', 'acciones'];
-
+    isLoading: boolean = false;
+  
+    spinnerShow(): void {
+      this.isLoading = true
+    }
+    
+      spinnerHide(): void {
+      this.isLoading = false
+    }
   constructor(public dialog: MatDialog) {
     this.getScreenSize();
     this.isUserLogin();
@@ -133,6 +142,7 @@ export class MetalCompraComponent implements OnInit {
 
 
   async eliminar(itemId: string, ItemPeriod: number) {
+    this.spinnerShow();
     let metalCompra: IMetalCompra = {
       metalId: null,
       nombre: '',
@@ -149,6 +159,7 @@ export class MetalCompraComponent implements OnInit {
 
       if (response) {
         this.showSuccess(response.message, "Metales")
+        this.spinnerHide();
         this.reloadData();
       }
     }

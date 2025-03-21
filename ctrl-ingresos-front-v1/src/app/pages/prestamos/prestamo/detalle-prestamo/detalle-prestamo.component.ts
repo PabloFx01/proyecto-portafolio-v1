@@ -35,6 +35,7 @@ import { ICuenta } from '../../../../models/ctrlEfectivo/cuenta.models';
 import { ITransaccion } from '../../../../models/ctrlEfectivo/transaccion.models';
 import { IMovimiento } from '../../../../models/ctrlEfectivo/movimiento.models';
 import { AnimacionFinPrestamoComponent } from './form/animacion-fin-prestamo/animacion-fin-prestamo.component';
+import { SpinnerComponent } from "../../../../shared/spinner/spinner.component";
 
 
 @Component({
@@ -53,7 +54,7 @@ import { AnimacionFinPrestamoComponent } from './form/animacion-fin-prestamo/ani
     MatButtonToggleModule,
     MatCheckboxModule,
     MatSlideToggleModule,
-    NavPrestamoComponent],
+    NavPrestamoComponent, SpinnerComponent],
   templateUrl: './detalle-prestamo.component.html',
   styleUrl: './detalle-prestamo.component.css'
 })
@@ -171,7 +172,15 @@ export class DetallePrestamoComponent implements OnInit {
 
   dataSource: MatTableDataSource<IDetallePrestamo> = new MatTableDataSource<IDetallePrestamo>([]);
   displayedColumns: string[] = ['fechaPago', 'pago', 'pagoProcesado', 'acciones'];
-
+  isLoading: boolean = false;
+  
+  spinnerShow(): void {
+    this.isLoading = true
+  }
+  
+    spinnerHide(): void {
+    this.isLoading = false
+  }
   constructor(public dialog: MatDialog) { }
 
   ngOnInit(): void {
@@ -228,7 +237,7 @@ export class DetallePrestamoComponent implements OnInit {
   async checkEndPrestamo(): Promise<void>{
     await this.getHayPagoSinProcesar();     
     if(!this.pagoSinProcesar && this.prestamoData.saldoRest ==0){
-      this.finPrestamo();
+        this.finPrestamo();
     }else{
       console.log("prestamo sin finalizar");      
     }
@@ -248,6 +257,7 @@ export class DetallePrestamoComponent implements OnInit {
 
   async nuevoPago() {
     await this.getHayPagoSinProcesar();
+    console.log(this.pagoSinProcesar);
     if (this.pagoSinProcesar) {
       if (window.confirm('¿Existen pagos sin procesar, seguro desea registrar otro pago?')) {
         this.newOrUpdate('Nuevo', null, this.prestamoData.id)
@@ -268,11 +278,13 @@ export class DetallePrestamoComponent implements OnInit {
   async eliminarDetallePrestamo(IdDetalle: number, idPrestamo: number) {
 
     if (window.confirm('¿Seguro que deseas eliminar este elemento?')) {
+      this.spinnerShow();
 
       let response: IResponse = await this.detallePrestamoDelete(IdDetalle, idPrestamo)
 
       if (response) {
         this.showSuccess(response.message, "Prestamo")
+        this.spinnerHide();
         this.reloadData();
       }
     }
@@ -392,6 +404,7 @@ export class DetallePrestamoComponent implements OnInit {
       if (responseCuenta) {
         //Actualizar cuenta destino
         let idSobreDestino = this.prestamoData.cuentaOrigen?.sobre?.id;
+
         this.cuentaDestinoData.saldo = monto;
         this.cuentaDestinoData.id = null;
         this.sobreDataDestino.id = idSobreDestino!;

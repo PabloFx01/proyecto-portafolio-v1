@@ -18,6 +18,7 @@ import { IResponse } from '../../../../models/response.models';
 import { IUser, IUsers } from '../../../../models/user.models';
 import { UserService } from '../../../../services/user.service';
 import { DataService } from '../../../../shared/data.service';
+import { SpinnerComponent } from "../../../../shared/spinner/spinner.component";
 
 
 @Component({
@@ -33,8 +34,9 @@ import { DataService } from '../../../../shared/data.service';
     MatIconModule,
     MatButtonModule,
     MatToolbarModule,
-    MatButtonToggleModule
-  ],
+    MatButtonToggleModule,
+    SpinnerComponent
+],
   templateUrl: './user.component.html',
   styleUrl: './user.component.css'
 })
@@ -94,13 +96,23 @@ export class UserComponent implements OnInit{
   showSuccess(message: string, title: string) {
     this._toastr.success(message, title);
   }
-
+  isLoading: boolean = false;
+  
+  spinnerShow(): void {
+    this.isLoading = true
+  }
+  
+    spinnerHide(): void {
+    this.isLoading = false
+  }
   async eliminar(id: number) {
     if (window.confirm('¿Seguro que deseas eliminar este elemento?')) {
+      this.spinnerShow();
       const response = await this.eliminarUser(id);
       if (response) {
-        this._DataService.dataUpdated$.next();
+        this.spinnerHide();
         this.showSuccess("Elemento eliminado con éxito.", "Eliminar")
+        this._DataService.dataUpdated$.next();
       }      
     }
   }

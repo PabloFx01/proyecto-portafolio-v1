@@ -23,6 +23,7 @@ import { LoginService } from '../../../../services/login.service';
 import { ConceptoService } from '../../../../services/ingresos/concepto.service';
 import { IConcepto } from '../../../../models/ingresos/concepto.models';
 import { onConceptosFormComponent } from '../onConceptos-form/onConceptos-form.component';
+import { SpinnerComponent } from "../../../../shared/spinner/spinner.component";
 
 
 @Component({
@@ -40,7 +41,8 @@ import { onConceptosFormComponent } from '../onConceptos-form/onConceptos-form.c
     MatSlideToggleModule,
     MatRadioModule,
     MatRadioGroup,
-    MatIconModule
+    MatIconModule,
+    SpinnerComponent
   ],
   templateUrl: './ingreso-form.component.html',
   styleUrl: './ingreso-form.component.css'
@@ -54,7 +56,6 @@ export class IngresoFormComponent {
   private _conceptoService = inject(ConceptoService);
   private loginServices = inject(LoginService);
   public dialog = inject(MatDialog)
-  private _DataService = inject(DataService);
   title?: string;
   idIngreso: number | null = null;
   dateCalendar: Date | null = null;
@@ -77,12 +78,12 @@ export class IngresoFormComponent {
   userLoginOn: boolean = false;
   username: string | null = '';
   role: String | null = '';
+  isLoading: boolean = false;
 
 
   habilitar(): void {
     this.ingresoForm.enable();
     this.edit = true;
-
   }
   constructor(private formBuilder: FormBuilder,
     @Inject(MAT_DIALOG_DATA) public data: any,
@@ -226,7 +227,7 @@ export class IngresoFormComponent {
       id: null,
       username: this.username!
     }
-    
+
     this.ingresoData!.usuario = user;
     let response!: IResponse;
     if (idIngreso != null) {
@@ -237,24 +238,25 @@ export class IngresoFormComponent {
 
     if (response) {
       this.showSuccess(msj, "Ingreso")
+      this.spinnerHide()
       this.dialogRef.close();
     }
   }
 
   async onSave() {
+    this.spinnerShow()
     this.asociarCptos = this.ingresoForm!.get("asociarConcepto")?.value;
     if (this.asociarCptos) {
       this.conceptos = await this.getAllConceptosAct(this.username!)
       if (this.conceptos.length > 0) {
         this.totPcjeActivo = this.getTotPcjeAct();
       }
-
       if (this.totPcjeActivo != 100) {
         this.openForm();
       } else {
-          this.fncOnsave();     
+        this.fncOnsave();
       }
-    }else{
+    } else {
       this.fncOnsave();
     }
 
@@ -262,6 +264,7 @@ export class IngresoFormComponent {
 
   async update(id: number, ingreso?: IIngreso): Promise<IResponse> {
     try {
+      this.spinnerShow()
       const response: IResponse =
         await firstValueFrom(this._apiIngresoService.updateIngreso(id, ingreso!));
       return response;
@@ -273,6 +276,8 @@ export class IngresoFormComponent {
 
   async save(ingreso: IIngreso): Promise<IResponse> {
     try {
+
+
       const response: any =
         await firstValueFrom(this._apiIngresoService.saveIngreso(ingreso));
       return response;
@@ -284,9 +289,11 @@ export class IngresoFormComponent {
 
   async eliminar(idIngreso: number | null): Promise<void> {
     if (window.confirm('¿Seguro que deseas eliminar este elemento?')) {
+      this.spinnerShow()
       const response = await this.eliminarIngreso(idIngreso!);
       if (response) {
         this.showSuccess(response.message, 'Ingreso');
+        this.spinnerHide()
         this.dialogRef.close();
       }
 
@@ -327,5 +334,24 @@ export class IngresoFormComponent {
   showSuccess(message: string, title: string) {
     this._toastr.success(message, title);
   }
+
+  async spinnerShow(): Promise<void> {
+    // this.irAlInicio();
+    this.isLoading = true
+  }
+
+  spinnerHide(): void {
+    this.isLoading = false
+  }
+
+  irAlInicio() {
+    window.scrollTo(0, 0); // Esto hace que la página se vaya a la posición (0, 0)
+  }
+
+
+
+
+
+
 
 }

@@ -26,6 +26,7 @@ import { IPeriodPay, IServicio } from '../../../../models/servicios/servicio.mod
 import { IUser } from '../../../../models/user.models';
 import { FormDetalleFacturaComponent } from './form/form-detalle-factura/form-detalle-factura.component';
 import { MatMenuModule } from '@angular/material/menu';
+import { SpinnerComponent } from "../../../../shared/spinner/spinner.component";
 @Component({
   selector: 'app-facturacion',
   standalone: true,
@@ -43,7 +44,7 @@ import { MatMenuModule } from '@angular/material/menu';
     MatCheckboxModule,
     MatSlideToggleModule,
     NavServiciosComponent,
-    MatMenuModule],
+    MatMenuModule, SpinnerComponent],
   templateUrl: './facturacion.component.html',
   styleUrl: './facturacion.component.css'
 })
@@ -111,7 +112,15 @@ export class FacturacionComponent implements OnInit {
 
   dataSource: MatTableDataSource<IDetalleFactura> = new MatTableDataSource<IDetalleFactura>([]);
   displayedColumns: string[] = ['fechaPago', 'pago', 'acciones'];
+  isLoading: boolean = false;
 
+  spinnerShow(): void {
+    this.isLoading = true
+  }
+
+  spinnerHide(): void {
+    this.isLoading = false
+  }
   constructor(public dialog: MatDialog) { }
 
   ngOnInit(): void {
@@ -226,7 +235,7 @@ export class FacturacionComponent implements OnInit {
 
 
   async saveFactura() {
-
+    this.spinnerShow();
     this.servicioData.id = this.paramIdServicio;
     this.facturaData.fecha = new Date();
     this.facturaData.servicio = this.servicioData;
@@ -238,6 +247,7 @@ export class FacturacionComponent implements OnInit {
     let response: IResponse = await this.save(this.facturaData);
     if (response) {
       this.showSuccess(response.message, "Factura")
+      this.spinnerHide();
       this.reloadData();
     }
 
@@ -341,6 +351,7 @@ export class FacturacionComponent implements OnInit {
       });
 
     dialogRef.afterClosed().subscribe(result => {
+      console.log(`Dialog result: ${result}`);
       this.reloadData();
     });
   }

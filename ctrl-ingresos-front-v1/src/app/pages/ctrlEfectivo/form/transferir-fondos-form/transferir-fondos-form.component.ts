@@ -25,6 +25,7 @@ import { IResponse } from '../../../../models/response.models';
 import { ILoginResponse } from '../../../../models/login.models';
 import { LoginService } from '../../../../services/login.service';
 import { IUser } from '../../../../models/user.models';
+import { SpinnerComponent } from "../../../../shared/spinner/spinner.component";
 
 
 @Component({
@@ -42,8 +43,9 @@ import { IUser } from '../../../../models/user.models';
     MatRadioModule,
     MatRadioGroup,
     FormsModule,
-    MatSelectModule
-  ],
+    MatSelectModule,
+    SpinnerComponent
+],
   templateUrl: './transferir-fondos-form.component.html',
   styleUrl: './transferir-fondos-form.component.css'
 })
@@ -117,7 +119,16 @@ export class TransferirFondosFormComponent implements OnInit {
   }
 
 
-
+  isLoading: boolean = false;
+  
+  spinnerShow(): void {
+    this.isLoading = true
+  }
+  
+    spinnerHide(): void {
+    this.isLoading = false
+  }
+  
   constructor(private formBuilder: FormBuilder,
     @Inject(MAT_DIALOG_DATA) public data: any,
     public dialogRef: MatDialogRef<TransferirFondosFormComponent>) {
@@ -173,6 +184,7 @@ export class TransferirFondosFormComponent implements OnInit {
 
 
   async onSave() {
+    this.spinnerShow();
     const user: IUser = {
       id: null,
       username: this.username!
@@ -240,6 +252,7 @@ export class TransferirFondosFormComponent implements OnInit {
               let responseMovimiento = await this.saveMovimiento(this.movimientoData);
               if (responseMovimiento) {
                 this.showSuccess('Se ha guardado correctamente.', tipoMovimiento)
+                this.spinnerHide();
                 this.dialogRef.close();
               }
 

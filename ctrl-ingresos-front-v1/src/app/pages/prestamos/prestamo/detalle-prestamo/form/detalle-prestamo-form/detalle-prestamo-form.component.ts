@@ -20,6 +20,7 @@ import { PrestamoService } from '../../../../../../services/prestamos/prestamo.s
 import { IDetallePrestamo, IDetallePrestamoId, IPrestamo } from '../../../../../../models/prestamos/prestamo.models';
 import { CuentaService } from '../../../../../../services/ctrlEfectivo/cuenta.service';
 import { MovimientoService } from '../../../../../../services/ctrlEfectivo/movimiento.service';
+import { SpinnerComponent } from "../../../../../../shared/spinner/spinner.component";
 
 
 @Component({
@@ -36,7 +37,7 @@ import { MovimientoService } from '../../../../../../services/ctrlEfectivo/movim
     MatSlideToggleModule,
     MatRadioModule,
     MatRadioGroup,
-    MatIconModule],
+    MatIconModule, SpinnerComponent],
   templateUrl: './detalle-prestamo-form.component.html',
   styleUrl: './detalle-prestamo-form.component.css'
 })
@@ -90,7 +91,15 @@ export class DetallePrestamoFormComponent implements OnInit {
   username: string | null = '';
   role: String | null = '';
 
-
+  isLoading: boolean = false;
+  
+  spinnerShow(): void {
+    this.isLoading = true
+  }
+  
+    spinnerHide(): void {
+    this.isLoading = false
+  }
   constructor(private formBuilder: FormBuilder,
     @Inject(MAT_DIALOG_DATA) public data: any,
     public dialogRef: MatDialogRef<DetallePrestamoFormComponent>) {
@@ -211,6 +220,7 @@ export class DetallePrestamoFormComponent implements OnInit {
 
 
   async onSave() {
+    this.spinnerShow();
     let msj = 'El pago se ha generado con éxito.';
     let idDetallePrestamo = this.idDetallePrestamo;
     if (idDetallePrestamo != null) {
@@ -240,6 +250,7 @@ export class DetallePrestamoFormComponent implements OnInit {
 
       if (response) {        
         this.showSuccess(msj, "Prestamo")
+        this.spinnerHide();
         this.dialogRef.close();
       }
     }

@@ -23,6 +23,7 @@ import { IngresoService } from '../../../../services/ingresos/ingreso.service';
 import { IUser } from '../../../../models/user.models';
 import { LoginService } from '../../../../services/login.service';
 import { ILoginResponse } from '../../../../models/login.models';
+import { SpinnerComponent } from "../../../../shared/spinner/spinner.component";
 
 
 @Component({
@@ -37,7 +38,7 @@ import { ILoginResponse } from '../../../../models/login.models';
     MatNativeDateModule,
     MatDialogModule,
     MatRadioModule,
-    MatSelectModule],
+    MatSelectModule, SpinnerComponent],
   templateUrl: './asig-total-form.component.html',
   styleUrl: './asig-total-form.component.css'
 })
@@ -67,13 +68,22 @@ export class AsigTotalFormComponent {
     username: '',
     role: ''
   }
-
+  isLoading: boolean = false;
+  
+  spinnerShow(): void {
+    this.isLoading = true
+  }
+  
+    spinnerHide(): void {
+    this.isLoading = false
+  }
   constructor(private formBuilder: FormBuilder,
     @Inject(MAT_DIALOG_DATA) public data: any,
     public dialogRef: MatDialogRef<AsigTotalFormComponent>) {
     this.isUserLogin();
     this.initForm();
     this.idIngresoParam = data.idIngreso;
+    console.log(data.idIngreso);
   }
 
   async ngOnInit(): Promise<void> {
@@ -186,7 +196,7 @@ export class AsigTotalFormComponent {
 
   async onSave() {
 
-
+    this.spinnerShow();
     let response!: IResponse;
     let nMonto = this.asigRestTotForm.get('montoTotRes')?.value;
     let cptoDestino = this.asigRestTotForm.get('conceptoDestino')?.value;
@@ -227,6 +237,7 @@ export class AsigTotalFormComponent {
       response = await this.update(detalleDestino.detalleIngresoId!, detalleDestino)
       if (response) {
         //Se actualiza el destino
+        this.spinnerHide();
         this.showSuccess('Se ha actualizado correctamente.', detalleDestino!.concepto!.nombre!);
         this.dialogRef.close();
       }

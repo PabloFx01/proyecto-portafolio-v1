@@ -29,6 +29,7 @@ import { ITransaccion } from '../../../models/ctrlEfectivo/transaccion.models';
 import { IMovimiento } from '../../../models/ctrlEfectivo/movimiento.models';
 import { CuentaService } from '../../../services/ctrlEfectivo/cuenta.service';
 import { MovimientoService } from '../../../services/ctrlEfectivo/movimiento.service';
+import { SpinnerComponent } from "../../../shared/spinner/spinner.component";
 
 @Component({
   selector: 'app-prestamo',
@@ -43,7 +44,7 @@ import { MovimientoService } from '../../../services/ctrlEfectivo/movimiento.ser
     MatButtonModule,
     MatToolbarModule,
     MatButtonToggleModule,
-    RouterOutlet, NavPrestamoComponent],
+    RouterOutlet, NavPrestamoComponent, SpinnerComponent],
   templateUrl: './prestamo.component.html',
   styleUrl: './prestamo.component.css'
 })
@@ -142,7 +143,15 @@ export class PrestamoComponent implements OnInit{
     usuario: null
   }
 
-
+  isLoading: boolean = false;
+  
+  spinnerShow(): void {
+    this.isLoading = true
+  }
+  
+    spinnerHide(): void {
+    this.isLoading = false
+  }
   constructor(public dialog: MatDialog) {
     this.isUserLogin();
   }
@@ -194,10 +203,13 @@ export class PrestamoComponent implements OnInit{
 
   async eliminar(id: number) {
     if (window.confirm('¿Seguro que deseas eliminar este elemento?')) {
+      this.spinnerShow();
       const response = await this.eliminarPrestamo(id);
       if (response) {
-        this._DataService.dataUpdated$.next();
+        
         this.showSuccess("Elemento eliminado con éxito.", "Eliminar")
+        this.spinnerHide();
+        this._DataService.dataUpdated$.next();
       }
     }
   }
@@ -243,6 +255,7 @@ export class PrestamoComponent implements OnInit{
       });
 
     dialogRef.afterClosed().subscribe(result => {
+      console.log(`Dialog result: ${result}`);
       this.reloadData();
     });
   }

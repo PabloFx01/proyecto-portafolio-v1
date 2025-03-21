@@ -23,6 +23,7 @@ import { DataService } from '../../../shared/data.service';
 import { MetalesNavComponent } from "../metales-nav/metales-nav.component";
 import { LoginService } from '../../../services/login.service';
 import { MatMenuModule } from '@angular/material/menu';
+import { SpinnerComponent } from "../../../shared/spinner/spinner.component";
 
 @Component({
   selector: 'app-venta',
@@ -38,7 +39,7 @@ import { MatMenuModule } from '@angular/material/menu';
     MatToolbarModule,
     MatButtonToggleModule,
     CurrencyPipe,
-    MatCheckboxModule, MetalesNavComponent, RouterOutlet, MatMenuModule],
+    MatCheckboxModule, MetalesNavComponent, RouterOutlet, MatMenuModule, SpinnerComponent],
   templateUrl: './venta.component.html',
   styleUrl: './venta.component.css'
 })
@@ -77,6 +78,15 @@ export class VentaComponent implements OnInit {
     this.getScreenSize();
     this.isUserLogin();
 
+  }
+  isLoading: boolean = false;
+  
+  spinnerShow(): void {
+    this.isLoading = true
+  }
+  
+    spinnerHide(): void {
+    this.isLoading = false
   }
   ngOnInit(): void {
     this.allVentaInDataSourcePaginador(null);
@@ -131,10 +141,12 @@ export class VentaComponent implements OnInit {
 
   async eliminar(id: number) {
     if (window.confirm('¿Seguro que deseas eliminar este elemento?')) {
+      this.spinnerShow();
       const response = await this.eliminarVenta(id);
       if (response.idMessage == '200') {
         console.log(response.message);
       }
+      this.spinnerHide();
       this._DataService.dataUpdated$.next();
     }
   }

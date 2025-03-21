@@ -6,10 +6,21 @@
 }
 .lds-spinner {
   color: currentColor;
-  display: inline-block;
-  position: relative;
   width: 80px;
   height: 80px;
+}
+.overlay{
+  
+  position: fixed; /* Fija la posición del elemento respecto a la ventana del navegador */
+  top: 0;
+  left: 0;
+  width: 100vw; /* Ancho completo de la ventana */
+  height: 100vh; /* Alto completo de la ventana */
+  background-color: rgba(0, 0, 0, 0.5); /* Fondo semitransparente */
+  z-index: 1000; /* Asegura que esté por encima de otros elementos */
+  display: flex; /* Ayuda a centrar el contenido */
+  justify-content: center; /* Centra horizontalmente el spinner */
+  align-items: center; /* Centra verticalmente el spinner */
 }
 .lds-spinner div {
   transform-origin: 40px 40px;

@@ -17,7 +17,6 @@ import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("tools/ctrlPagos/metalesApp/compra/inventario")
-@CrossOrigin(origins = {"http://localhost:4200"})
 public class InventarioController {
     @Autowired
     private IDetalleCompraService detalleCompraService;

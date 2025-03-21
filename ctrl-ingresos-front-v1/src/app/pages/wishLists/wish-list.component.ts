@@ -27,6 +27,7 @@ import { CuentaService } from '../../services/ctrlEfectivo/cuenta.service';
 import { MovimientoService } from '../../services/ctrlEfectivo/movimiento.service';
 import { IResponse } from '../../models/response.models';
 import { WishListFormComponent } from './form/wish-list-form/wish-list-form.component';
+import { SpinnerComponent } from "../../shared/spinner/spinner.component";
 
 
 @Component({
@@ -42,7 +43,7 @@ import { WishListFormComponent } from './form/wish-list-form/wish-list-form.comp
     MatButtonModule,
     MatToolbarModule,
     MatButtonToggleModule,
-    RouterOutlet,NavWishListComponent],
+    RouterOutlet, NavWishListComponent, SpinnerComponent],
   templateUrl: './wish-list.component.html',
   styleUrl: './wish-list.component.css'
 })
@@ -116,7 +117,15 @@ export class WishListComponent implements OnInit{
     usuario: null
   }
 
-
+  isLoading: boolean = false;
+  
+  spinnerShow(): void {
+    this.isLoading = true
+  }
+  
+    spinnerHide(): void {
+    this.isLoading = false
+  }
   constructor(public dialog: MatDialog) {
     this.isUserLogin();
   }
@@ -168,10 +177,15 @@ export class WishListComponent implements OnInit{
 
   async eliminar(id: number) {
     if (window.confirm('¿Seguro que deseas eliminar este elemento?')) {
+      this.spinnerShow();
       const response = await this.eliminarWishList(id);
       if (response) {
-        this._DataService.dataUpdated$.next();
+
         this.showSuccess("Elemento eliminado con éxito.", "Eliminar")
+        this.spinnerHide();
+        this._DataService.dataUpdated$.next();
+        
+
       }
     }
   }
@@ -217,6 +231,7 @@ export class WishListComponent implements OnInit{
       });
 
     dialogRef.afterClosed().subscribe(result => {
+      console.log(`Dialog result: ${result}`);
       this.reloadData();
     });
   }
@@ -254,8 +269,7 @@ export class WishListComponent implements OnInit{
       throw error;
     }
   }
-
-
+ 
   async getCuentaByIdSobre(idSobre: number): Promise<ICuenta> {
     try {
       const cuenta: ICuenta =

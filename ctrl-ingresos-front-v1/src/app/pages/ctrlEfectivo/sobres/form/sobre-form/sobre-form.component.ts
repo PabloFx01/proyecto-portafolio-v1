@@ -1,6 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { Component, Inject, OnInit, inject, NgModule } from '@angular/core';
-import { FormBuilder, FormGroup, ReactiveFormsModule, Validators,FormsModule } from '@angular/forms';
+import { FormBuilder, FormGroup, ReactiveFormsModule, Validators, FormsModule } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
@@ -8,7 +8,7 @@ import { MatNativeDateModule } from '@angular/material/core';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { MatDialogModule } from '@angular/material/dialog';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
-import {MatRadioModule,MatRadioGroup} from '@angular/material/radio';
+import { MatRadioModule, MatRadioGroup } from '@angular/material/radio';
 import { firstValueFrom } from 'rxjs';
 import { ToastrService } from 'ngx-toastr';
 import { SobreService } from '../../../../../services/ctrlEfectivo/sobre.service';
@@ -18,12 +18,13 @@ import { LoginService } from '../../../../../services/login.service';
 import { ILoginResponse } from '../../../../../models/login.models';
 import { IResponse } from '../../../../../models/response.models';
 import { IUser } from '../../../../../models/user.models';
+import { SpinnerComponent } from "../../../../../shared/spinner/spinner.component";
 
 
 @Component({
   selector: 'app-sobre-form',
   standalone: true,
-  imports: [    CommonModule,
+  imports: [CommonModule,
     ReactiveFormsModule,
     MatButtonModule,
     MatFormFieldModule,
@@ -33,11 +34,11 @@ import { IUser } from '../../../../../models/user.models';
     MatSlideToggleModule,
     MatRadioModule,
     MatRadioGroup,
-    FormsModule],
+    FormsModule, SpinnerComponent],
   templateUrl: './sobre-form.component.html',
   styleUrl: './sobre-form.component.css'
 })
-export class SobreFormComponent implements OnInit{
+export class SobreFormComponent implements OnInit {
 
   sobreForm!: FormGroup;
   _sobreService = inject(SobreService);
@@ -48,12 +49,12 @@ export class SobreFormComponent implements OnInit{
   sobreData: ISobre = {
     id: null,
     descripcion: null,
-    activo : false,
+    activo: false,
     usuario: null
   };
 
   loginServices = inject(LoginService);
-  
+
   username: string | null = '';
   role: String | null = '';
   userLoginOn: boolean = false;
@@ -63,8 +64,15 @@ export class SobreFormComponent implements OnInit{
     username: '',
     role: ''
   }
+  isLoading: boolean = false;
 
+  spinnerShow(): void {
+    this.isLoading = true
+  }
 
+  spinnerHide(): void {
+    this.isLoading = false
+  }
   constructor(private formBuilder: FormBuilder,
     @Inject(MAT_DIALOG_DATA) public data: any,
     public dialogRef: MatDialogRef<SobreFormComponent>) {
@@ -82,8 +90,8 @@ export class SobreFormComponent implements OnInit{
 
   initForm(): void {
     this.sobreForm = this.formBuilder.group(
-      {        
-        descripcion: [{ value: null, disabled: false }, [Validators.required, Validators.minLength(3)]],       
+      {
+        descripcion: [{ value: null, disabled: false }, [Validators.required, Validators.minLength(3)]],
       }
     )
   }
@@ -109,17 +117,17 @@ export class SobreFormComponent implements OnInit{
     }
   }
 
-  async onSave() {    
-    
+  async onSave() {
+    this.spinnerShow();
     this.sobreData!.descripcion = this.sobreForm.get("descripcion")?.value;
-       
+
 
     let response!: IResponse;
     const user: IUser = {
       id: null,
       username: this.username!
     }
-    
+
     this.sobreData!.usuario = user;
     if (this.idSobre != null) {
       response = await this.update(this.idSobre, this.sobreData)
@@ -129,7 +137,9 @@ export class SobreFormComponent implements OnInit{
 
     if (response) {
       this.showSuccess('Se ha guardado correctamente.', this.sobreData!.descripcion!)
+      this.spinnerHide();
       this.dialogRef.close();
+      
     }
   }
 
@@ -145,7 +155,7 @@ export class SobreFormComponent implements OnInit{
     }
   }
 
-  async update(id: number, sobre?: ISobre): Promise<IResponse> {    
+  async update(id: number, sobre?: ISobre): Promise<IResponse> {
     try {
       const response: IResponse =
         await firstValueFrom(this._sobreService.updateSobre(id, sobre!));

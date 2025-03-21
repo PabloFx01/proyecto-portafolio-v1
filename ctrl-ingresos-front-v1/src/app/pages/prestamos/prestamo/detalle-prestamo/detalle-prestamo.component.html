@@ -1,5 +1,8 @@
 <app-nav-prestamo />
 <router-outlet />
+@if (isLoading) {
+<app-spinner></app-spinner>
+}
 <div class='demo-app'>
     <div class='demo-app-sidebar'>
         <div class='demo-app-sidebar-section'>
@@ -46,21 +49,21 @@
             <br />
 
             <div class="miTabla">
-                <table mat-table [dataSource]="dataSource" >
+                <table mat-table [dataSource]="dataSource">
 
                     <ng-container matColumnDef="fechaPago">
-                        <th mat-header-cell *matHeaderCellDef >Fecha de pago</th>
+                        <th mat-header-cell *matHeaderCellDef>Fecha de pago</th>
                         <td mat-cell *matCellDef="let row"> {{row.fechaPago | date:'dd-MM-yyyy'}} </td>
                     </ng-container>
 
 
                     <ng-container matColumnDef="pago">
-                        <th mat-header-cell *matHeaderCellDef >Pago</th>
+                        <th mat-header-cell *matHeaderCellDef>Pago</th>
                         <td mat-cell *matCellDef="let row">{{row.montoPago | currency}}</td>
                     </ng-container>
 
                     <ng-container matColumnDef="pagoProcesado">
-                        <th mat-header-cell *matHeaderCellDef >Pago procesado?</th>
+                        <th mat-header-cell *matHeaderCellDef>Pago procesado?</th>
                         <td mat-cell *matCellDef="let row">{{row.pagoEfectuado?'si':'no'}}</td>
                     </ng-container>
 

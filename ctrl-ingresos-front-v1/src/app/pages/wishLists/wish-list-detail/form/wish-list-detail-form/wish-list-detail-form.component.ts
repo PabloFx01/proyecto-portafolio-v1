@@ -21,6 +21,7 @@ import { MovimientoService } from '../../../../../services/ctrlEfectivo/movimien
 import { LoginService } from '../../../../../services/login.service';
 import { WishListService } from '../../../../../services/wishList/wishList.service';
 import { WishListDetailService } from '../../../../../services/wishList/wishListDetails.service';
+import { SpinnerComponent } from "../../../../../shared/spinner/spinner.component";
 
 @Component({
   selector: 'app-wish-list-detail-form',
@@ -36,7 +37,7 @@ import { WishListDetailService } from '../../../../../services/wishList/wishList
     MatSlideToggleModule,
     MatRadioModule,
     MatRadioGroup,
-    MatIconModule],
+    MatIconModule, SpinnerComponent],
   templateUrl: './wish-list-detail-form.component.html',
   styleUrl: './wish-list-detail-form.component.css'
 })
@@ -85,7 +86,15 @@ export class WishListDetailFormComponent implements OnInit {
   username: string | null = '';
   role: String | null = '';
 
-
+  isLoading: boolean = false;
+  
+  spinnerShow(): void {
+    this.isLoading = true
+  }
+  
+    spinnerHide(): void {
+    this.isLoading = false
+  }
   constructor(private formBuilder: FormBuilder,
     @Inject(MAT_DIALOG_DATA) public data: any,
     public dialogRef: MatDialogRef<WishListDetailFormComponent>) {
@@ -215,6 +224,7 @@ export class WishListDetailFormComponent implements OnInit {
 
 
   async onSave() {
+    this.spinnerShow();
     let msj = 'El item se ha generado con éxito.';
     let idDetalle = this.idDetalle;
     if (idDetalle != null) {
@@ -250,6 +260,7 @@ export class WishListDetailFormComponent implements OnInit {
 
     if (response) {
       this.showSuccess(msj, "Item")
+      this.spinnerHide();
       this.dialogRef.close();
     }
   }

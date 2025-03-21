@@ -36,6 +36,7 @@ import { WishListDetailFormComponent } from './form/wish-list-detail-form/wish-l
 import { NavServiciosComponent } from "../../servicios/nav/nav-servicios.component";
 import { aC, aW } from '@fullcalendar/core/internal-common';
 import { AnimacionFinwishListComponent } from './animacion-fin-wishList/animacion-fin-wishList.component';
+import { SpinnerComponent } from "../../../shared/spinner/spinner.component";
 
 
 @Component({
@@ -54,7 +55,7 @@ import { AnimacionFinwishListComponent } from './animacion-fin-wishList/animacio
     MatButtonToggleModule,
     MatCheckboxModule,
     MatSlideToggleModule,
-    NavWishListComponent, NavServiciosComponent],
+    NavWishListComponent, NavServiciosComponent, SpinnerComponent],
   templateUrl: './wish-list-detail.component.html',
   styleUrl: './wish-list-detail.component.css'
 })
@@ -145,7 +146,15 @@ export class WishListDetailComponent implements OnInit {
   dataSource: MatTableDataSource<IWishListDetail> = new MatTableDataSource<IWishListDetail>([]);
   displayedColumns: string[] = ['fechaCreacion', 'itemName', 'precio', 'link', 'comentario', 'cumplido', 'acciones'];
 
+  isLoading: boolean = false;
 
+  spinnerShow(): void {
+    this.isLoading = true
+  }
+
+  spinnerHide(): void {
+    this.isLoading = false
+  }
   constructor(public dialog: MatDialog) { }
 
   async ngOnInit(): Promise<void> {
@@ -194,9 +203,6 @@ export class WishListDetailComponent implements OnInit {
   }
 
 
-
-
-
   showSuccess(message: string, title: string) {
     this._toastr.success(message, title);
   }
@@ -237,8 +243,7 @@ export class WishListDetailComponent implements OnInit {
 
   async cumplirDeseos(): Promise<void> {
     if (window.confirm('Al cumplir los deseos, se descontará el monto exacto a su cuenta asociada y la lista se dará por finalizado. ¿Seguro que deseas continuar?')) {
-
-
+      this.spinnerShow();
 
       this.wishListData.wishListDetails?.forEach(async items => {
         if (!items.procesarDetail) {
@@ -250,6 +255,7 @@ export class WishListDetailComponent implements OnInit {
 
       if (ok) {
         this.showSuccess(this.wishListData.titulo + ": Cumplido!", "Lista de deseos")
+        this.spinnerHide();
         this.reloadData();
         this.finWishList();
       }
@@ -375,6 +381,7 @@ export class WishListDetailComponent implements OnInit {
       });
 
     dialogRef.afterClosed().subscribe(result => {
+      console.log(`Dialog result: ${result}`);
       this.reloadData();
     });
   }
@@ -395,6 +402,7 @@ export class WishListDetailComponent implements OnInit {
       });
 
     dialogRef.afterClosed().subscribe(result => {
+      console.log(`Dialog result: ${result}`);
       this.reloadData();
     });
   }
@@ -413,7 +421,7 @@ export class WishListDetailComponent implements OnInit {
 
   async cumplirItemWish(IdDetalle: number, idWish: number, precio: number, itemName: string) {
     if (window.confirm('Al cumplir el deseo, se descontará el monto exacto a su cuenta asociada. ¿Seguro que deseas continuar?')) {
-
+      this.spinnerShow();
 
       let response: IResponse = await this.updateProcesarWishDetails(IdDetalle, idWish, this.wishListDetailData)
 
@@ -421,6 +429,7 @@ export class WishListDetailComponent implements OnInit {
         await this.transferirFondos(precio, itemName);
         await this.reloadData();
         this.showSuccess(itemName + ": Cumplido!", "Lista de deseos")
+        this.spinnerHide();
         // await this.checkEndPrestamo();
       }
     }
@@ -543,6 +552,7 @@ export class WishListDetailComponent implements OnInit {
   }
 
   async obtenerFechaEstimada(idCuenta: number): Promise<Date> {
+
     let nuevaFecha = new Date();
     let startDate: Date = new Date();
     let endDate: Date = new Date();
@@ -552,14 +562,20 @@ export class WishListDetailComponent implements OnInit {
 
     this.startMovFilter = this.getShortDate(startDate);
     this.endMovFilter = this.getShortDate(endDate);
+
     this.listMovimiento = await this.getAllMovimientosByCuenta(idCuenta);
+
+
     if (this.listMovimiento.length > 0) {
 
       let prom = 0;
       let sum = this.listMovimiento.map(item => item.monto).reduce((acc, value) => acc! + value!, 0);
       let saldoActualCuenta: number = this.wishListData.cuentaOrigen?.saldo!;
+
       let valorActLista = this.getTotValorList();
       let dif = valorActLista! - saldoActualCuenta;
+
+
       if (dif > 0) {
         prom = sum / this.listMovimiento.length;
         let mesesAprox: number = Number((dif! / prom).toFixed(2));

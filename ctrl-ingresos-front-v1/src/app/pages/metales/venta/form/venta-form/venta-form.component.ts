@@ -19,6 +19,7 @@ import { VentaService } from '../../../../../services/metales/venta.service';
 import { DataService } from '../../../../../shared/data.service';
 import { LoginService } from '../../../../../services/login.service';
 import { IUser } from '../../../../../models/user.models';
+import { SpinnerComponent } from "../../../../../shared/spinner/spinner.component";
 
 @Component({
   selector: 'app-venta-form',
@@ -32,8 +33,9 @@ import { IUser } from '../../../../../models/user.models';
     MatDatepickerModule,
     MatNativeDateModule,
     MatDialogModule,
-    MatSlideToggleModule
-  ],
+    MatSlideToggleModule,
+    SpinnerComponent
+],
   templateUrl: './venta-form.component.html',
   styleUrl: './venta-form.component.css'
 })
@@ -67,7 +69,14 @@ export class VentaFormComponent implements OnInit {
     username: '',
     role: ''
   }
-
+  isLoading: boolean = false;
+  spinnerShow(): void {
+    this.isLoading = true
+  }
+  
+    spinnerHide(): void {
+    this.isLoading = false
+  }
   constructor(private formBuilder: FormBuilder,
     @Inject(MAT_DIALOG_DATA) public data: any,
     public dialogRef: MatDialogRef<VentaFormComponent>) {
@@ -124,7 +133,7 @@ export class VentaFormComponent implements OnInit {
   }
 
   async onSave() {
-
+    this.spinnerShow();
     let usuario: IUser = {
       id: null,
       username: this.username!
@@ -147,6 +156,7 @@ export class VentaFormComponent implements OnInit {
 
     if (response) {
       this.showSuccess('Se ha guardado correctamente.', this.ventaData!.descripcion)
+      this.spinnerHide();
       this.dialogRef.close();
     }
   }

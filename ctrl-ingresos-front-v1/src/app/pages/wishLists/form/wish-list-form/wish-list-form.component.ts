@@ -26,6 +26,7 @@ import { MovimientoService } from '../../../../services/ctrlEfectivo/movimiento.
 import { SobreService } from '../../../../services/ctrlEfectivo/sobre.service';
 import { LoginService } from '../../../../services/login.service';
 import { PrestamoFormComponent } from '../../../prestamos/prestamo/form/prestamo-form/prestamo-form.component';
+import { SpinnerComponent } from "../../../../shared/spinner/spinner.component";
 
 
 @Component({
@@ -43,7 +44,7 @@ import { PrestamoFormComponent } from '../../../prestamos/prestamo/form/prestamo
     MatRadioModule,
     MatRadioGroup,
     MatIconModule,
-    MatSelectModule],
+    MatSelectModule, SpinnerComponent],
   templateUrl: './wish-list-form.component.html',
   styleUrl: './wish-list-form.component.css'
 })
@@ -116,7 +117,15 @@ export class WishListFormComponent {
   username: string | null = '';
   role: String | null = '';
 
-
+  isLoading: boolean = false;
+  
+  spinnerShow(): void {
+    this.isLoading = true
+  }
+  
+    spinnerHide(): void {
+    this.isLoading = false
+  }
   constructor(private formBuilder: FormBuilder,
     @Inject(MAT_DIALOG_DATA) public data: any,
     public dialogRef: MatDialogRef<PrestamoFormComponent>) {
@@ -304,6 +313,7 @@ export class WishListFormComponent {
 
 
   async onSave() {
+    this.spinnerShow();
     let msj = 'La lista de deseo se ha generado con éxito.';
     let idWishList = this.idWish;
     if (idWishList != null) {
@@ -347,6 +357,7 @@ export class WishListFormComponent {
 
     if (response) {
       this.showSuccess(msj, "Lista de deseo")
+      this.spinnerHide();
       this.dialogRef.close();
     }
 

@@ -21,6 +21,7 @@ import { IIngreso } from '../../../../models/ingresos/ingreso.models';
 import { IngresoService } from '../../../../services/ingresos/ingreso.service';
 import { IPctXConceptoId, IPorcentajeXConcepto } from '../../../../models/ingresos/porcentajeXConcepto.models';
 import { IConcepto, IConceptoId } from '../../../../models/ingresos/concepto.models';
+import { SpinnerComponent } from "../../../../shared/spinner/spinner.component";
 
 @Component({
   selector: 'app-detalle-ingreso-form',
@@ -32,7 +33,7 @@ import { IConcepto, IConceptoId } from '../../../../models/ingresos/concepto.mod
     MatInputModule,
     MatDatepickerModule,
     MatNativeDateModule,
-    MatDialogModule],
+    MatDialogModule, SpinnerComponent],
   templateUrl: './detalle-ingreso-form.component.html',
   styleUrl: './detalle-ingreso-form.component.css'
 })
@@ -110,7 +111,15 @@ export class DetalleIngresoFormComponent implements OnInit {
     username: '',
     role: ''
   }
-
+  isLoading: boolean = false;
+  
+  spinnerShow(): void {
+    this.isLoading = true
+  }
+  
+    spinnerHide(): void {
+    this.isLoading = false
+  }
   constructor(private formBuilder: FormBuilder,
     @Inject(MAT_DIALOG_DATA) public data: any,
     public dialogRef: MatDialogRef<DetalleIngresoFormComponent>) {
@@ -201,6 +210,7 @@ export class DetalleIngresoFormComponent implements OnInit {
 
   async onSave() {
     if (this.idDetalleData.id != null) {
+      this.spinnerShow();
       const user: IUser = {
         id: null,
         username: this.username!
@@ -264,6 +274,7 @@ export class DetalleIngresoFormComponent implements OnInit {
           response = await this.update(this.detalleData.detalleIngresoId!, this.detalleData)
           if (response) {
             this.showSuccess('Se ha actualizado correctamente.', this.detalleData!.concepto!.nombre!);
+            this.spinnerHide();
             this.dialogRef.close();
           }
         }

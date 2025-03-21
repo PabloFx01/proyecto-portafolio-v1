@@ -23,6 +23,7 @@ import { IResponse } from '../../../../models/response.models';
 import { LoginService } from '../../../../services/login.service';
 import { ILoginResponse } from '../../../../models/login.models';
 import { IUser } from '../../../../models/user.models';
+import { SpinnerComponent } from "../../../../shared/spinner/spinner.component";
 
 @Component({
   selector: 'app-retirar-fondos-form',
@@ -39,7 +40,8 @@ import { IUser } from '../../../../models/user.models';
     MatRadioModule,
     MatRadioGroup,
     FormsModule,
-    MatSelectModule
+    MatSelectModule,
+    SpinnerComponent
   ],
   templateUrl: './retirar-fondos-form.component.html',
   styleUrl: './retirar-fondos-form.component.css'
@@ -89,7 +91,15 @@ export class RetirarFondosFormComponent implements OnInit {
     username: '',
     role: ''
   }
+  isLoading: boolean = false;
 
+  spinnerShow(): void {
+    this.isLoading = true
+  }
+
+  spinnerHide(): void {
+    this.isLoading = false
+  }
   constructor(private formBuilder: FormBuilder,
     @Inject(MAT_DIALOG_DATA) public data: any,
     public dialogRef: MatDialogRef<RetirarFondosFormComponent>) {
@@ -142,11 +152,12 @@ export class RetirarFondosFormComponent implements OnInit {
   }
 
   async onSave() {
+    this.spinnerShow();
     const user: IUser = {
       id: null,
       username: this.username!
     }
-    
+
     let idSobre = this.retirarFondosForm.get("sobre")?.value;
     let cuenta = await this.getCuentaByIdSobre(idSobre);
     this.messageError = null;
@@ -182,6 +193,7 @@ export class RetirarFondosFormComponent implements OnInit {
           let responseMovimiento = await this.saveMovimiento(this.movimientoData);
           if (responseMovimiento) {
             this.showSuccess('Se ha guardado correctamente.', tipoMovimiento)
+            this.spinnerHide();
             this.dialogRef.close();
           }
 

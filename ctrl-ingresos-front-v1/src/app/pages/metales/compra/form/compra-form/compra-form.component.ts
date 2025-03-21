@@ -18,6 +18,7 @@ import { CompraService } from '../../../../../services/metales/compra.service';
 import { DataService } from '../../../../../shared/data.service';
 import { LoginService } from '../../../../../services/login.service';
 import { IUser } from '../../../../../models/user.models';
+import { SpinnerComponent } from "../../../../../shared/spinner/spinner.component";
 
 @Component({
   selector: 'app-compra-form',
@@ -31,8 +32,9 @@ import { IUser } from '../../../../../models/user.models';
     MatDatepickerModule,
     MatNativeDateModule,
     MatDialogModule,
-    MatSlideToggleModule
-  ],
+    MatSlideToggleModule,
+    SpinnerComponent
+],
   templateUrl: './compra-form.component.html',
   styleUrl: './compra-form.component.css'
 })
@@ -65,7 +67,15 @@ export class CompraFormComponent implements OnInit {
     username: '',
     role: ''
   }
-
+  isLoading: boolean = false;
+  
+  spinnerShow(): void {
+    this.isLoading = true
+  }
+  
+    spinnerHide(): void {
+    this.isLoading = false
+  }
   constructor(private formBuilder: FormBuilder,
     @Inject(MAT_DIALOG_DATA) public data: any,
     public dialogRef: MatDialogRef<CompraFormComponent>) {
@@ -106,7 +116,6 @@ export class CompraFormComponent implements OnInit {
 
     const compra: ICompra = await this.getCompra(itemId);
     if (compra) {
-
       let nuevaFecha = this.getShortDate(compra.fechaCompra)
       this.compraForm.patchValue({
         id: compra.id,
@@ -139,6 +148,7 @@ export class CompraFormComponent implements OnInit {
 
 
   async onSave() {
+    this.spinnerShow();
     let usuario: IUser = {
       id: null,
       username: this.username!
@@ -163,6 +173,7 @@ export class CompraFormComponent implements OnInit {
 
     if (response) {
       this.showSuccess(msj, "Compra")
+      this.spinnerHide();
       this.dialogRef.close();
     }
 

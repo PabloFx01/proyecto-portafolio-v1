@@ -28,6 +28,7 @@ import { firstValueFrom } from 'rxjs';
 import type { ECElementEvent, EChartsOption } from 'echarts';
 import type { ECActionEvent } from 'echarts/types/src/util/types';
 import LinearGradient from 'zrender/lib/graphic/LinearGradient';
+import { SpinnerComponent } from "../../../../shared/spinner/spinner.component";
 
 
 
@@ -54,7 +55,7 @@ import LinearGradient from 'zrender/lib/graphic/LinearGradient';
     MatRadioModule,
     MatRadioGroup,
     NavComponent,
-    NgxEchartsDirective],
+    NgxEchartsDirective, SpinnerComponent],
   templateUrl: './consulta-ingreso.component.html',
   styleUrl: './consulta-ingreso.component.css'
 })
@@ -105,7 +106,15 @@ export class ConsultaIngresoComponent implements OnInit {
 
   ngOnInit(): void {
   }
-
+  isLoading: boolean = false;
+  
+  spinnerShow(): void {
+    this.isLoading = true
+  }
+  
+    spinnerHide(): void {
+    this.isLoading = false
+  }
   onChartEvent(event: ECElementEvent | ECActionEvent, type: string) {
     // console.log('chart event:', type, event);
   }
@@ -214,12 +223,14 @@ export class ConsultaIngresoComponent implements OnInit {
 
 
   async search() {
+    this.spinnerShow();
     this.fechaDesde = this.getShortDate(this.consultaIngresoForm.get("fechaDesde")?.value);
     this.fechaHasta = this.getShortDate(this.consultaIngresoForm.get("fechaHasta")?.value);
     this.titulo = this.consultaIngresoForm.get("titulo")?.value;
 
     this.allIngresoInDataSourcePaginador();
     await this.actualizarGrafico();
+    this.spinnerHide();
 
   }
 

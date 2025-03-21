@@ -15,7 +15,6 @@ import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("tools/ctrlPagos/metalesApp/metal/metal-venta")
-@CrossOrigin(origins = {"http://localhost:4200"})
 public class MetalVentaController {
     @Autowired
     private IMetalVentaService metalVentaService;

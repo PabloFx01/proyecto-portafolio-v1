@@ -24,6 +24,7 @@ import { ILoginResponse } from '../../../../models/login.models';
 import { LoginService } from '../../../../services/login.service';
 import { IUser } from '../../../../models/user.models';
 import { MatMenuModule } from '@angular/material/menu';
+import { SpinnerComponent } from "../../../../shared/spinner/spinner.component";
 
 
 @Component({
@@ -42,7 +43,7 @@ import { MatMenuModule } from '@angular/material/menu';
     MatToolbarModule,
     MatButtonToggleModule,
     DetalleCompraFormComponent,
-    CurrencyPipe, MetalesNavComponent, RouterOutlet, MatMenuModule]
+    CurrencyPipe, MetalesNavComponent, RouterOutlet, MatMenuModule, SpinnerComponent]
 })
 export class DetallesCompraComponent implements OnInit {
 
@@ -95,7 +96,15 @@ export class DetallesCompraComponent implements OnInit {
 
   dataSource: MatTableDataSource<IDetalleCompra> = new MatTableDataSource<IDetalleCompra>([]);
   displayedColumns: string[] = ['id', 'metal.nombre', 'precio', 'peso', 'importe', 'acciones'];
+  isLoading: boolean = false;
 
+  spinnerShow(): void {
+    this.isLoading = true
+  }
+
+  spinnerHide(): void {
+    this.isLoading = false
+  }
   constructor() {
     this.getScreenSize();
     this.isUserLogin();
@@ -127,6 +136,7 @@ export class DetallesCompraComponent implements OnInit {
 
   async eliminar(idCompra: number, idDetalle: number) {
     if (window.confirm('¿Seguro que deseas eliminar este elemento?')) {
+      this.spinnerShow();
       let detalleId: DetalleCompraId = {
         idCompra: idCompra,
         id: idDetalle
@@ -135,6 +145,7 @@ export class DetallesCompraComponent implements OnInit {
       if (response.idMessage == '200') {
         console.log(response.message);
       }
+      this.spinnerHide();
       this._DataService.dataUpdated$.next();
     }
   }
@@ -186,7 +197,7 @@ export class DetallesCompraComponent implements OnInit {
   async cerrarDia() {
     let totalComprado: number = 0;
     if (window.confirm('¿Seguro que deseas cerrar el día?')) {
-
+      this.spinnerShow();
       if (this.paramIdCompra != null) {
         const detalleCompraList: IDetalleCompra[] = await this.findAllDetalle(this.paramIdCompra);
         detalleCompraList.forEach(detalle => {
@@ -215,11 +226,13 @@ export class DetallesCompraComponent implements OnInit {
         let response: IResponse = await this.actualizarCompra(this.paramIdCompra, this.compraData)
         if (response) {
           if (compra.ficticio == false) {
+            console.log("antes de inventario");
             let responseCalculo = await this.calcularInventarioByIdCompra(this.paramIdCompra)
             if (responseCalculo) {
               this.showSuccess("Se ha actualizado correctamente.", "Inventario")
             }
           }
+          this.spinnerHide();
           this._DataService.dataUpdated$.next();
           this._router.navigate(["/compra"])
 

@@ -23,6 +23,7 @@ import { ISobre, ISobres } from '../../../models/ctrlEfectivo/sobre.models';
 import { IResponse } from '../../../models/response.models';
 import { NavCtrlEfectivoComponent } from "../nav/nav-ctrl-efectivo.component";
 import { IUser } from '../../../models/user.models';
+import { SpinnerComponent } from "../../../shared/spinner/spinner.component";
 
 @Component({
   selector: 'app-sobres',
@@ -39,8 +40,9 @@ import { IUser } from '../../../models/user.models';
     MatToolbarModule,
     MatButtonToggleModule,
     NavCtrlEfectivoComponent,
-    RouterOutlet
-  ],
+    RouterOutlet,
+    SpinnerComponent
+],
   templateUrl: './sobres.component.html',
   styleUrl: './sobres.component.css'
 })
@@ -79,6 +81,15 @@ export class SobresComponent implements OnInit {
     token: '',
     username: '',
     role: ''
+  }
+  isLoading: boolean = false;
+  
+  spinnerShow(): void {
+    this.isLoading = true
+  }
+  
+    spinnerHide(): void {
+    this.isLoading = false
   }
   constructor(public dialog: MatDialog) {
     this.isUserLogin();
@@ -131,10 +142,13 @@ export class SobresComponent implements OnInit {
 
   async eliminar(id: number) {
     if (window.confirm('¿Seguro que deseas desactivar este elemento?')) {
+      this.spinnerShow();
       const response = await this.eliminarSobre(id);
       if (response) {
-        this._DataService.dataUpdated$.next();
+        
         this.showSuccess("Elemento desactivado con éxito.", "Desactivar")
+        this.spinnerHide();
+        this._DataService.dataUpdated$.next();
       }
     }
   }

@@ -20,6 +20,7 @@ import { IInventario } from '../../../../../../models/metales/inventario.models'
 import { IUser } from '../../../../../../models/user.models';
 import { IMetalCompra } from '../../../../../../models/metales/metal-compra.models';
 import { IResponse } from '../../../../../../models/response.models';
+import { SpinnerComponent } from "../../../../../../shared/spinner/spinner.component";
 
 
 @Component({
@@ -37,7 +38,7 @@ import { IResponse } from '../../../../../../models/response.models';
     MatRadioModule,
     MatRadioGroup,
     MatIconModule,
-    MatSelectModule],
+    MatSelectModule, SpinnerComponent],
   templateUrl: './inventario-form.component.html',
   styleUrl: './inventario-form.component.css'
 })
@@ -78,7 +79,15 @@ export class InventarioFormComponent {
   role: String | null = '';
   idMetal: string | null;
 
-
+  isLoading: boolean = false;
+  
+  spinnerShow(): void {
+    this.isLoading = true
+  }
+  
+    spinnerHide(): void {
+    this.isLoading = false
+  }
   constructor(private formBuilder: FormBuilder,
     @Inject(MAT_DIALOG_DATA) public data: any,
     public dialogRef: MatDialogRef<InventarioFormComponent>) {
@@ -137,6 +146,7 @@ export class InventarioFormComponent {
 
 
   async onSave() {
+    this.spinnerShow();
     let msj = 'El inventario se ha generado con éxito.';
     let idInventario = this.idInventario;
     let idMetal = this.idMetal;
@@ -162,13 +172,16 @@ export class InventarioFormComponent {
 
     let response!: IResponse;
     if (idInventario != null) {
-      response = await this.update(this.idInventario!, this.idMetal!, this.InventarioData!)
+      response = await this.update(this.idInventario!, this.idMetal!, this.InventarioData!);
     }
 
     if (response) {
-      this.showSuccess(msj, "Prestamo")
+      this.showSuccess(msj, "Inventario");
+      this.spinnerHide();
       this.dialogRef.close();
     }
+
+    
 
   }
 

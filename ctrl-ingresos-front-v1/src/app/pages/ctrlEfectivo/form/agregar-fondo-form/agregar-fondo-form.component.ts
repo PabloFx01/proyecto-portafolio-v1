@@ -23,6 +23,7 @@ import { IResponse } from '../../../../models/response.models';
 import { LoginService } from '../../../../services/login.service';
 import { ILoginResponse } from '../../../../models/login.models';
 import { IUser } from '../../../../models/user.models';
+import { SpinnerComponent } from "../../../../shared/spinner/spinner.component";
 
 
 @Component({
@@ -40,7 +41,8 @@ import { IUser } from '../../../../models/user.models';
     MatRadioModule,
     MatRadioGroup,
     FormsModule,
-    MatSelectModule
+    MatSelectModule,
+    SpinnerComponent
   ],
   templateUrl: './agregar-fondo-form.component.html',
   styleUrl: './agregar-fondo-form.component.css'
@@ -53,6 +55,16 @@ export class AgregarFondoFormComponent implements OnInit {
   _movimientoService = inject(MovimientoService);
   private _toastr = inject(ToastrService)
   title?: string;
+
+  isLoading: boolean = false;
+
+  spinnerShow(): void {
+    this.isLoading = true
+  }
+
+  spinnerHide(): void {
+    this.isLoading = false
+  }
 
   listSobre: ISobre[] = [];
   sobreData: ISobre = {
@@ -123,6 +135,7 @@ export class AgregarFondoFormComponent implements OnInit {
   }
 
   async onSave() {
+    this.spinnerShow();
     const user: IUser = {
       id: null,
       username: this.username!
@@ -130,35 +143,37 @@ export class AgregarFondoFormComponent implements OnInit {
 
     let idSobre = this.agregarFondosForm.get("sobre")?.value;
 
-      let monto = this.agregarFondosForm.get("monto")?.value;
+    let monto = this.agregarFondosForm.get("monto")?.value;
 
-      this.cuentaData.saldo = monto;
-      this.cuentaData.id = null;
-      this.sobreData.id = idSobre!;
-      this.sobreData!.usuario = user;
-      this.cuentaData.sobre = this.sobreData;
-           
+    this.cuentaData.saldo = monto;
+    this.cuentaData.id = null;
+    this.sobreData.id = idSobre!;
+    this.sobreData!.usuario = user;
+    this.cuentaData.sobre = this.sobreData;
 
-      let responseCuenta = await this.updateCuenta(idSobre, this.cuentaData)
-      if (responseCuenta) {
-      
-        //Crea movimiento
-        const tipoMovimiento = 'Agregar fondo';
-        this.movimientoData.usuario = user;
-        this.movimientoData.fecha = new Date();
-        this.movimientoData.cuenta = this.cuentaData;
-        this.movimientoData.tipoMovimiento = tipoMovimiento;
-        this.movimientoData.monto = monto;
-        this.movimientoData.comentario = this.agregarFondosForm.get("comentario")?.value;
 
-        let responseMovimiento = await this.saveMovimiento(this.movimientoData);
-        if (responseMovimiento) {
-          this.showSuccess('Se ha guardado correctamente.', tipoMovimiento)
-          this.dialogRef.close();
-        }
+    let responseCuenta = await this.updateCuenta(idSobre, this.cuentaData)
+    if (responseCuenta) {
 
+      //Crea movimiento
+      const tipoMovimiento = 'Agregar fondo';
+      this.movimientoData.usuario = user;
+      this.movimientoData.fecha = new Date();
+      this.movimientoData.cuenta = this.cuentaData;
+      this.movimientoData.tipoMovimiento = tipoMovimiento;
+      this.movimientoData.monto = monto;
+      this.movimientoData.comentario = this.agregarFondosForm.get("comentario")?.value;
+
+      let responseMovimiento = await this.saveMovimiento(this.movimientoData);
+      if (responseMovimiento) {
+        this.showSuccess('Se ha guardado correctamente.', tipoMovimiento)
+        this.spinnerHide();
+        this.dialogRef.close();
+        
       }
-    
+
+    }
+
   }
 
   getLongDate(): string {

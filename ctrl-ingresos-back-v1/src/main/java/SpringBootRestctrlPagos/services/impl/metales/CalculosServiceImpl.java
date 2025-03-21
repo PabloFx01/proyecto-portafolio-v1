@@ -4,8 +4,10 @@ package SpringBootRestctrlPagos.services.impl.metales;
 import SpringBootRestctrlPagos.controllers.dto.metales.DetalleCompraPromDTO;
 import SpringBootRestctrlPagos.models.Calculo;
 import SpringBootRestctrlPagos.models.Item;
+import SpringBootRestctrlPagos.models.entities.Usuario;
 import SpringBootRestctrlPagos.models.entities.metales.*;
 import SpringBootRestctrlPagos.persistences.metales.*;
+import SpringBootRestctrlPagos.services.IUserService;
 import SpringBootRestctrlPagos.services.metales.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -30,6 +32,8 @@ public class CalculosServiceImpl implements ICalculosService {
     private IDetalleCompraDAO detalleCompraDAO;
     @Autowired
     IDetalleVentaDAO detalleVentaDAO;
+    @Autowired
+    private IUserService userService;
 
     @Override
     public void calcularInventarioByIdCompra(Long idCompra) {
@@ -82,15 +86,20 @@ public class CalculosServiceImpl implements ICalculosService {
                         inventarioDAO.saveOrUpdate(inventario);
                     } else {
                         Long newId = inventarioDAO.nextInventarioId(username);
-                        String metalId = calculo.getItems().get(0).getMetal().getMetalId().getId();
-                        InventarioId newInventarioId = new InventarioId(newId, metalId);
-                        inventario = new Inventario();
-                        inventario.setInventarioId(newInventarioId);
-                        inventario.setFechaIni(new Date());
-                        inventario.setStock(calculo.getPesoAcumulado());
-                        inventario.setImporteTotal(calculo.getImporteAcumulado());
-                        inventario.setFechaUltAct(new Date());
-                        inventarioDAO.saveOrUpdate(inventario);
+                        Optional<Usuario> optionalUser = userService.findByUsername(compra.getUsuario().getUsername());
+                        if (optionalUser.isPresent()) {
+                            Usuario user = optionalUser.get();
+                            String metalId = calculo.getItems().get(0).getMetal().getMetalId().getId();
+                            InventarioId newInventarioId = new InventarioId(newId, metalId);
+                            inventario = new Inventario();
+                            inventario.setInventarioId(newInventarioId);
+                            inventario.setFechaIni(new Date());
+                            inventario.setStock(calculo.getPesoAcumulado());
+                            inventario.setImporteTotal(calculo.getImporteAcumulado());
+                            inventario.setFechaUltAct(new Date());
+                            inventario.setUsuario(user);
+                            inventarioDAO.saveOrUpdate(inventario);
+                        }
                     }
                     System.out.println("despues de inventario");
                 });

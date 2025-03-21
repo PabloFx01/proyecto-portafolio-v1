@@ -21,6 +21,7 @@ import { IPeriodPay, IServicio } from '../../../../../models/servicios/servicio.
 import { IUser } from '../../../../../models/user.models';
 import { IResponse } from '../../../../../models/response.models';
 import { MatSelectModule } from '@angular/material/select';
+import { SpinnerComponent } from "../../../../../shared/spinner/spinner.component";
 
 @Component({
   selector: 'app-servicio-form',
@@ -37,7 +38,7 @@ import { MatSelectModule } from '@angular/material/select';
     MatRadioModule,
     MatRadioGroup,
     MatIconModule,
-    MatSelectModule],
+    MatSelectModule, SpinnerComponent],
   templateUrl: './servicio-form.component.html',
   styleUrl: './servicio-form.component.css'
 })
@@ -78,7 +79,15 @@ export class ServicioFormComponent implements OnInit {
   username: string | null = '';
   role: String | null = '';
 
-
+  isLoading: boolean = false;
+  
+  spinnerShow(): void {
+    this.isLoading = true
+  }
+  
+    spinnerHide(): void {
+    this.isLoading = false
+  }
   constructor(private formBuilder: FormBuilder,
     @Inject(MAT_DIALOG_DATA) public data: any,
     public dialogRef: MatDialogRef<ServicioFormComponent>) {
@@ -176,6 +185,7 @@ export class ServicioFormComponent implements OnInit {
   }
 
   async onSave() {
+    this.spinnerShow();
     let msj = 'Se ha creado correctamente.';
     let idServicio = this.idServicio;
     if (idServicio != null) {
@@ -206,6 +216,7 @@ export class ServicioFormComponent implements OnInit {
 
     if (response) {
       this.showSuccess(msj, "Servicio")
+      this.spinnerHide();
       this.dialogRef.close();
     }
 

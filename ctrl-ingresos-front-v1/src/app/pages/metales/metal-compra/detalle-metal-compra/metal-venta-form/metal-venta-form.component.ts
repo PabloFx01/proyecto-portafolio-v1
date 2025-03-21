@@ -14,6 +14,7 @@ import { MetalVentaId, IMetalVenta } from '../../../../../models/metales/metal-v
 import { IResponse } from '../../../../../models/response.models';
 import { MetalVentaService } from '../../../../../services/metales/metal-venta.service';
 import { DataService } from '../../../../../shared/data.service';
+import { SpinnerComponent } from "../../../../../shared/spinner/spinner.component";
 
 
 @Component({
@@ -26,8 +27,7 @@ import { DataService } from '../../../../../shared/data.service';
     MatInputModule,
     MatDatepickerModule,
     MatNativeDateModule,
-    MatDialogModule
-  ],
+    MatDialogModule, SpinnerComponent],
   templateUrl: './metal-venta-form.component.html',
   styleUrl: './metal-venta-form.component.css'
 })
@@ -48,7 +48,16 @@ export class MetalVentaFormComponent implements OnInit {
     editadoPor: null,
     modificadoEl: null
   };
-
+  isLoading: boolean = false;
+  
+  spinnerShow(): void {
+    this.isLoading = true
+  }
+  
+    spinnerHide(): void {
+    this.isLoading = false
+  }
+  
   constructor(private formBuilder: FormBuilder,
     @Inject(MAT_DIALOG_DATA) public data: any,
     public dialogRef: MatDialogRef<MetalVentaFormComponent>) {
@@ -108,7 +117,7 @@ export class MetalVentaFormComponent implements OnInit {
   }
 
   async onSave() {
-
+    this.spinnerShow();
     this.idMetalVentaData.id = this.metalVentaForm.get("idMetalVenta")?.value;
     this.metalVentaData.descripcion = this.metalVentaForm.get("descripcion")?.value;
 
@@ -124,6 +133,7 @@ export class MetalVentaFormComponent implements OnInit {
     }
     if (response) {
       this.showSuccess('Se ha asociado correctamente.', this.metalVentaData!.descripcion)
+      this.spinnerHide();
       this.dialogRef.close();
     }
   }

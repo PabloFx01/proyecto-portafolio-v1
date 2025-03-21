@@ -19,6 +19,7 @@ import { DataService } from '../../shared/data.service';
 import { IUser, IUsers } from '../../models/user.models';
 import { IResponse } from '../../models/response.models';
 import { NavPrestamoComponent } from "../nav/nav-login.component";
+import { SpinnerComponent } from "../../shared/spinner/spinner.component";
 
 
 @Component({
@@ -36,7 +37,8 @@ import { NavPrestamoComponent } from "../nav/nav-login.component";
     MatToolbarModule,
     MatButtonToggleModule,
     NavPrestamoComponent,
-    RouterOutlet
+    RouterOutlet,
+    SpinnerComponent
 ],
   templateUrl: './user.component.html',
   styleUrl: './user.component.css'
@@ -57,7 +59,15 @@ export class UserComponent implements OnInit{
 
   dataSource: MatTableDataSource<IUser> = new MatTableDataSource<IUser>([]);
   displayedColumns: string[] = ['id', 'username', 'role', 'acciones'];
-
+  isLoading: boolean = false;
+  
+  spinnerShow(): void {
+    this.isLoading = true
+  }
+  
+    spinnerHide(): void {
+    this.isLoading = false
+  }
   constructor(public dialog: MatDialog) {
 
   }
@@ -100,10 +110,13 @@ export class UserComponent implements OnInit{
 
   async eliminar(id: number) {
     if (window.confirm('¿Seguro que deseas eliminar este elemento?')) {
+      this.spinnerShow();
       const response = await this.eliminarUser(id);
       if (response) {
-        this._DataService.dataUpdated$.next();
+        
         this.showSuccess("Elemento eliminado con éxito.", "Eliminar")
+        this.spinnerHide();
+        this._DataService.dataUpdated$.next();
       }      
     }
   }

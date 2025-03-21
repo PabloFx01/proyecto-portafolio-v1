@@ -17,6 +17,7 @@ import { TicketService } from '../../../../../../services/metales/ticket.service
 import { DataService } from '../../../../../../shared/data.service';
 import { IUser } from '../../../../../../models/user.models';
 import { LoginService } from '../../../../../../services/login.service';
+import { SpinnerComponent } from "../../../../../../shared/spinner/spinner.component";
 
 
 @Component({
@@ -29,7 +30,7 @@ import { LoginService } from '../../../../../../services/login.service';
     MatInputModule,
     MatDatepickerModule,
     MatNativeDateModule,
-    MatDialogModule],
+    MatDialogModule, SpinnerComponent],
   templateUrl: './ticket-form.component.html',
   styleUrl: './ticket-form.component.css'
 })
@@ -63,7 +64,15 @@ export class TicketFormComponent implements OnInit {
     username: '',
     role: ''
   }
+  isLoading: boolean = false;
 
+  spinnerShow(): void {
+    this.isLoading = true
+  }
+
+  spinnerHide(): void {
+    this.isLoading = false
+  }
   constructor(private formBuilder: FormBuilder,
     @Inject(MAT_DIALOG_DATA) public data: any,
     public dialogRef: MatDialogRef<TicketFormComponent>) {
@@ -120,7 +129,7 @@ export class TicketFormComponent implements OnInit {
   }
 
   async onSave() {
-
+    this.spinnerShow();
     let usuario: IUser = {
       id: null,
       username: this.username!
@@ -141,6 +150,7 @@ export class TicketFormComponent implements OnInit {
 
     if (response) {
       this.showSuccess('Se ha guardado correctamente.', this.ticketData!.descripcion)
+      this.spinnerHide();
       this.dialogRef.close();
     }
   }
