@@ -252,6 +252,7 @@ export class IngresoFormComponent {
         this.totPcjeActivo = this.getTotPcjeAct();
       }
       if (this.totPcjeActivo != 100) {
+        this.spinnerHide();
         this.openForm();
       } else {
         this.fncOnsave();
