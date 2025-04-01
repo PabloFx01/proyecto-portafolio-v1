@@ -262,11 +262,13 @@ export class PrestamoComponent implements OnInit{
 
   async procesarPago(idPrestamo: number, pago: number) {
     if (window.confirm('¿Seguro que deseas procesar el prestamo?')) {
+      this.spinnerShow();
       let response: IResponse = await this.updatePagoEfectuado(idPrestamo, this.prestamoData)
       this.prestamoData = await this.getPrestamo(idPrestamo);
       if (response) {
         await this.transferirFondos(pago);
         await this.reloadData();
+        this.spinnerHide();
         // await this.checkEndPrestamo();
       }
     }
