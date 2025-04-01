@@ -77,6 +77,7 @@ export class DashboardNavComponent implements OnInit {
   logout() {
     this.loginServices.logout();
     this.role = null;
+    this.username = null;
     this.onOption("login");
     this.router.navigate(['/login']);
 

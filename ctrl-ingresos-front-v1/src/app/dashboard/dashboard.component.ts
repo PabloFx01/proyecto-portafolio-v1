@@ -38,6 +38,10 @@ export class DashboardComponent implements OnInit {
   ngOnInit(): void {
     this.isUserLogin();
     this.getScreenSize();
+    if(!this.userLoginOn){
+      this.username = null;
+      this.role = null;
+    }
   }
 
 

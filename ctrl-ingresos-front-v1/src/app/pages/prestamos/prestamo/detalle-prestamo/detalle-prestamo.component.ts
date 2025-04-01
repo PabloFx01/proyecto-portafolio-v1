@@ -357,10 +357,11 @@ export class DetallePrestamoComponent implements OnInit {
   async procesarPago(IdDetalle: number, idPrestamo: number, pago: number) {
     if (window.confirm('¿Seguro que deseas procesar el pago?')) {
       let response: IResponse = await this.updatePagoEfectuado(IdDetalle, idPrestamo, this.detallePrestamoData)
-
+      this.spinnerShow();
       if (response) {
         await this.transferirFondos(pago);
         await this.reloadData();
+        this.spinnerHide();
         await this.checkEndPrestamo();
       }
     }
